@@ -1,0 +1,235 @@
+/* Общие переменные для согласованности с другими компонентами */
+$primary-color: #4CAF50; // Зеленый
+$secondary-color: #2196F3; // Синий
+$accent-color: #FFC107; // Желтый
+$danger-color: #f44336; // Красный
+$text-color: #333;
+$light-text-color: #666;
+$border-color: #ddd;
+$background-color: #f5f5f5;
+$card-background: #fff;
+$shadow-light: rgba(0, 0, 0, 0.1);
+
+// Миксин для теней
+@mixin card-shadow {
+  box-shadow: 0 4px 8px $shadow-light;
+  transition: box-shadow 0.3s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Миксин для кнопок (для унификации стилей)
+@mixin button-styles($bg-color, $text-color: white) {
+  background-color: $bg-color;
+  color: $text-color;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+
+  &:hover {
+    background-color: darken($bg-color, 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    background-color: darken($bg-color, 15%);
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.workout-form-container {
+  max-width: 800px; // Ограничиваем ширину формы
+  margin: 30px auto; // Центрируем контейнер
+  padding: 30px;
+  background-color: $card-background;
+  border-radius: 8px;
+  @include card-shadow;
+  font-family: Arial, sans-serif;
+  color: $text-color;
+
+  h1 {
+    text-align: center;
+    color: $primary-color;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    font-weight: bold;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; // Отступ между основными секциями формы
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: $light-text-color;
+    }
+
+    input[type="date"],
+    textarea,
+    select {
+      padding: 12px;
+      border: 1px solid $border-color;
+      border-radius: 5px;
+      font-size: 1em;
+      width: 100%; // Поля занимают всю доступную ширину
+      box-sizing: border-box; // Учитываем padding и border в ширине
+
+      &:focus {
+        outline: none;
+        border-color: $secondary-color;
+        box-shadow: 0 0 0 3px rgba($secondary-color, 0.2);
+      }
+
+      &.is-invalid {
+        border-color: $danger-color;
+      }
+    }
+
+    textarea {
+      resize: vertical; // Разрешаем изменять размер по вертикали
+      min-height: 80px;
+    }
+  }
+
+  .error-message {
+    color: $danger-color;
+    font-size: 0.85em;
+    margin-top: 5px;
+  }
+
+  .exercises-section {
+    border: 1px dashed $border-color;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: lighten($background-color, 2%);
+
+    h3 {
+      color: $secondary-color;
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 1.4em;
+    }
+
+    .sets-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px; // Отступ между отдельными подходами
+      margin-bottom: 15px;
+      max-height: 400px; // Установите желаемую максимальную высоту.
+                        // Подберите значение, которое хорошо смотрится на большинстве экранов.
+      overflow-y: auto; // Включает вертикальную прокрутку, если содержимое превышает max-height
+      padding-right: 10px; 
+    }
+
+    .set-item {
+      display: flex;
+      flex-wrap: wrap; // Позволяет элементам переноситься на новую строку на маленьких экранах
+      gap: 15px; // Отступ между инлайновыми группами и кнопкой удаления
+      align-items: flex-end; // Выравнивание кнопок и полей по низу
+
+      // Стили для групп полей внутри одного сета
+      .set-inputs {
+        flex-grow: 1; // Занимает доступное пространство
+        display: flex;
+        flex-wrap: wrap; // Поля внутри сета могут переноситься
+        gap: 15px; // Отступ между полями exercise, reps, weight
+      }
+
+      .form-group-inline {
+        flex: 1 1 250px; // Позволяет элементам растягиваться, но с минимальной шириной 250px
+        display: flex;
+        flex-direction: column; // Метка над полем
+        min-width: 150px; // Минимальная ширина для полей внутри инлайн-группы
+
+        label {
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            font-weight: normal; // Метки в инлайн группах могут быть чуть менее жирными
+        }
+        input, select {
+            width: 100%;
+        }
+      }
+
+      .remove-set-button {
+        @include button-styles($danger-color, white);
+        padding: 8px 15px; // Меньший padding для этих кнопок
+        font-size: 0.9em;
+        align-self: flex-end; // Прижимаем кнопку к низу сет-айтэма
+      }
+    }
+
+    .no-sets-message {
+      text-align: center;
+      color: $light-text-color;
+      margin-bottom: 15px;
+    }
+
+    .add-set-button {
+      @include button-styles($secondary-color, white);
+      width: fit-content; // Кнопка занимает только необходимую ширину
+      margin: 0 auto; // Центрируем кнопку "Add Set"
+      display: block; // Делаем ее блочным элементом для margin: auto
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end; // Кнопки справа
+    gap: 15px; // Отступ между кнопками
+    margin-top: 20px;
+
+    .submit-button {
+      @include button-styles($primary-color, white);
+    }
+
+    .cancel-button {
+      @include button-styles(#9e9e9e, white); // Серый цвет для отмены
+    }
+  }
+
+  /* Стили для сообщений о состоянии формы */
+  .form-loading,
+  .form-error,
+  .form-success {
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+
+  .form-loading {
+    background-color: #e0f2f7; // Светло-голубой
+    color: $secondary-color;
+  }
+
+  .form-error {
+    background-color: #ffebee; // Светло-красный
+    color: $danger-color;
+  }
+
+  .form-success {
+    background-color: #e8f5e9; // Светло-зеленый
+    color: $primary-color;
+  }
+}

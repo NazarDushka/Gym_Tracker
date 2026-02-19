@@ -1,0 +1,121 @@
+<div class="workout-form-container">
+  <h1>{{ isEditMode ? 'Edit Workout' : 'Add New Workout' }}</h1>
+
+  <form (ngSubmit)="onSubmit()" #workoutForm="ngForm">
+    <div class="form-group">
+      <label for="date">Date:</label>
+      <input
+        type="date"
+        id="date"
+        name="date"
+        [(ngModel)]="workout.date"
+        required
+        #dateField="ngModel"
+        [class.is-invalid]="dateField.invalid && dateField.touched"
+      />
+      @if (dateField.invalid && dateField.touched) {
+        <div class="error-message">Date is required.</div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="notes">Notes:</label>
+      <textarea
+        id="notes"
+        name="notes"
+        rows="4"
+        [(ngModel)]="workout.notes"
+      ></textarea>
+    </div>
+
+    <div class="exercises-section">
+      <h3>Exercises & Sets:</h3>
+
+      @if (workout.sets && workout.sets.length > 0) {
+        <div class="sets-list">
+          @for (set of workout.sets; track set.id || $index) {
+            <div class="set-item">
+              <div class="set-inputs">
+                <div class="form-group-inline">
+                  <label for="exercise-{{$index}}">Exercise:</label>
+                  <select
+                    id="exercise-{{$index}}"
+                    name="exercise-{{$index}}"
+                    [(ngModel)]="set.exerciseId"
+                    required
+                    #exerciseField="ngModel"
+                    [class.is-invalid]="exerciseField.invalid && exerciseField.touched"
+                  >
+                    <option [ngValue]="null" disabled selected>Select Exercise</option>
+                    @for (exercise of availableExercises; track exercise.id) {
+                      <option [ngValue]="exercise.id">{{ exercise.name }}</option>
+                    }
+                  </select>
+                  @if (exerciseField.invalid && exerciseField.touched) {
+                    <div class="error-message">Exercise is required.</div>
+                  }
+                </div>
+
+                <div class="form-group-inline">
+                  <label for="reps-{{$index}}">Reps:</label>
+                  <input
+                    type="number"
+                    id="reps-{{$index}}"
+                    name="reps-{{$index}}"
+                    [(ngModel)]="set.reps"
+                    required
+                    min="1"
+                    #repsField="ngModel"
+                    [class.is-invalid]="repsField.invalid && repsField.touched"
+                  />
+                  @if (repsField.invalid && repsField.touched) {
+                    <div class="error-message">Reps required (min 1).</div>
+                  }
+                </div>
+
+                <div class="form-group-inline">
+                  <label for="weight-{{$index}}">Weight (kg):</label>
+                  <input
+                    type="number"
+                    id="weight-{{$index}}"
+                    name="weight-{{$index}}"
+                    [(ngModel)]="set.weight"
+                    required
+                    min="0"
+                    step="0.1"
+                    #weightField="ngModel"
+                    [class.is-invalid]="weightField.invalid && weightField.touched"
+                  />
+                  @if (weightField.invalid && weightField.touched) {
+                    <div class="error-message">Weight required (min 0).</div>
+                  }
+                </div>
+              </div>
+
+              <button type="button" class="remove-set-button" (click)="removeSet(set)">Remove</button>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="no-sets-message">No sets added yet. Click "Add Set" below.</p>
+      }
+
+      <button type="button" class="add-set-button" (click)="addSet()">Add Set</button>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="!workoutForm.valid" class="submit-button">
+        {{ isEditMode ? 'Save Changes' : 'Add Workout' }}
+      </button>
+      <button type="button" class="cancel-button" (click)="onCancel()">Cancel</button>
+    </div>
+
+    @if (isLoading) {
+      <p class="form-loading">Saving workout...</p>
+    } @else if (errorMessage) {
+      <p class="form-error">{{ errorMessage }}</p>
+    } @else if (successMessage) {
+      <p class="form-success">{{ successMessage }}</p>
+    }
+  </form>
+</div>

@@ -1,0 +1,27 @@
+<div class="workout-card">
+  @if (workout) {
+    <h1>Workout Details</h1>
+    
+    <p><strong>Date:</strong> {{ workout.date | date:'mediumDate' }}</p>
+    <p><strong>Your note:</strong> {{ workout.notes }}</p>
+
+    <div class="exercises-section">
+      <h3>Exercises:</h3>
+      <div>
+        <ul class="exercise-list">
+          @for (set of workout.sets; track set.id) {
+            <li class="exercise-item">
+              <span class="exercise-name">{{ set.exercise?.name || 'Unknown Exercise' }}</span>
+              <span class="set-details">({{ set.reps }} reps x {{ set.weight }} kg)</span>
+            </li>
+          } @empty {
+            <p>No sets recorded for this workout.</p>
+          }
+        </ul>
+      </div>
+    </div>
+  } 
+  @else {
+    <p class="no-data">Loading your workout...</p>
+  }
+</div>

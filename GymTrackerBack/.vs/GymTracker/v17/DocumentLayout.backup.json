@@ -1,0 +1,375 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\repository\\unitofwork\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\repository\\unitofwork\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\repository\\auth\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\repository\\auth\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\repository\\exerciserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\repository\\exerciserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\repository\\auth\\authsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\repository\\auth\\authsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\repository\\auth\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\repository\\auth\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\repository\\workoutrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\repository\\workoutrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\controllers\\workoutcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\controllers\\workoutcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\repository\\auth\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\repository\\auth\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\models\\workout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\models\\workout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\models\\exercise.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\models\\exercise.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\interfaces\\iuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\interfaces\\iuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\interfaces\\iworkout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\interfaces\\iworkout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\repository\\auth\\authextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\repository\\auth\\authextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\interfaces\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\models\\bodymeasurements.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\models\\bodymeasurements.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\interfaces\\iexercise.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\interfaces\\iexercise.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\repository\\workoutdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\repository\\workoutdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\gymtracker.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\gymtracker.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|c:\\users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\gymtracker\\gymtracker\\migrations\\20250722131147_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{51FE4EAC-D598-4449-AE72-B219B996AA08}|GymTracker\\GymTracker.csproj|solutionrelative:gymtracker\\migrations\\20250722131147_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 13,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UnitOfWork.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\UnitOfWork\\UnitOfWork.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Repository\\UnitOfWork\\UnitOfWork.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\UnitOfWork\\UnitOfWork.cs",
+              "RelativeToolTip": "GymTracker\\Repository\\UnitOfWork\\UnitOfWork.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABMAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-04T12:59:14.576Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "GymTracker\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA0AAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-28T14:28:19.796Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "RegisterRequest.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\Auth\\RegisterRequest.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Repository\\Auth\\RegisterRequest.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\Auth\\RegisterRequest.cs",
+              "RelativeToolTip": "GymTracker\\Repository\\Auth\\RegisterRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAYAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T19:31:16.716Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Exercise.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Models\\Exercise.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Models\\Exercise.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Models\\Exercise.cs",
+              "RelativeToolTip": "GymTracker\\Models\\Exercise.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAIAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-22T12:50:08.606Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Workout.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Models\\Workout.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Models\\Workout.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Models\\Workout.cs",
+              "RelativeToolTip": "GymTracker\\Models\\Workout.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAIAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-22T12:52:02.21Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ExerciseRepository.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\ExerciseRepository.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Repository\\ExerciseRepository.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\ExerciseRepository.cs",
+              "RelativeToolTip": "GymTracker\\Repository\\ExerciseRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T13:08:17.94Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IWorkout.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Interfaces\\IWorkout.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Interfaces\\IWorkout.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Interfaces\\IWorkout.cs",
+              "RelativeToolTip": "GymTracker\\Interfaces\\IWorkout.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwBAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T12:11:21.946Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "JwtService.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\Auth\\JwtService.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Repository\\Auth\\JwtService.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\Auth\\JwtService.cs",
+              "RelativeToolTip": "GymTracker\\Repository\\Auth\\JwtService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-28T14:25:59.594Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\Auth\\UserRepository.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Repository\\Auth\\UserRepository.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\Auth\\UserRepository.cs",
+              "RelativeToolTip": "GymTracker\\Repository\\Auth\\UserRepository.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAABQwEQAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-04T10:55:17.843Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Program.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Program.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Program.cs",
+              "RelativeToolTip": "GymTracker\\Program.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAowD4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T10:54:15.806Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "WorkoutRepository.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\WorkoutRepository.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Repository\\WorkoutRepository.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\WorkoutRepository.cs",
+              "RelativeToolTip": "GymTracker\\Repository\\WorkoutRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAIBJwAcAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T12:11:44.845Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "IUser.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Interfaces\\IUser.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Interfaces\\IUser.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Interfaces\\IUser.cs",
+              "RelativeToolTip": "GymTracker\\Interfaces\\IUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-04T10:53:43.202Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "WorkoutController.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Controllers\\WorkoutController.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Controllers\\WorkoutController.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Controllers\\WorkoutController.cs",
+              "RelativeToolTip": "GymTracker\\Controllers\\WorkoutController.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAawFgAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-04T11:36:34.401Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\appsettings.json",
+              "RelativeDocumentMoniker": "GymTracker\\appsettings.json",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\appsettings.json",
+              "RelativeToolTip": "GymTracker\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-19T12:28:29.212Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AuthSettings.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\Auth\\AuthSettings.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Repository\\Auth\\AuthSettings.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\Auth\\AuthSettings.cs",
+              "RelativeToolTip": "GymTracker\\Repository\\Auth\\AuthSettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-28T14:25:10.185Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "AuthExtensions.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\Auth\\AuthExtensions.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Repository\\Auth\\AuthExtensions.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\Auth\\AuthExtensions.cs",
+              "RelativeToolTip": "GymTracker\\Repository\\Auth\\AuthExtensions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-28T14:22:25.676Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "IUnitOfWork.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Interfaces\\IUnitOfWork.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Interfaces\\IUnitOfWork.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Interfaces\\IUnitOfWork.cs",
+              "RelativeToolTip": "GymTracker\\Interfaces\\IUnitOfWork.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAUAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-19T11:46:09.471Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "BodyMeasurements.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Models\\BodyMeasurements.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Models\\BodyMeasurements.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Models\\BodyMeasurements.cs",
+              "RelativeToolTip": "GymTracker\\Models\\BodyMeasurements.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-22T12:51:53.302Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "WorkoutDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\WorkoutDbContext.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Repository\\WorkoutDbContext.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Repository\\WorkoutDbContext.cs",
+              "RelativeToolTip": "GymTracker\\Repository\\WorkoutDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-22T13:01:20.541Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "IExercise.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Interfaces\\IExercise.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Interfaces\\IExercise.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Interfaces\\IExercise.cs",
+              "RelativeToolTip": "GymTracker\\Interfaces\\IExercise.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAQAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T13:09:02.923Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "GymTracker.csproj",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\GymTracker.csproj",
+              "RelativeDocumentMoniker": "GymTracker\\GymTracker.csproj",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\GymTracker.csproj",
+              "RelativeToolTip": "GymTracker\\GymTracker.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-07-19T12:35:09.235Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "20250722131147_InitialCreate.cs",
+              "DocumentMoniker": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Migrations\\20250722131147_InitialCreate.cs",
+              "RelativeDocumentMoniker": "GymTracker\\Migrations\\20250722131147_InitialCreate.cs",
+              "ToolTip": "C:\\Users\\\u043D\u0430\u0437\u0430\u0440\\source\\repos\\GymTracker\\GymTracker\\Migrations\\20250722131147_InitialCreate.cs",
+              "RelativeToolTip": "GymTracker\\Migrations\\20250722131147_InitialCreate.cs",
+              "ViewState": "AgIAAIgAAAAAAAAAAAAgwJwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-22T13:11:47.929Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

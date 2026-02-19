@@ -1,0 +1,175 @@
+/* Общие переменные и миксины (без изменений) */
+$primary-color: #4CAF50; // Зеленый
+$secondary-color: #2196F3; // Синий
+$accent-color: #FFC107; // Желтый
+$text-color: #333;
+$light-text-color: #666;
+$border-color: #ddd;
+$background-color: #f5f5f5;
+$card-background: #fff;
+$shadow-light: rgba(0, 0, 0, 0.1);
+$shadow-medium: rgba(0, 0, 0, 0.2);
+
+@mixin card-shadow {
+  box-shadow: 0 4px 8px $shadow-light;
+  transition: box-shadow 0.3s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 6px 12px $shadow-medium;
+  }
+}
+
+.workout-history-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 30px;
+  background-color: $card-background;
+  border-radius: 8px;
+  @include card-shadow;
+  font-family: Arial, sans-serif;
+  color: $text-color;
+  // remove align-content: center; from here, it's for grid layout, not what we need for buttons
+
+  h1 {
+    text-align: center;
+    color: $primary-color;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Стили для центрирования кнопки "Add New Workout" */
+  .add-workout-button-container {
+    text-align: center; // Центрирует строчные/inline-block элементы
+    margin-bottom: 25px; // Отступ снизу от кнопки
+    button { // Стили для этой конкретной кнопки
+        background-color: $primary-color; // Основной цвет
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.1em;
+        font-weight: bold;
+        transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+            transform: translateY(-2px);
+        }
+        &:active {
+            background-color: darken($primary-color, 15%);
+            transform: translateY(0);
+        }
+    }
+  }
+
+
+  /* Стили для сообщений (без изменений) */
+  .loading-message,
+  .error-message,
+  .no-data-message {
+    text-align: center;
+    padding: 20px;
+    font-size: 1.1em;
+    color: $light-text-color;
+    border: 1px dashed $border-color;
+    border-radius: 5px;
+    background-color: $background-color;
+    margin-top: 20px;
+  }
+
+  .error-message {
+    color: #d32f2f;
+    border-color: #d32f2f;
+    background-color: #ffebee;
+  }
+
+  /* Стили для таблицы (без изменений) */
+  .workouts-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.95em;
+
+    th, td {
+      border: 1px solid $border-color;
+      padding: 12px 15px;
+      text-align: left;
+    }
+
+    thead {
+      background-color: $primary-color;
+      color: $card-background;
+      th {
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background-color: lighten($background-color, 3%);
+        }
+        &:hover {
+          background-color: lighten($primary-color, 45%);
+        }
+      }
+
+      td {
+        vertical-align: middle;
+      }
+    }
+  }
+
+  /* Стили для общего вида кнопок внутри таблицы (можно оставить) */
+  .action-buttons button { // Этот селектор будет применяться ко всем кнопкам внутри .action-buttons
+    background-color: $secondary-color; // Синяя кнопка (Details по умолчанию)
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+
+    &:hover {
+      background-color: darken($secondary-color, 10%);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      background-color: darken($secondary-color, 15%);
+      transform: translateY(0);
+    }
+  }
+
+  /* Стили для расположения кнопок в колонку */
+  .action-buttons {
+    display: flex;
+    flex-direction: column; // Располагаем элементы в колонку
+    gap: 8px; // Отступ между кнопками в колонке
+    align-items: flex-start; // Выравнивание кнопок по левому краю в их контейнере
+    // Если хотите центрировать их в ячейке td:
+    // align-items: center;
+  }
+
+  /* Дополнительные стили для специфичных кнопок в таблице (если используете классы) */
+  .action-buttons .delete-button {
+    background-color: #f44336; // Красный цвет для кнопки Delete
+    &:hover {
+      background-color: darken(#f44336, 10%);
+    }
+  }
+
+  .action-buttons .edit-button {
+    background-color: $accent-color; // Желтый/оранжевый цвет для кнопки Edit
+    color: $text-color; // Можно сделать текст темнее для лучшего контраста
+    &:hover {
+      background-color: darken($accent-color, 10%);
+    }
+  }
+}

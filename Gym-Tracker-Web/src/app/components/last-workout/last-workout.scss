@@ -1,0 +1,96 @@
+// Define some color variables for consistency
+$primary-color: #3498db; // Blue
+$secondary-color: #2c3e50; // Dark Blue/Charcoal
+$text-color-dark: #34495e; // Darker text
+$text-color-light: #7f8c8d; // Lighter text
+$background-light: #f9f9f9; // Light grey background
+$border-color: #e0e0e0; // Light grey border
+$error-color: #e74c3c; // Red for errors
+
+.last-workout-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  max-width: 600px;
+  margin: 20px auto; /* Center the card horizontally */
+  border-left: 5px solid $primary-color; /* A little accent */
+
+  h1 {
+    color: $secondary-color;
+    font-size: 2em;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+  }
+
+  .workout-details {
+    p {
+      font-size: 1.1em;
+      line-height: 1.6;
+      margin-bottom: 10px;
+
+      strong {
+        color: $text-color-dark;
+      }
+    }
+  }
+
+  .exercises-section {
+    margin-top: 30px;
+    background-color: $background-light;
+    border-radius: 5px;
+    padding: 20px;
+    border: 1px solid $border-color;
+
+    h3 {
+      color: $primary-color;
+      font-size: 1.5em;
+      margin-bottom: 15px;
+    }
+
+    .exercise-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .exercise-item {
+      background-color: #ffffff;
+      padding: 10px 15px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      border: 1px solid #dcdcdc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .exercise-name {
+        font-weight: bold;
+        color: $secondary-color;
+        flex-grow: 1;
+      }
+
+      .set-details {
+        font-size: 0.9em;
+        color: $text-color-light;
+        margin-left: 15px;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .loading-indicator,
+  .error-message,
+  .no-data {
+    text-align: center;
+    padding: 20px;
+    font-size: 1.2em;
+    color: $text-color-light;
+  }
+
+  .error-message {
+    color: $error-color;
+    font-weight: bold;
+  }
+}
