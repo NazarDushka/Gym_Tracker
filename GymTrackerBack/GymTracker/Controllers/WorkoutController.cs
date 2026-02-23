@@ -3,6 +3,8 @@ using GymTracker.Models;
 using GymTracker.Repository;
 using GymTracker.Repository.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace GymTracker.Controllers
 {
@@ -49,27 +51,61 @@ namespace GymTracker.Controllers
         [HttpPut("UpdateWorkout{id}")]
         public async Task<ActionResult> UpdateWorkout(int id, [FromBody] Workout updatedWorkout)
         {
-            if (id != updatedWorkout.Id) // Ensure the ID in the route matches the ID in the body
+            if (id != updatedWorkout.Id)
             {
                 return BadRequest("Workout ID in URL does not match ID in body.");
             }
 
-
             var existingWorkout = await _unitOfWork.Workout.Get(id);
+
             if (existingWorkout == null)
             {
                 return NotFound($"Workout with ID {id} not found.");
             }
 
-            existingWorkout.Sets=updatedWorkout.Sets;
+            // 1. Обновляем простые поля
             existingWorkout.Date = updatedWorkout.Date;
             existingWorkout.Notes = updatedWorkout.Notes;
 
-            _unitOfWork.Workout.Update(existingWorkout);
+            // 2. Удаляем сеты, которых больше нет в пришедшем updatedWorkout
+            var incomingSetIds = updatedWorkout.Sets.Select(s => s.Id).ToList();
+            var setsToRemove = existingWorkout.Sets
+                .Where(existingSet => !incomingSetIds.Contains(existingSet.Id))
+                .ToList();
+
+            foreach (var setToRemove in setsToRemove)
+            {
+                existingWorkout.Sets.Remove(setToRemove);
+            }
+
+            foreach (var incomingSet in updatedWorkout.Sets)
+            {
+                var existingSet = existingWorkout.Sets.FirstOrDefault(s => s.Id == incomingSet.Id);
+
+                if (existingSet != null && existingSet.Id != 0)
+                {
+                    existingSet.Reps = incomingSet.Reps;
+                    existingSet.Weight = incomingSet.Weight;
+                    existingSet.ExerciseId = incomingSet.ExerciseId;
+                }
+                else
+                {
+
+                    existingWorkout.Sets.Add(new WorkoutSet
+                    {
+                        Reps = incomingSet.Reps,
+                        Weight = incomingSet.Weight,
+                        ExerciseId = incomingSet.ExerciseId
+                    });
+                }
+            }
+
             await _unitOfWork.CompleteAsync();
 
-            return Ok("Workout with was updated");
+            return Ok("Workout was updated");
         }
+
+
         [HttpDelete("DeleteWorkout{id}")]
         public async Task<ActionResult> DeleteWorkout(int id) {
 

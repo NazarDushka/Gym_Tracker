@@ -2,11 +2,13 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, DatePipe, NgIf, NgFor } from '@angular/common'; // Для директив
 import { FormsModule, NgForm } from '@angular/forms'; // Для форм на основе шаблонов
-import { WorkoutService } from '../../Data/Services/workout.service';
-import { Workout} from '../../Data/Services/Interfaces/workout.interface';
+import { WorkoutService } from '../../../Data/Services/workout.service';
+import { Workout} from '../../../Data/Services/Interfaces/workout.interface';
 import { finalize, switchMap, of, catchError, Observable } from 'rxjs'; // Добавляем необходимые операторы
-import { Exercise } from '../../Data/Services/Interfaces/exercise.interface';
-import { Sets } from '../../Data/Services/Interfaces/sets.interface';
+import { Exercise } from '../../../Data/Services/Interfaces/exercise.interface';
+import { Sets } from '../../../Data/Services/Interfaces/sets.interface';
+import { Token } from '@angular/compiler';
+import { AuthService } from '../../../Data/Services/auth.service';
 
 
 @Component({
@@ -24,13 +26,17 @@ export class WorkoutFormComponent implements OnInit {
   private router = inject(Router);
   private workoutService = inject(WorkoutService);
 
-  workout: Workout = this.initializeNewWorkout(); // Объект тренировки для формы
-  isEditMode: boolean = false; // Флаг: режим редактирования или добавления
-  isLoading: boolean = false; // Флаг для индикации загрузки/сохранения
+  private authService = inject(AuthService);
+
+  MyId: number = this.authService.getUserIdFromToken() || 0; 
+
+  workout: Workout = this.initializeNewWorkout(); 
+
+  isEditMode: boolean = false; 
+  isLoading: boolean = false; 
   errorMessage: string | null = null;
   successMessage: string | null = null;
-
-  availableExercises: Exercise[] = []; // Список доступных упражнений для <select>
+  availableExercises: Exercise[] = [];
 
   ngOnInit(): void {
     // Загрузка списка доступных упражнений
@@ -56,7 +62,7 @@ export class WorkoutFormComponent implements OnInit {
             catchError(err => {
               this.errorMessage = 'Failed to load workout for editing.';
               console.error('Error loading workout:', err);
-              this.router.navigate(['/history']); // Перенаправляем на историю, если ошибка
+              this.router.navigate(['/workouts-history']); // Перенаправляем на историю, если ошибка
               return of(null);
             })
           );
@@ -69,12 +75,12 @@ export class WorkoutFormComponent implements OnInit {
     ).subscribe({
       next: (workoutData: Workout | null) => {
         if (workoutData) {
-          // Важно: если дата приходит как строка, преобразуйте ее в 'YYYY-MM-DD' для type="date"
+          
           this.workout = {
             ...workoutData,
             date: workoutData.date ? new Date(workoutData.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
           };
-          // Убедитесь, что sets инициализированы, если их нет
+         
           if (!this.workout.sets) {
             this.workout.sets = [];
           }
@@ -90,7 +96,7 @@ export class WorkoutFormComponent implements OnInit {
       date: new Date().toISOString().split('T')[0], // Формат YYYY-MM-DD для input type="date"
       notes: '',
       sets: [],
-       // Установите реальный userId, если это требуется вашим API
+       userId: this.MyId,
     };
   }
 
@@ -144,13 +150,13 @@ export class WorkoutFormComponent implements OnInit {
           this.successMessage = `Workout ${this.isEditMode ? 'updated' : 'added'} successfully!`;
           // Опционально: перенаправить пользователя после успешного сохранения
           setTimeout(() => {
-            this.router.navigate(['/history']); // Например, на страницу истории
+            this.router.navigate(['/workouts-history']); // Например, на страницу истории
           }, 1500);
         } else {
             // Если API ничего не возвращает, но запрос успешен, можно считать успехом
              this.successMessage = `Workout ${this.isEditMode ? 'updated' : 'added'} successfully!`;
              setTimeout(() => {
-                this.router.navigate(['/history']);
+                this.router.navigate(['/workouts-history']);
             }, 1500);
         }
       }
@@ -162,3 +168,4 @@ export class WorkoutFormComponent implements OnInit {
     this.router.navigate(['/workouts-history']); // Возвращаемся на страницу истории
   }
 }
+

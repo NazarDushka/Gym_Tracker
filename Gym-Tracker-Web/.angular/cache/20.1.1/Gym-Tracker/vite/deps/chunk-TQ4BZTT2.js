@@ -20,7 +20,6 @@ import {
   identity,
   innerFrom,
   isArrayLike,
-  isFunction,
   isScheduler,
   mapOneOrManyArgs,
   mergeAll,
@@ -33,7 +32,10 @@ import {
   popScheduler,
   scheduleIterable,
   subscribeOn
-} from "./chunk-RTGP7ALM.js";
+} from "./chunk-3F6MSGFW.js";
+import {
+  isFunction
+} from "./chunk-XYSLGILQ.js";
 
 // node_modules/rxjs/dist/esm5/internal/scheduler/performanceTimestampProvider.js
 var performanceTimestampProvider = {
@@ -908,4 +910,4 @@ export {
   range,
   using
 };
-//# sourceMappingURL=chunk-G6ECYYJH.js.map
+//# sourceMappingURL=chunk-TQ4BZTT2.js.map
