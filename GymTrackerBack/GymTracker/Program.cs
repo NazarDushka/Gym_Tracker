@@ -40,6 +40,8 @@ builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("AuthS
 builder.Services.AddControllers();
 builder.Services.AddScoped<JwtSerwice>();
 builder.Services.AddScoped<IUser, UserRepository>();
+builder.Services.AddScoped<IWorkout, WorkoutRepository>();
+builder.Services.AddScoped<IExercise, ExerciseRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

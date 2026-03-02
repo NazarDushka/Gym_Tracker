@@ -33,6 +33,7 @@ namespace GymTracker.Controllers
            var workouts = await _unitOfWork.Workout.GetAll();
             return Ok(workouts); 
         }
+
         [HttpGet("GetWorkout{id}")]
         public async Task<ActionResult<Workout>> GetWorkout(int id) 
         {
@@ -127,12 +128,6 @@ namespace GymTracker.Controllers
             return Ok(LastWorkout);
         }
 
-        [HttpGet("GetExercises")]
-        public async Task<ActionResult<IEnumerable<Exercise>>> GetExercises()
-        {
-          var exercises = await _unitOfWork.Exercises.GetExercises();
-            if(exercises==null) return NotFound();
-            return Ok(exercises);
-        }
+        
     }
 }
