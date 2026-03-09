@@ -1,8 +1,8 @@
-﻿using GymTracker.Interfaces;
+﻿using GymTracker.Models;
 
-namespace GymTracker.Models
+namespace GymTracker.Interfaces
 {
-    public class WorkoutSet: IWorkoutSet
+    public interface IWorkoutSet
     {
         public int Id { get; set; }
         public int Reps { get; set; }
