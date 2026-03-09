@@ -1,0 +1,29 @@
+<div class="exercise-list-container">
+  <h1>Exercise List</h1>
+
+  @if (exercises && exercises.length > 0) {
+    <table class="exercises-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Muscle Group</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+      @for (exercise of exercises; track exercise.id) {
+        <tr>
+          <td>{{ exercise.name }}</td>
+          <td>{{ exercise.muscleGroup || 'N/A' }}</td>
+          <td>
+            <button class="details-button" (click)="navigateToExerciseDetails(exercise.id)">Details</button>
+          </td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  }
+  @else {
+    <p class="no-data-message">No exercises found.</p>
+  }
+</div>
