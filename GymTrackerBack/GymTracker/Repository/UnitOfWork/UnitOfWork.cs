@@ -16,15 +16,15 @@ namespace GymTracker.Repository.UnitOfWork
             User = new UserRepository(_context,_jwtSerwice );
             Workout = new WorkoutRepository(_context);
             Exercises = new ExerciseRepository(_context);
-           // WorkoutSets = new WorkoutSetRepository(_context);
-           // BodyMeasurements = new BodyMeasurementRepository(_context);
+            // WorkoutSets = new WorkoutSetRepository(_context);
+            BodyMeasurements = new BodyMeasurementsRepository(_context);
         }
 
         public IUser User { get; private set; }
         public IWorkout Workout { get; private set; }
         public IExercise Exercises { get; private set; }
         //public IWorkoutSetRepository WorkoutSets { get; private set; }
-        //public IBodyMeasurementRepository BodyMeasurements { get; private set; }
+        public IBodyMeasurementRep BodyMeasurements { get; private set; }
 
         public async Task<int> CompleteAsync()
         {

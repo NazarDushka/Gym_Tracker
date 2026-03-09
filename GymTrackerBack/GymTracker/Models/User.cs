@@ -9,6 +9,6 @@
         public DateTime CreatedAt { get; set; }
 
         public ICollection<Workout>? Workouts { get; set; }
-        public ICollection<BodyMeasurement>? BodyMeasurements { get; set; }
+        public ICollection<BodyMeasurements>? BodyMeasurements { get; set; }
     }
 }
