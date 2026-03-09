@@ -24,6 +24,7 @@ namespace GymTracker.Controllers
             if (userId == null) return Unauthorized("User not authenticated.");
             var workouts = await _unitOfWork.Workout.GetMyWorkouts(userId);
             if (workouts == null || !workouts.Any()) return NotFound("No workouts found for this user.");
+            workouts = workouts.OrderByDescending(w => w.Date).ToList();
             return Ok(workouts);
         }
 
@@ -31,6 +32,8 @@ namespace GymTracker.Controllers
         public async Task<ActionResult<IEnumerable<Workout>>> GetAllWorkouts()
         {
            var workouts = await _unitOfWork.Workout.GetAll();
+            workouts = workouts.OrderByDescending(w => w.Date).ToList();
+
             return Ok(workouts); 
         }
 

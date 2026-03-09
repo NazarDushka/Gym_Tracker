@@ -1,0 +1,13 @@
+<div class="exercise-card">
+  @if (exercise) {
+    <h1>{{ exercise.name }}</h1>
+    
+    <div class="exercise-details">
+      <p><strong>Muscle Group:</strong> {{ exercise.muscleGroup || 'Not specified' }}</p>
+      <p><strong>Description:</strong> {{ exercise.description || 'No description available.' }}</p>
+    </div>
+  } 
+  @else {
+    <p class="no-data">Loading exercise details...</p>
+  }
+</div>

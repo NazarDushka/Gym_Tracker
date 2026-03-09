@@ -106,14 +106,14 @@ export class WorkoutFormComponent implements OnInit {
       this.workout.sets = [];
     }
     this.workout.sets.push({
-      id: 0, // Временно 0 для новых подходов
-      exerciseId: null, // Должен быть выбран пользователем
+      id: 0, 
+      exerciseId: null, 
       reps: null,
       weight: null,
       workoutId: 0,
       workout: null,
       exercise: null
-    } as any); // Используем as any временно, если типы не идеально совпадают с null
+    } as any); 
   }
 
   // Удаление подхода

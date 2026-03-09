@@ -18,8 +18,7 @@ namespace GymTracker.Repository.UnitOfWork
             Exercises = new ExerciseRepository(_context);
             PersonalRecords = new PRsRepository(_context);
             // WorkoutSets = new WorkoutSetRepository(_context);
-            // BodyMeasurements = new BodyMeasurementRepository(_context);
-
+            BodyMeasurements = new BodyMeasurementsRepository(_context);
         }
 
         public IUser User { get; private set; }
@@ -27,7 +26,7 @@ namespace GymTracker.Repository.UnitOfWork
         public IExercise Exercises { get; private set; }
         public IPersonalRecord PersonalRecords { get; private set; }
         //public IWorkoutSetRepository WorkoutSets { get; private set; }
-        //public IBodyMeasurementRepository BodyMeasurements { get; private set; }
+        public IBodyMeasurementRep BodyMeasurements { get; private set; }
 
         public async Task<int> CompleteAsync()
         {

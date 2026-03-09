@@ -7,7 +7,7 @@
         IExercise Exercises { get; }
         IPersonalRecord PersonalRecords { get; }
         //IWorkoutSetRepository WorkoutSets { get; } //In process...
-        //IBodyMeasurementRepository BodyMeasurements { get; } //In process...
+        IBodyMeasurementRep BodyMeasurements { get; }
 
         Task<int> CompleteAsync();
     }

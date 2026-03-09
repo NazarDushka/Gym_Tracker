@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core'; 
 import { Workout } from '../../../Data/Services/Interfaces/workout.interface';
 import { WorkoutService } from '../../../Data/Services/workout.service';
+import { AuthService } from '../../../Data/Services/auth.service';
 import { CommonModule, DatePipe} from '@angular/common';
 import {Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
@@ -15,17 +16,20 @@ import { finalize } from 'rxjs/operators';
 export class WorkoutsHistory  {
   router = inject(Router);
     WorkoutService = inject(WorkoutService);
+    AuthService = inject(AuthService);
+    myId= this.AuthService.getUserIdFromToken();
   workouts?: Workout[]; 
 errorMessage: any;
 set: any;
 
-// Инжектируем ChangeDetectorRef
+
+
+
   private changeDetectorRef = inject(ChangeDetectorRef);
   constructor() {
-     this.WorkoutService.getWorkouts().subscribe(val => {
+     this.WorkoutService.getUsersWorkouts(this.myId!).subscribe(val => {
        console.log("Workout data received by component:", val);
        this.workouts = val;
-       // Явно запускаем обнаружение изменений
        this.changeDetectorRef.detectChanges();
      });
   

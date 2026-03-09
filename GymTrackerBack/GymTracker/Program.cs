@@ -45,6 +45,7 @@ builder.Services.AddScoped<IExercise, ExerciseRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddControllers();
 var app = builder.Build();
 
 
