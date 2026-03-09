@@ -9,20 +9,23 @@ namespace GymTracker.Repository.UnitOfWork
     public class UnitOfWork : IUnitOfWork
     {
         readonly WorkoutDbContext _context;
-        readonly JwtSerwice _jwtSerwice;
-        public UnitOfWork(WorkoutDbContext context, JwtSerwice jwtSerwice) {
+        readonly JwtService _jwtService;
+        public UnitOfWork(WorkoutDbContext context, JwtService jwtService) {
         _context=context;
-        _jwtSerwice = jwtSerwice;
-            User = new UserRepository(_context,_jwtSerwice );
+        _jwtService = jwtService;
+            User = new UserRepository(_context, _jwtService);
             Workout = new WorkoutRepository(_context);
             Exercises = new ExerciseRepository(_context);
-           // WorkoutSets = new WorkoutSetRepository(_context);
-           // BodyMeasurements = new BodyMeasurementRepository(_context);
+            PersonalRecords = new PRsRepository(_context);
+            // WorkoutSets = new WorkoutSetRepository(_context);
+            // BodyMeasurements = new BodyMeasurementRepository(_context);
+
         }
 
         public IUser User { get; private set; }
         public IWorkout Workout { get; private set; }
         public IExercise Exercises { get; private set; }
+        public IPersonalRecord PersonalRecords { get; private set; }
         //public IWorkoutSetRepository WorkoutSets { get; private set; }
         //public IBodyMeasurementRepository BodyMeasurements { get; private set; }
 

@@ -38,7 +38,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<WorkoutDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("AuthSettings"));
 builder.Services.AddControllers();
-builder.Services.AddScoped<JwtSerwice>();
+builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<IUser, UserRepository>();
 builder.Services.AddScoped<IWorkout, WorkoutRepository>();
 builder.Services.AddScoped<IExercise, ExerciseRepository>();

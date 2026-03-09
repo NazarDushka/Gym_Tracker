@@ -7,7 +7,7 @@ using System.Text;
 
 namespace GymTracker.Repository.Auth
 {
-    public class JwtSerwice(IOptions<AuthSettings> options)
+    public class JwtService(IOptions<AuthSettings> options)
     {
         public string GenerateToken(User user)
         {

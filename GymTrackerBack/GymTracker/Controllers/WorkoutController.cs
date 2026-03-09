@@ -44,7 +44,15 @@ namespace GymTracker.Controllers
         [HttpPost("AddWorkout")]
         public async Task<ActionResult<Workout>> AddWorkout([FromBody] Workout workout) 
         {
-            await _unitOfWork.Workout.Add(workout); 
+            await _unitOfWork.Workout.Add(workout);
+
+            if (workout.Sets != null && workout.Sets.Any())
+            {
+                foreach (var set in workout.Sets)
+                {
+                    await _unitOfWork.PersonalRecords.AddOrUpdatePersonalRecord(workout.UserId, set.ExerciseId, set);
+                }
+            }
             await _unitOfWork.CompleteAsync();
             return Ok(workout);
         }
@@ -64,11 +72,9 @@ namespace GymTracker.Controllers
                 return NotFound($"Workout with ID {id} not found.");
             }
 
-            // 1. Обновляем простые поля
             existingWorkout.Date = updatedWorkout.Date;
             existingWorkout.Notes = updatedWorkout.Notes;
 
-            // 2. Удаляем сеты, которых больше нет в пришедшем updatedWorkout
             var incomingSetIds = updatedWorkout.Sets.Select(s => s.Id).ToList();
             var setsToRemove = existingWorkout.Sets
                 .Where(existingSet => !incomingSetIds.Contains(existingSet.Id))
@@ -99,6 +105,7 @@ namespace GymTracker.Controllers
                         ExerciseId = incomingSet.ExerciseId
                     });
                 }
+                _unitOfWork.PersonalRecords.AddOrUpdatePersonalRecord(existingWorkout.UserId, incomingSet.ExerciseId, incomingSet);
             }
 
             await _unitOfWork.CompleteAsync();
