@@ -6,6 +6,8 @@ import { MainLayout } from './components/main-layout/main-layout';
 import { WorkoutsHistory } from './components/main-layout/workouts-history/workouts-history';
 import { WorkoutDetails } from './components/main-layout/workout-details/workout-details';
 import { WorkoutFormComponent } from './components/main-layout/workout-form/workout-form';
+import { ExercisesList } from './components/exercises/exercises';
+import { ExerciseDetails } from './components/exercise-details/exercise-details';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -16,6 +18,8 @@ export const routes: Routes = [
         { path : 'workout/:id', component: WorkoutDetails },
         { path : 'edit-workout/:id', component: WorkoutFormComponent },
         { path : 'add-workout', component: WorkoutFormComponent },
+        { path : 'exercises', component: ExercisesList },
+        { path : 'exerciseDetails/:id', component: ExerciseDetails },
     ] },
    
 ];
