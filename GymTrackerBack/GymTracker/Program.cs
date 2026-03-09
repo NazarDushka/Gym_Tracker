@@ -37,8 +37,8 @@ builder.Services.AddCors(options =>
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<WorkoutDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("AuthSettings"));
-builder.Services.AddScoped<JwtSerwice>();
-builder.Services.AddScoped<IBodyMeasurementRep, BodyMeasurementsRepository>();
+builder.Services.AddControllers();
+builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<IUser, UserRepository>();
 builder.Services.AddScoped<IWorkout, WorkoutRepository>();
 builder.Services.AddScoped<IExercise, ExerciseRepository>();

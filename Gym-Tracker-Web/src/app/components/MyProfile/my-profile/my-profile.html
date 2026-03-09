@@ -1,0 +1,55 @@
+<div class="user-profile-container">
+  @if (user) {
+    <header class="profile-header">
+      <div class="avatar-placeholder">
+        {{ user.name.charAt(0) | uppercase }}
+      </div>
+      <div class="user-info">
+        <h1>{{ user.name }}</h1>
+        <p class="join-date">В строю с: {{ user.joinDate | date:'longDate' }}</p>
+      </div>
+    </header>
+
+    <div class="profile-cards-grid">
+      
+      <section class="profile-card metrics-card">
+        <h2>Body Metrics</h2>
+        <div class="card-content">
+          <div class="metric-row">
+            <span class="metric-label">Height:</span>
+            <span class="metric-value">{{ metrics?.height || '--' }} cm</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Weight:</span>
+            <span class="metric-value">{{ metrics?.weight || '--' }} kg</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Body Fat:</span>
+            <span class="metric-value">{{ metrics?.bodyFat || '--' }}% <span class="goal">(Target: 8%)</span></span>
+          </div>
+        </div>
+        <button class="action-button" (click)="viewAllMeasurements()">View all measurements</button>
+      </section>
+
+      <section class="profile-card records-card">
+        <h2>Recent Breakthroughs</h2>
+        <div class="card-content">
+          <ul class="records-list">
+            @for (record of recentRecords; track record.id) {
+              <li>
+                <span class="exercise-name">{{ record.exerciseName }}</span>
+                <span class="record-details">{{ record.weight }} kg &times; {{ record.reps }}</span>
+              </li>
+            } @empty {
+              <p class="empty-state">No records yet. Time to push harder!</p>
+            }
+          </ul>
+        </div>
+        <button class="action-button" (click)="viewAllRecords()">View all records</button>
+      </section>
+
+    </div>
+  } @else {
+    <p class="loading-message">Loading profile data...</p>
+  }
+</div>

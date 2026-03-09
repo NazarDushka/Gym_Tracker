@@ -5,6 +5,7 @@
         IUser User { get; }
         IWorkout Workout { get; }
         IExercise Exercises { get; }
+        IPersonalRecord PersonalRecords { get; }
         //IWorkoutSetRepository WorkoutSets { get; } //In process...
         IBodyMeasurementRep BodyMeasurements { get; }
 

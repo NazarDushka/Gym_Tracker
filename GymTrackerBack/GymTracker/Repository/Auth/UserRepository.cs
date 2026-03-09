@@ -11,10 +11,9 @@ namespace GymTracker.Repository.Auth
     public class UserRepository : IUser
     {
         private readonly WorkoutDbContext _workoutDbContext;
-        readonly JwtSerwice _jwtSerwice;
+        readonly JwtService _jwtSerwice;
 
-        // ДОБАВЬТЕ ЭТОТ КОНСТРУКТОР
-        public UserRepository(WorkoutDbContext workoutDbContext, JwtSerwice jwtSerwice)
+        public UserRepository(WorkoutDbContext workoutDbContext, JwtService jwtSerwice)
         {
             _workoutDbContext = workoutDbContext;
             _jwtSerwice = jwtSerwice;

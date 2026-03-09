@@ -47,7 +47,15 @@ namespace GymTracker.Controllers
         [HttpPost("AddWorkout")]
         public async Task<ActionResult<Workout>> AddWorkout([FromBody] Workout workout) 
         {
-            await _unitOfWork.Workout.Add(workout); 
+            await _unitOfWork.Workout.Add(workout);
+
+            if (workout.Sets != null && workout.Sets.Any())
+            {
+                foreach (var set in workout.Sets)
+                {
+                    await _unitOfWork.PersonalRecords.AddOrUpdatePersonalRecord(workout.UserId, set.ExerciseId, set);
+                }
+            }
             await _unitOfWork.CompleteAsync();
             return Ok(workout);
         }
@@ -100,6 +108,7 @@ namespace GymTracker.Controllers
                         ExerciseId = incomingSet.ExerciseId
                     });
                 }
+                _unitOfWork.PersonalRecords.AddOrUpdatePersonalRecord(existingWorkout.UserId, incomingSet.ExerciseId, incomingSet);
             }
 
             await _unitOfWork.CompleteAsync();
