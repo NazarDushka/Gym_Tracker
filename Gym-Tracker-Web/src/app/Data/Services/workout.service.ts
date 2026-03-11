@@ -21,21 +21,18 @@ baseUrl='https://localhost:7079/GymTracker/Workout/'
   }
 
   getWorkoutDetails(id: number) {
-    return this.http.get<Workout>(this.baseUrl+'GetWorkout'+id)
+    return this.http.get<Workout>(this.baseUrl+'GetWorkout/'+id)
   }
   deleteWorkout(id: number) {
     return this.http.delete<Workout>(this.baseUrl+'DeleteWorkout'+id)
   }
   
   updateWorkout(workout: Workout) {
-    return this.http.put<Workout>(this.baseUrl+'UpdateWorkout'+workout.id,workout)
+    return this.http.put<Workout>(this.baseUrl+'UpdateWorkout/'+workout.id,workout)
   }
 
   addWorkout(workout: Workout) {
     return this.http.post<Workout>(this.baseUrl+'AddWorkout',workout)
   }
 
-  getExercises() {
-    return this.http.get<Exercise[]>(this.baseUrl+'GetExercises')
-  }
 }

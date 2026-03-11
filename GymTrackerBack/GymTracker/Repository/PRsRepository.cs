@@ -14,19 +14,21 @@ namespace GymTracker.Repository
 
         public async Task AddOrUpdatePersonalRecord(int userId, int exerciseId, WorkoutSet set)
         {
-            var existingPR = await _db.PersonalRecords.FindAsync(userId, exerciseId);
+            var existingPR = await _db.PersonalRecords.FirstOrDefaultAsync(pr=>pr.UserId==userId && pr.ExerciseId==exerciseId);
             if (existingPR == null) { 
                 var newPR = new PersonalRecord
                 {
+                    WorkoutSetId=set.Id,
                     UserId = userId,
                     ExerciseId = exerciseId,
-                    MaxLifted = PersonalRecord.ORM(set.Weight, set.Reps)
+                    CalculatedMax = PersonalRecord.ORM(set.Weight, set.Reps),
+                    AchievedDate = DateTime.Now
                 };
                 _db.PersonalRecords.Add(newPR);
             }
-            else if (PersonalRecord.ORM(set.Weight, set.Reps) > existingPR.MaxLifted)
+            else if (PersonalRecord.ORM(set.Weight, set.Reps) > existingPR.CalculatedMax)
             {
-                existingPR.MaxLifted = PersonalRecord.ORM(set.Weight, set.Reps);
+                existingPR.CalculatedMax = PersonalRecord.ORM(set.Weight, set.Reps);
                 _db.PersonalRecords.Update(existingPR);
             }
         }

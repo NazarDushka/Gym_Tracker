@@ -11,10 +11,11 @@ namespace GymTracker.Models
         [Key]
         public int WorkoutSetId { get; set; }
 
-        public float MaxLifted { get; set; }
+        public float CalculatedMax { get; set; }
 
         public int UserId { get; set; }
         public int ExerciseId { get; set; }
+        public DateTime AchievedDate { get; set; }
 
         public static float ORM(float weight, int reps) => weight * (1 + reps / 30.0f);
     }

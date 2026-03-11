@@ -9,6 +9,7 @@ import { Exercise } from '../../../Data/Services/Interfaces/exercise.interface';
 import { Sets } from '../../../Data/Services/Interfaces/sets.interface';
 import { Token } from '@angular/compiler';
 import { AuthService } from '../../../Data/Services/auth.service';
+import { ExerciseService } from '../../../Data/Services/exercise.service';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class WorkoutFormComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private workoutService = inject(WorkoutService);
+  private exerciseService = inject(ExerciseService);
 
   private authService = inject(AuthService);
 
@@ -40,7 +42,7 @@ export class WorkoutFormComponent implements OnInit {
 
   ngOnInit(): void {
     // Загрузка списка доступных упражнений
-    this.workoutService.getExercises().subscribe({ // Предполагается, что у вас есть метод getExercises()
+    this.exerciseService.getExercises().subscribe({ // Предполагается, что у вас есть метод getExercises()
       next: (exercises: Exercise[]) => {
         this.availableExercises = exercises;
       },
