@@ -1,4 +1,5 @@
 using GymTracker.Interfaces;
+using GymTracker.Models;
 using GymTracker.Repository;
 using GymTracker.Repository.Auth;
 using GymTracker.Repository.UnitOfWork;
@@ -35,18 +36,34 @@ builder.Services.AddCors(options =>
                              });
 });
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<WorkoutDbContext>(options => options.UseSqlServer(connectionString));
+
+if (Program.IsTestRun)
+{
+    builder.Services.AddDbContext<WorkoutDbContext>(options =>
+        options.UseInMemoryDatabase("InMemoryDbForTesting"));
+}
+else
+{
+    builder.Services.AddDbContext<WorkoutDbContext>(options =>
+        options.UseSqlServer(connectionString));
+}
 builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("AuthSettings"));
-builder.Services.AddControllers();
 builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<IUser, UserRepository>();
 builder.Services.AddScoped<IWorkout, WorkoutRepository>();
 builder.Services.AddScoped<IExercise, ExerciseRepository>();
+builder.Services.AddScoped<IPersonalRecord,PRsRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddControllers();
 var app = builder.Build();
+
+if (Program.IsTestRun)
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
+    db.Database.EnsureCreated();
+}
 
 
 if (app.Environment.IsDevelopment())
@@ -63,3 +80,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program
+{
+   public static bool IsTestRun { get; set; } = false;
+}

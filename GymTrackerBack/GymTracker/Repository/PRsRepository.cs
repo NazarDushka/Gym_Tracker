@@ -14,19 +14,24 @@ namespace GymTracker.Repository
 
         public async Task AddOrUpdatePersonalRecord(int userId, int exerciseId, WorkoutSet set)
         {
-            var existingPR = await _db.PersonalRecords.FindAsync(userId, exerciseId);
-            if (existingPR == null) { 
+            var existingPR = await _db.PersonalRecords.FirstOrDefaultAsync(pr => pr.UserId == userId && pr.ExerciseId == exerciseId);
+            if (existingPR == null) {
+                var exercise = await _db.Exercises.FindAsync(exerciseId);
+          
                 var newPR = new PersonalRecord
                 {
                     UserId = userId,
                     ExerciseId = exerciseId,
-                    MaxLifted = PersonalRecord.ORM(set.Weight, set.Reps)
+                    CalculatedMaxLift = PersonalRecord.ORM(set.Weight, set.Reps),
+                    ExerciseName = exercise.Name,
+                    Reps = set.Reps,
+                    Weight = set.Weight
                 };
                 _db.PersonalRecords.Add(newPR);
             }
-            else if (PersonalRecord.ORM(set.Weight, set.Reps) > existingPR.MaxLifted)
+            else if (PersonalRecord.ORM(set.Weight, set.Reps) > existingPR.CalculatedMaxLift)
             {
-                existingPR.MaxLifted = PersonalRecord.ORM(set.Weight, set.Reps);
+                existingPR.CalculatedMaxLift = PersonalRecord.ORM(set.Weight, set.Reps);
                 _db.PersonalRecords.Update(existingPR);
             }
         }
@@ -39,7 +44,7 @@ namespace GymTracker.Repository
 
         public async Task<PersonalRecord> GetPersonalRecordInExerc(int userId, int exerciseId)
         {
-           var pr = await _db.PersonalRecords.FindAsync(userId, exerciseId);
+            var pr = await _db.PersonalRecords.FirstOrDefaultAsync(pr => pr.UserId == userId && pr.ExerciseId == exerciseId);
             if (pr == null) return null;
             return pr;
         }
