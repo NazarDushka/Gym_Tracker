@@ -37,7 +37,7 @@ namespace GymTracker.Controllers
             return Ok(workouts); 
         }
 
-        [HttpGet("GetWorkout{id}")]
+        [HttpGet("GetWorkout/{id}")]
         public async Task<ActionResult<Workout>> GetWorkout(int id) 
         {
             var workout = await _unitOfWork.Workout.Get(id);
@@ -60,7 +60,7 @@ namespace GymTracker.Controllers
             return Ok(workout);
         }
 
-        [HttpPut("UpdateWorkout{id}")]
+        [HttpPut("UpdateWorkout/{id}")]
         public async Task<ActionResult> UpdateWorkout(int id, [FromBody] Workout updatedWorkout)
         {
             if (id != updatedWorkout.Id)
@@ -108,7 +108,15 @@ namespace GymTracker.Controllers
                         ExerciseId = incomingSet.ExerciseId
                     });
                 }
-                _unitOfWork.PersonalRecords.AddOrUpdatePersonalRecord(existingWorkout.UserId, incomingSet.ExerciseId, incomingSet);
+                return Ok();
+
+            }
+
+            await _unitOfWork.CompleteAsync();
+
+            foreach (var set in existingWorkout.Sets)
+            {
+                await _unitOfWork.PersonalRecords.AddOrUpdatePersonalRecord(existingWorkout.UserId, set.ExerciseId, set);
             }
 
             await _unitOfWork.CompleteAsync();

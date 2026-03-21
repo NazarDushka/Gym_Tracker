@@ -17,6 +17,7 @@ namespace GymTracker.Models
         public int UserId { get; set; }
         public string ExerciseName { get; set; }
         public int ExerciseId { get; set; }
+        public DateTime AchievedDate { get; set; }
 
         public static float ORM(float weight, int reps) => weight * (1 + reps / 30.0f);
     }

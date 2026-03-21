@@ -20,6 +20,7 @@ namespace GymTracker.Repository
           
                 var newPR = new PersonalRecord
                 {
+                    WorkoutSetId=set.Id,
                     UserId = userId,
                     ExerciseId = exerciseId,
                     CalculatedMaxLift = PersonalRecord.ORM(set.Weight, set.Reps),
