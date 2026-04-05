@@ -8,8 +8,8 @@ namespace GymTracker.Interfaces
         Task<string> GetByEmail(string email, string passwd);
         Task<User> GetUser(int id);
         Task AddUser(SignupRequest user);
-        void UpdateUser(User user);
+        Task UpdateUser(User user);
 
-        void DeleteUser(User user);
+        Task DeleteUser(User user);
     }
 }

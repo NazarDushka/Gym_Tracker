@@ -16,7 +16,9 @@ namespace GymTracker.Repository
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<WorkoutSet> WorkoutSets { get; set; }
-        public DbSet<BodyMeasurements> BodyMeasurements { get; set; }
         public DbSet<PersonalRecord> PersonalRecords { get; set; }
+        public DbSet<MeasurementType> MeasurementTypes { get; set; }
+        public DbSet<MeasurementTarget> MeasurementTargets { get; set; }
+        public DbSet<MeasurementLog> MeasurementLogs { get; set; }
     }
 }

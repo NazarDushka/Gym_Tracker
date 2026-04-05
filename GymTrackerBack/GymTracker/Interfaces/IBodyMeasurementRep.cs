@@ -1,13 +1,22 @@
 ﻿using GymTracker.Models;
+using System.Threading.Tasks;
 
 namespace GymTracker.Interfaces
 {
-    public interface IBodyMeasurementRep
+    public interface IMeasurementRepository
     {
-        Task<IEnumerable<BodyMeasurements>> GetBodyMeasurementsByUserId(int userId);
-        Task<BodyMeasurements> GetBodyMeasurementById(int id);
-        Task AddBodyMeasurement(BodyMeasurements bodyMeasurement);
-        Task UpdateBodyMeasurement(BodyMeasurements bodyMeasurement);
-        Task DeleteBodyMeasurement(int id);
+        Task<IEnumerable<MeasurementType>> GetAllTypesAsync();
+
+        Task<IEnumerable<MeasurementLog>> GetLogsByUserIdAsync(int userId);
+
+        Task<IEnumerable<MeasurementLog>> GetLogsByTypeAsync(int userId, int typeId);
+
+        Task<MeasurementLog?> GetLogByIdAsync(int logId);
+        Task AddLogAsync(MeasurementLog log);
+        Task DeleteLogAsync(int logId);
+
+        Task<IEnumerable<MeasurementTarget>> GetActiveTargetsByUserIdAsync(int userId);
+        Task AddTargetAsync(MeasurementTarget target);
+        Task DeactivateTargetAsync(int targetId);
     }
 }

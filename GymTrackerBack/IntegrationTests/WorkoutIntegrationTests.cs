@@ -26,11 +26,11 @@ namespace GymTracker.IntegrationTests
             int testUserId;
 
             // === 0. SEEDING ===
+            await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
+            
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
-                dbContext.Database.EnsureDeleted();
-                dbContext.Database.EnsureCreated();
 
                 // Создаем сущности БЕЗ жестко заданных ID (пусть БД сгенерирует их сама)
                 var exercise = new Exercise { Name = "Bench Press" };
@@ -42,7 +42,7 @@ namespace GymTracker.IntegrationTests
 
                 // Забираем реальные ID, которые БД только что придумала!
                 testExerciseId = exercise.Id;
-                testUserId = (int)user.Id;
+                testUserId = user.Id;
             }
 
             // === 1. ARRANGE ===
@@ -77,6 +77,66 @@ namespace GymTracker.IntegrationTests
                 Assert.NotNull(personalRecord);
                 Assert.Equal(100 * (1 + 5 / 30.0f), personalRecord.CalculatedMaxLift);
             }
+        }
+
+        [Fact]
+        public async Task GettingAndAddingMeasurements_ShouldSaveAndReturnLogs()
+        {
+            int testUserId;
+            int testTypeId;
+
+            // === 0. SEEDING ===
+            await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
+            
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
+
+                // Создаем тестовые данные
+                var user = new User { FullName = "MeasurementTester", PasswordHash = "123", Email = "test@measurements.com" };
+                var measurementType = new MeasurementType { Id = 1, Name = "Body Fat Percentage", Unit = "%" };
+
+                dbContext.Users.Add(user);
+                dbContext.MeasurementTypes.Add(measurementType);
+                await dbContext.SaveChangesAsync();
+
+                testUserId = user.Id;
+                testTypeId = measurementType.Id;
+            }
+
+            // === 1. ARRANGE ===
+            var newLog = new MeasurementLog
+            {
+                UserId = testUserId,
+                MeasurementTypeId = testTypeId,
+                Value = 15.5f,
+                Date = DateTime.UtcNow
+            };
+
+            // === 2. ACT (POST - Добавляем замер) ===
+            
+            var postResponse = await _client.PostAsJsonAsync("/api/Measurements", newLog);
+            var postErrorText = await postResponse.Content.ReadAsStringAsync();
+
+            // === 3. ASSERT (POST) ===
+            Assert.True(postResponse.IsSuccessStatusCode, $"Сервер вернул ошибку при POST: {postErrorText}");
+
+            // === 4. ACT (GET - Получаем замеры обратно) ===
+            var getResponse = await _client.GetAsync($"/api/users/{testUserId}/measurements");
+            var getErrorText = await getResponse.Content.ReadAsStringAsync();
+
+            // === 5. ASSERT (GET) ===
+            Assert.True(getResponse.IsSuccessStatusCode, $"Сервер вернул ошибку при GET: {getErrorText}");
+
+            // Десериализуем ответ от сервера в список логов
+            var retrievedLogs = await getResponse.Content.ReadFromJsonAsync<List<MeasurementLog>>();
+
+            // Проверяем, что данные дошли без искажений
+            Assert.NotNull(retrievedLogs);
+            Assert.Single(retrievedLogs); // Убеждаемся, что в базе ровно 1 запись, которую мы только что добавили
+            Assert.Equal(15.5f, retrievedLogs[0].Value);
+            Assert.Equal(testTypeId, retrievedLogs[0].MeasurementTypeId);
+            Assert.Equal(testUserId, retrievedLogs[0].UserId);
         }
     }
 }

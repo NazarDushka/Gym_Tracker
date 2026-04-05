@@ -4,46 +4,84 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GymTracker.Repository
 {
-    public class BodyMeasurementsRepository: IBodyMeasurementRep
+    public class MeasurementsRepository : IMeasurementRepository
     {
         private readonly WorkoutDbContext _workoutDbContext;
 
-        public BodyMeasurementsRepository(WorkoutDbContext workoutDbContext)
+        public MeasurementsRepository(WorkoutDbContext workoutDbContext)
         {
             _workoutDbContext = workoutDbContext;
         }
 
-        public async Task<IEnumerable<BodyMeasurements>> GetBodyMeasurementsByUserId(int userId)
+        public async Task<IEnumerable<MeasurementType>> GetAllTypesAsync()
+        {
+            return await _workoutDbContext.MeasurementTypes
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<MeasurementLog>> GetLogsByUserIdAsync(int userId)
+        {
+            return await _workoutDbContext.MeasurementLogs
+                .Include(l => l.MeasurementType)
+                .Where(l => l.UserId == userId)
+                .OrderByDescending(l => l.Date)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<MeasurementLog>> GetLogsByTypeAsync(int userId, int typeId)
+        {
+            return await _workoutDbContext.MeasurementLogs
+                .Where(l => l.UserId == userId && l.MeasurementTypeId == typeId)
+                .OrderBy(l => l.Date)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<MeasurementLog?> GetLogByIdAsync(int logId)
+        {
+            return await _workoutDbContext.MeasurementLogs
+                .Include(l => l.MeasurementType)
+                .FirstOrDefaultAsync(l => l.Id == logId);
+        }
+
+        public async Task AddLogAsync(MeasurementLog log)
+        {
+            await _workoutDbContext.MeasurementLogs.AddAsync(log);
+        }
+
+        public async Task DeleteLogAsync(int logId)
+        {
+            var log = await _workoutDbContext.MeasurementLogs.FindAsync(logId);
+            if (log != null)
             {
-                return await _workoutDbContext.BodyMeasurements.Where(bm => bm.UserId == userId).ToListAsync();
-        }
-
-        public async Task AddBodyMeasurement(BodyMeasurements bodyMeasurement)
-        {
-            await _workoutDbContext.BodyMeasurements.AddAsync(bodyMeasurement);
-        }
-
-        public async Task UpdateBodyMeasurement(BodyMeasurements bodyMeasurement)
-        {
-            _workoutDbContext.BodyMeasurements.Update(bodyMeasurement);
-            await _workoutDbContext.SaveChangesAsync();
-        }
-
-        public async Task DeleteBodyMeasurement(int id)
-        {
-            var bodyMeasurement = await _workoutDbContext.BodyMeasurements.FindAsync(id);
-            if (bodyMeasurement != null)
-            {
-                _workoutDbContext.BodyMeasurements.Remove(bodyMeasurement);
-                await _workoutDbContext.SaveChangesAsync();
+                _workoutDbContext.MeasurementLogs.Remove(log);
             }
         }
 
-        public async Task<BodyMeasurements> GetBodyMeasurementById(int id)
+        public async Task<IEnumerable<MeasurementTarget>> GetActiveTargetsByUserIdAsync(int userId)
         {
-            return await _workoutDbContext.BodyMeasurements.FindAsync(id);
+            return await _workoutDbContext.MeasurementTargets
+                .Include(t => t.MeasurementType)
+                .Where(t => t.UserId == userId && t.IsActive)
+                .AsNoTracking()
+                .ToListAsync();
         }
-    
 
+        public async Task AddTargetAsync(MeasurementTarget target)
+        {
+            await _workoutDbContext.MeasurementTargets.AddAsync(target);
+        }
+
+        public async Task DeactivateTargetAsync(int targetId)
+        {
+            var target = await _workoutDbContext.MeasurementTargets.FindAsync(targetId);
+            if (target != null)
+            {
+                target.IsActive = false;
+                _workoutDbContext.MeasurementTargets.Update(target);
+            }
+        }
     }
 }

@@ -11,35 +11,43 @@ namespace GymTracker.Repository.Auth
     public class UserRepository : IUser
     {
         private readonly WorkoutDbContext _workoutDbContext;
-        readonly JwtService _jwtSerwice;
+        readonly JwtService _jwtService;
 
-        public UserRepository(WorkoutDbContext workoutDbContext, JwtService jwtSerwice)
+        public UserRepository(WorkoutDbContext workoutDbContext, JwtService jwtService)
         {
             _workoutDbContext = workoutDbContext;
-            _jwtSerwice = jwtSerwice;
+            _jwtService = jwtService;
         }
 
 
 
         public async Task AddUser(SignupRequest user)
         {
+            // Валидация входных данных
+            if (string.IsNullOrWhiteSpace(user?.Name))
+                throw new Exception("Имя пользователя не может быть пустым.");
             
-            if (_workoutDbContext.Users.Any(a => a.FullName == user.Name))
-            {
-                throw new Exception("Пользователь с таким именем уже существует.");
-            }
+            if (string.IsNullOrWhiteSpace(user?.Email))
+                throw new Exception("Email не может быть пустым.");
+            
+            if (string.IsNullOrWhiteSpace(user?.Password))
+                throw new Exception("Пароль не может быть пустым.");
 
-            if (_workoutDbContext.Users.Any(a => a.Email == user.Email))
+            // Нормализация email
+            var normalizedEmail = user.Email.Trim().ToLower();
+            
+            // Объединенная проверка (1 запрос вместо 2)
+            if (_workoutDbContext.Users.Any(a => a.FullName == user.Name || a.Email == normalizedEmail))
             {
-                throw new Exception("Пользователь с таким email уже существует.");
+                throw new Exception("Пользователь с таким именем или email уже существует.");
             }
             
             var newUser = new User
             {
                 FullName = user.Name,
-                Email = user.Email,
+                Email = normalizedEmail,
                 CreatedAt = DateTime.UtcNow,
-                BodyMeasurements=null,
+              //  BodyMeasurements=null,
                 Workouts=null,
             };
             var hasher = new PasswordHasher<User>();
@@ -49,14 +57,26 @@ namespace GymTracker.Repository.Auth
             await _workoutDbContext.SaveChangesAsync();
         }
 
-        public void DeleteUser(User user)
+        public async Task DeleteUser(User user)
         {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+            
              _workoutDbContext.Users.Remove(user);
+             await _workoutDbContext.SaveChangesAsync();
         }
 
         public async Task<string> GetByEmail(string email, string passwd)
         {
-            var account = await _workoutDbContext.Users.FirstOrDefaultAsync(x => x.Email == email);
+            // Валидация входных данных
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentException("Email не может быть пустым.", nameof(email));
+            
+            if (string.IsNullOrWhiteSpace(passwd))
+                throw new ArgumentException("Пароль не может быть пустым.", nameof(passwd));
+            
+            var normalizedEmail = email.Trim().ToLower();
+            var account = await _workoutDbContext.Users.FirstOrDefaultAsync(x => x.Email == normalizedEmail);
             if (account == null)
             {
                 throw new Exception("Неверный email или пароль");
@@ -64,8 +84,7 @@ namespace GymTracker.Repository.Auth
             var result = new PasswordHasher<User>().VerifyHashedPassword(account, account.PasswordHash, passwd);
             if (result == PasswordVerificationResult.Success)
             {
-                // Теперь _jwtSerwice не будет null
-                return _jwtSerwice.GenerateToken(account);
+                return _jwtService.GenerateToken(account);
             }
             else
             {
@@ -73,14 +92,18 @@ namespace GymTracker.Repository.Auth
             }
         }
 
-        public async Task<User?> GetUser(int id)
+        public async Task<User> GetUser(int id)
         {
             return await _workoutDbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public void UpdateUser(User user)
+        public async Task UpdateUser(User user)
         {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+            
             _workoutDbContext.Users.Update(user);
+            await _workoutDbContext.SaveChangesAsync();
         }
     }
 }
