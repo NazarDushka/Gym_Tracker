@@ -24,19 +24,29 @@ namespace GymTracker.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(SignupRequest user)
         {
-           
+            try
+            {
                 await _unitOfWork.User.AddUser(user);
                 return Ok(new { message = "Registration complete" });
-           
-           
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(string email,string passwd)
+        public async Task<IActionResult> Login(string email, string passwd)
         {
-            
+            try
+            {
                 var token = await _unitOfWork.User.GetByEmail(email, passwd);
                 return Ok(new { token });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
     }

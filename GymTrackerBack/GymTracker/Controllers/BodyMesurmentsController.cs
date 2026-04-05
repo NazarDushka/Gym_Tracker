@@ -1,5 +1,6 @@
 ﻿using GymTracker.Interfaces;
 using GymTracker.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,69 +8,179 @@ namespace GymTracker.Controllers
 {
     [Route("GymTracker/[controller]")]
     [ApiController]
-    public class BodyMesurmentsController : ControllerBase
+    [Authorize]
+    public class MeasurementsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        public BodyMesurmentsController(IUnitOfWork unitOfWork)
+        public MeasurementsController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        [HttpGet("GetBodyMeasurementsByUserId{id}")]
-        public async Task<ActionResult> GetBodyMeasurementsByUserId(int id)
+        // GET: api/measurements/types
+        [AllowAnonymous]
+        [HttpGet("types")]
+        public async Task<ActionResult<IEnumerable<MeasurementType>>> GetMeasurementTypes()
         {
-            var bodyMeasurements = await _unitOfWork.BodyMeasurements.GetBodyMeasurementsByUserId(id);
-            if (bodyMeasurements == null) return NotFound();
-            return Ok(bodyMeasurements);
+            var types = await _unitOfWork.Measurements.GetAllTypesAsync();
+            return Ok(types);
         }
 
-        [HttpGet("GetBodyMeasurementById{id}")]
-        public async Task<ActionResult> GetBodyMeasurementById(int id)
+        // GET: api/users/{userId}/measurements
+        [HttpGet("~/api/users/{userId}/measurements")]
+        public async Task<ActionResult<IEnumerable<MeasurementLog>>> GetUserLogs(int userId) 
         {
-            var bodyMeasurement = await _unitOfWork.BodyMeasurements.GetBodyMeasurementById(id);
-            if (bodyMeasurement == null) return NotFound();
-            return Ok(bodyMeasurement);
+            // Проверка существования пользователя
+            var user = await _unitOfWork.User.GetUser(userId);
+            if (user == null)
+                return NotFound(new { message = "Пользователь не найден" });
+
+            var logs = await _unitOfWork.Measurements.GetLogsByUserIdAsync(userId);
+            return Ok(logs);
         }
 
-        [HttpPost("AddBodyMeasurement")]
-        public async Task<ActionResult> AddBodyMeasurement([FromBody] BodyMeasurements bodyMeasurement)
+        // POST: api/measurements
+        [HttpPost]
+        public async Task<ActionResult> AddMeasurementLog([FromBody] MeasurementLog log)
         {
-            await _unitOfWork.BodyMeasurements.AddBodyMeasurement(bodyMeasurement);
-            await _unitOfWork.CompleteAsync();
-            return Ok();
-        }
+            // Валидация входных данных
+            if (log == null)
+                return BadRequest(new { message = "Данные логирования не могут быть пустыми" });
+            
+            if (log.UserId <= 0)
+                return BadRequest(new { message = "UserId должен быть больше 0" });
+            
+            if (log.MeasurementTypeId <= 0)
+                return BadRequest(new { message = "MeasurementTypeId должен быть больше 0" });
+            
+            if (log.Value < 0)
+                return BadRequest(new { message = "Value не может быть отрицательным" });
 
-        [HttpPut("UpdateBodyMeasurement{id}")]
-        public async Task<ActionResult> UpdateBodyMeasurement(int id, [FromBody] BodyMeasurements bodyMeasurement)
-        {
-            if (id != bodyMeasurement.Id)
+            // Проверка существования пользователя
+            var user = await _unitOfWork.User.GetUser(log.UserId);
+            if (user == null)
+                return NotFound(new { message = "Пользователь не найден" });
+
+            // Проверка существования типа измерения
+            var types = await _unitOfWork.Measurements.GetAllTypesAsync();
+            if (!types.Any(t => t.Id == log.MeasurementTypeId))
+                return BadRequest(new { message = "Тип измерения не найден" });
+
+            try
             {
-                return BadRequest("Body Measurement ID in URL does not match ID in body.");
-            }
-            var existingBodyMeasurement = await _unitOfWork.BodyMeasurements.GetBodyMeasurementById(id);
-            if (existingBodyMeasurement == null) return NotFound();
-            existingBodyMeasurement.Weight = bodyMeasurement.Weight;
-            existingBodyMeasurement.BodyFatPercentage = bodyMeasurement.BodyFatPercentage;
-            existingBodyMeasurement.Chest = bodyMeasurement.Chest;
-            existingBodyMeasurement.Waist = bodyMeasurement.Waist;
-            existingBodyMeasurement.Hips = bodyMeasurement.Hips;
-            existingBodyMeasurement.Biceps = bodyMeasurement.Biceps;
-            existingBodyMeasurement.Legs = bodyMeasurement.Legs;
-            existingBodyMeasurement.Calves = bodyMeasurement.Calves;
-            existingBodyMeasurement.Forearms = bodyMeasurement.Forearms;
-            existingBodyMeasurement.Height = bodyMeasurement.Height;
-            existingBodyMeasurement.Date = bodyMeasurement.Date;
+                if (log.Date == default)
+                {
+                    log.Date = DateTime.UtcNow;
+                }
 
-            await _unitOfWork.CompleteAsync();
-            return Ok();
+                log.MeasurementType = null;
+
+                await _unitOfWork.Measurements.AddLogAsync(log);
+                await _unitOfWork.CompleteAsync(); 
+
+                return StatusCode(StatusCodes.Status201Created, log);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Ошибка при создании логирования", details = ex.Message });
+            }
         }
 
-        [HttpDelete("DeleteBodyMeasurement{id}")]
-        public async Task<ActionResult> DeleteBodyMeasurement(int id)
+        // DELETE: api/measurements/{id}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteMeasurementLog(int id) 
         {
-            await _unitOfWork.BodyMeasurements.DeleteBodyMeasurement(id);
-            await _unitOfWork.CompleteAsync();
-            return Ok();
+            try
+            {
+                var log = await _unitOfWork.Measurements.GetLogByIdAsync(id);
+                if (log == null)
+                    return NotFound(new { message = "Логирование не найдено" });
+
+                await _unitOfWork.Measurements.DeleteLogAsync(id);
+                await _unitOfWork.CompleteAsync(); 
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Ошибка при удалении логирования", details = ex.Message });
+            }
+        }
+
+        // GET: api/users/{userId}/targets
+        [HttpGet("~/api/users/{userId}/targets")]
+        public async Task<ActionResult<IEnumerable<MeasurementTarget>>> GetUserTargets(int userId) 
+        {
+            // Проверка существования пользователя
+            var user = await _unitOfWork.User.GetUser(userId);
+            if (user == null)
+                return NotFound(new { message = "Пользователь не найден" });
+
+            var targets = await _unitOfWork.Measurements.GetActiveTargetsByUserIdAsync(userId);
+            return Ok(targets);
+        }
+
+        // POST: api/targets
+        [HttpPost("targets")]
+        public async Task<ActionResult> AddTarget([FromBody] MeasurementTarget target)
+        {
+            // Валидация входных данных
+            if (target == null)
+                return BadRequest(new { message = "Целевое значение не может быть пустым" });
+            
+            if (target.UserId <= 0)
+                return BadRequest(new { message = "UserId должен быть больше 0" });
+            
+            if (target.MeasurementTypeId <= 0)
+                return BadRequest(new { message = "MeasurementTypeId должен быть больше 0" });
+            
+            if (target.TargetValue < 0)
+                return BadRequest(new { message = "TargetValue не может быть отрицательным" });
+
+            // Проверка существования пользователя
+            var user = await _unitOfWork.User.GetUser(target.UserId);
+            if (user == null)
+                return NotFound(new { message = "Пользователь не найден" });
+
+            try
+            {
+                var activeTargets = await _unitOfWork.Measurements.GetActiveTargetsByUserIdAsync(target.UserId);
+                var oldTarget = activeTargets.FirstOrDefault(t => t.MeasurementTypeId == target.MeasurementTypeId);
+
+                if (oldTarget != null)
+                {
+                    await _unitOfWork.Measurements.DeactivateTargetAsync(oldTarget.Id);
+                }
+
+                target.CreatedAt = DateTime.UtcNow;
+                target.IsActive = true;
+
+                await _unitOfWork.Measurements.AddTargetAsync(target);
+                await _unitOfWork.CompleteAsync();
+
+                return StatusCode(StatusCodes.Status201Created, target);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Ошибка при создании целевого значения", details = ex.Message });
+            }
+        }
+
+        // DELETE (Deactivate): api/targets/{id}
+        [HttpDelete("targets/{id}")]
+        public async Task<ActionResult> DeactivateTarget(int id) 
+        {
+            try
+            {
+                await _unitOfWork.Measurements.DeactivateTargetAsync(id);
+                await _unitOfWork.CompleteAsync(); 
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Ошибка при деактивации целевого значения", details = ex.Message });
+            }
         }
     }
 }
