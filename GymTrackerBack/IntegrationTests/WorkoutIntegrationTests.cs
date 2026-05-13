@@ -115,7 +115,7 @@ namespace GymTracker.IntegrationTests
 
             // === 2. ACT (POST - Добавляем замер) ===
             
-            var postResponse = await _client.PostAsJsonAsync("/api/Measurements", newLog);
+            var postResponse = await _client.PostAsJsonAsync("/GymTracker/Measurements", newLog);
             var postErrorText = await postResponse.Content.ReadAsStringAsync();
 
             // === 3. ASSERT (POST) ===

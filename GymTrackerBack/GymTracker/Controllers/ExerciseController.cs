@@ -2,11 +2,15 @@
 using GymTracker.Models;
 using GymTracker.Repository;
 using GymTracker.Repository.UnitOfWork;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymTracker.Controllers
 {
+    [Route("GymTracker/[controller]")]
+    [ApiController]
+
     public class ExerciseController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
