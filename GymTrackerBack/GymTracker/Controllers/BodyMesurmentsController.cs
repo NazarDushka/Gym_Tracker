@@ -59,7 +59,7 @@ namespace GymTracker.Controllers
             // Проверка существования пользователя
             var user = await _unitOfWork.User.GetUser(log.UserId);
             if (user == null)
-                return NotFound(new { message = "Пользователь не найден" });
+                return BadRequest(new { message = "Пользователь не найден" });
 
             // Проверка существования типа измерения
             var types = await _unitOfWork.Measurements.GetAllTypesAsync();

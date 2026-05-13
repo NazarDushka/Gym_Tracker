@@ -39,7 +39,7 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ACT ===
-            var response = await _client.GetAsync("/GetExercises");
+            var response = await _client.GetAsync("/GymTracker/Exercise/GetExercises");
             var errorText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
@@ -79,7 +79,7 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ACT ===
-            var response = await _client.GetAsync($"/GetExercise/{testExerciseId}");
+            var response = await _client.GetAsync($"/GymTracker/Exercise/GetExercise{testExerciseId}");
             var errorText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
@@ -99,7 +99,7 @@ namespace GymTracker.IntegrationTests
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             // === 1. ACT ===
-            var response = await _client.GetAsync($"/GetExercise/999");
+            var response = await _client.GetAsync($"/GymTracker/Exercise/GetExercise/999");
 
             // === 2. ASSERT ===
             Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
@@ -120,7 +120,7 @@ namespace GymTracker.IntegrationTests
             };
 
             // === 2. ACT ===
-            var response = await _client.PostAsJsonAsync("/AddExercise", newExercise);
+            var response = await _client.PostAsJsonAsync("/GymTracker/Exercise/AddExercise", newExercise);
             var errorText = await response.Content.ReadAsStringAsync();
 
             // === 3. ASSERT ===
@@ -173,7 +173,7 @@ namespace GymTracker.IntegrationTests
             };
 
             // === 2. ACT ===
-            var response = await _client.PutAsJsonAsync($"/UpdateExercise/{testExerciseId}", updatedExercise);
+            var response = await _client.PutAsJsonAsync($"/GymTracker/Exercise/UpdateExercise{testExerciseId}", updatedExercise);
             var errorText = await response.Content.ReadAsStringAsync();
 
             // === 3. ASSERT ===
@@ -207,7 +207,7 @@ namespace GymTracker.IntegrationTests
             };
 
             // === 2. ACT ===
-            var response = await _client.PutAsJsonAsync($"/UpdateExercise/999", updatedExercise);
+            var response = await _client.PutAsJsonAsync($"/GymTracker/Exercise/UpdateExercise999", updatedExercise);
 
             // === 3. ASSERT ===
             Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
@@ -239,7 +239,7 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ACT ===
-            var response = await _client.DeleteAsync($"/DeleteExercise/{testExerciseId}");
+            var response = await _client.DeleteAsync($"/GymTracker/Exercise/DeleteExercise{testExerciseId}");
             var errorText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
@@ -262,7 +262,7 @@ namespace GymTracker.IntegrationTests
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             // === 1. ACT ===
-            var response = await _client.DeleteAsync($"/DeleteExercise/999");
+            var response = await _client.DeleteAsync($"/GymTracker/Exercise/DeleteExercise999");
 
             // === 2. ASSERT ===
             // Контроллер всегда возвращает Ok, даже если упражнение не существует
@@ -276,7 +276,7 @@ namespace GymTracker.IntegrationTests
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             // === 1. ACT ===
-            var response = await _client.GetAsync("/GetExercises");
+            var response = await _client.GetAsync("/GymTracker/Exercise/GetExercises");
             var errorText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
