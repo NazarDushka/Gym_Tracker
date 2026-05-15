@@ -15,7 +15,7 @@ import { AuthService } from '../../Data/Services/auth.service';
 export class LastWorkout {
   WorkoutService = inject(WorkoutService);
    authService = inject(AuthService);
-  MyId = this.authService.getUserIdFromToken();
+  MyId = this.authService.getUserINFOFromToken().id || 0;
   workout?: Workout; 
 errorMessage: any;
 set: any;
@@ -23,7 +23,7 @@ set: any;
 // Инжектируем ChangeDetectorRef
   private changeDetectorRef = inject(ChangeDetectorRef);
   constructor() {
-     this.WorkoutService.getLastWorkout(this.MyId!).subscribe(val => {
+     this.WorkoutService.getLastWorkout(this.MyId).subscribe(val => {
        console.log("Workout data received by component:", val);
        this.workout = val;
        // Явно запускаем обнаружение изменений

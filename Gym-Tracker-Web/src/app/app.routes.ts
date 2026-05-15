@@ -8,6 +8,7 @@ import { WorkoutDetails } from './components/main-layout/workout-details/workout
 import { WorkoutFormComponent } from './components/main-layout/workout-form/workout-form';
 import { ExercisesList } from './components/exercises/exercises';
 import { ExerciseDetails } from './components/exercise-details/exercise-details';
+import { MyProfile } from './components/MyProfile/my-profile/my-profile';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -20,6 +21,7 @@ export const routes: Routes = [
         { path : 'add-workout', component: WorkoutFormComponent },
         { path : 'exercises', component: ExercisesList },
         { path : 'exerciseDetails/:id', component: ExerciseDetails },
+        { path : 'my-profile', component: MyProfile},
     ] },
    
 ];
