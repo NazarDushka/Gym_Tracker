@@ -27,9 +27,17 @@ namespace GymTracker.Controllers
         }
 
         // GET: api/users/{userId}/measurements
-        [HttpGet("~/api/users/{userId}/measurements")]
-        public async Task<ActionResult<IEnumerable<MeasurementLog>>> GetUserLogs(int userId) 
+        [HttpGet("~/measurements")]
+        public async Task<ActionResult<IEnumerable<MeasurementLog>>> GetUserLogs() 
         {
+            // Получение идентификатора пользователя из контекста аутентификации
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "Id");
+            if (userIdClaim == null)
+                return Unauthorized(new { message = "Пользователь не аутентифицирован" });
+
+            if (!int.TryParse(userIdClaim.Value, out int userId))
+                return BadRequest(new { message = "Некорректный идентификатор пользователя" });
+
             // Проверка существования пользователя
             var user = await _unitOfWork.User.GetUser(userId);
             if (user == null)

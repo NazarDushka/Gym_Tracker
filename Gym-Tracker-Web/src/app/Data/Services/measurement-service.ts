@@ -2,41 +2,40 @@ import { inject, Injectable } from '@angular/core';
 import { MeasurementLog } from './Interfaces/body-measurements';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
+import { Target } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MeasurementService {
   http = inject(HttpClient)
- 
-  getLatestMeasurementLogs(userId?: number): Observable<MeasurementLog[]> {
-  return this.http.get<MeasurementLog[]>(`https://localhost:7079/api/users/${userId}/measurements`)
-    .pipe(
-      map((logs: MeasurementLog[]) => {
-        if (!logs || logs.length === 0) return [];
+  baseUrl = 'https://localhost:7079/GymTracker/measurements';
+ getLatestMeasurementLogs(): Observable<MeasurementLog[]> {
+    return this.http.get<MeasurementLog[]>(`${this.baseUrl}/last`);
+  }
 
-        // 1. Группируем логи по MeasurementTypeId, оставляя только самые новые
-        const latestLogsMap = new Map<number, MeasurementLog>();
+ getAllMeasurementLogs(): Observable<MeasurementLog[]> {
+    return this.http.get<MeasurementLog[]>(`${this.baseUrl}`);
+  }
+  
+  addMeasurementLog(log: MeasurementLog): Observable<MeasurementLog> {
+    return this.http.post<MeasurementLog>(`${this.baseUrl}`, log);
+  }
 
-        logs.forEach(log => {
-          const currentLogTime = new Date(log.Date).getTime();
-          const existingLog = latestLogsMap.get(log.MeasurementTypeId);
+  deleteMeasurementLog(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
 
-          if (!existingLog) {
-            latestLogsMap.set(log.MeasurementTypeId, log);
-          } else {
-            const existingLogTime = new Date(existingLog.Date).getTime();
-            if (currentLogTime > existingLogTime) {
-              latestLogsMap.set(log.MeasurementTypeId, log);
-            }
-          }
-        });
+  getUserTargets(): Observable<Target[]> {
+    return this.http.get<Target[]>(`${this.baseUrl}/targets`);
+  }
 
-        const sortedUniqueLogs = Array.from(latestLogsMap.values())
-          .sort((a, b) => a.MeasurementTypeId - b.MeasurementTypeId);
-
-        return sortedUniqueLogs;
-      })
-    );
+  addTarget(target: Target): Observable<Target> {
+    return this.http.post<Target>(`${this.baseUrl}/targets`, target);
+  }
+  
+  deleteTarget(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/targets/${id}`);
+  }
 }
-}
+

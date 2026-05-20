@@ -36,11 +36,11 @@ namespace GymTracker.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(string email, string passwd)
+        public async Task<IActionResult> Login(string email, string password)
         {
             try
             {
-                var token = await _unitOfWork.User.GetByEmail(email, passwd);
+                var token = await _unitOfWork.User.GetByEmail(email, password);
                 return Ok(new { token });
             }
             catch (Exception ex)
