@@ -30,7 +30,7 @@ export class WorkoutFormComponent implements OnInit {
 
   private authService = inject(AuthService);
 
-  MyId: number = this.authService.getUserIdFromToken() || 0; 
+  MyId: number = this.authService.getUserINFOFromToken().id || 0; 
 
   workout: Workout = this.initializeNewWorkout(); 
 

@@ -1,38 +1,29 @@
 //Временная заглушка
 
-
-
-
-
-import { Component } from '@angular/core';
-// Импортируем недостающие пайпы (решение ошибки NG8004)
-import { UpperCasePipe, DatePipe } from '@angular/common'; 
+import { Component, inject } from '@angular/core';
+import { MeasurementService } from '../../../Data/Services/measurement-service';
+import { UpperCasePipe, DatePipe, AsyncPipe, SlicePipe } from '@angular/common'; 
+import { AuthService } from '../../../Data/Services/auth.service';
 
 @Component({
   selector: 'app-my-profile',
   standalone: true,
-  imports: [UpperCasePipe, DatePipe], // Обязательно добавляем их сюда
+  imports: [UpperCasePipe, DatePipe, AsyncPipe, SlicePipe],
   templateUrl: './my-profile.html',
-  styleUrls: ['./my-profile.css'] // или .scss, в зависимости от твоих настроек
+  styleUrls: ['./my-profile.scss'] 
 })
 export class MyProfile {
-  // 1. Решение ошибки TS2339: Добавляем свойство user
-  user = {
-    name: 'Имя Пользователя',
-    joinDate: new Date('2025-01-01') // Заглушка даты
-  };
+ authService = inject(AuthService);
+ UserInfo = this.authService.getUserINFOFromToken()|| { id: 0, name: "Unknown User", joinDate: "0000-00-00" };
 
-  // 2. Решение ошибки TS2339: Добавляем метрики
-  metrics = {
-    height: 180,
-    weight: 85.5,
-    bodyFat: 12.5 // Цель 8% всё ближе!
-  };
+ measurementService = inject(MeasurementService);
+ measurements$ = this.measurementService.getLatestMeasurementLogs(this.UserInfo.id || 0); 
 
+ 
   // 3. Решение ошибки TS2339: Массив для @for
   recentRecords = [
-    { id: 1, exercise: 'Жим лежа', value: '100 кг', date: '2026-03-08' },
-    { id: 2, exercise: 'Присед', value: '140 кг', date: '2026-03-09' }
+    { id: 1, exerciseName: 'Жим лежа', weight: 100, reps: 5, date: '2026-03-08' },
+    { id: 2, exerciseName: 'Присед', weight: 140, reps: 5, date: '2026-03-09' }
   ];
 
   // 4. Решение ошибки TS2339: Обработчики кликов

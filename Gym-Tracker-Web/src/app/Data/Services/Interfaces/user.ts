@@ -1,5 +1,5 @@
-import { BodyMeasurements } from "./body-measurements";
 import { Workout } from "./workout.interface";
+import { MeasurementLog } from "./body-measurements";
 
 export interface User {
     id: number,
@@ -8,5 +8,5 @@ export interface User {
     password: string,
     createdAt: string,
     workouts: Workout[],
-    bodyMeasurements: BodyMeasurements[]
+    bodyMeasurementLogs: MeasurementLog[]
 }
