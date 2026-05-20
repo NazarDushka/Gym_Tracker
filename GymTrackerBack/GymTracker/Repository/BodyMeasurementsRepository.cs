@@ -20,6 +20,17 @@ namespace GymTracker.Repository
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<MeasurementLog>> GetLastLogsForUserAsync(int userId)
+        { 
+        return await _workoutDbContext.MeasurementLogs
+            .AsNoTracking()
+            .Include(l => l.MeasurementType)
+            .Where(l => l.UserId == userId)
+            .GroupBy(l => l.MeasurementTypeId)
+            .Select(g => g.OrderByDescending(l => l.Date).FirstOrDefault())
+            .ToListAsync();
+        }
+
         public async Task<IEnumerable<MeasurementLog>> GetLogsByUserIdAsync(int userId)
         {
             return await _workoutDbContext.MeasurementLogs
