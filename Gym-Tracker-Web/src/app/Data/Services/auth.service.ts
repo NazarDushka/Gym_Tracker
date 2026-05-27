@@ -38,7 +38,7 @@ private _isAuthenticated = new BehaviorSubject<boolean>(this.hasToken());
 
   // Метод для входа пользователя
   login(request: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.baseUrl + 'login?email='+request.email+'&passwd='+request.password, request).pipe(
+    return this.http.post<AuthResponse>(this.baseUrl + 'login?email='+request.email+'&password='+request.password, request).pipe(
       tap(response => {
         this.saveAuthData(response.token);
         this._isAuthenticated.next(true);

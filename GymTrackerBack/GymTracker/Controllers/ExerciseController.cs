@@ -10,7 +10,7 @@ namespace GymTracker.Controllers
 {
     [Route("GymTracker/[controller]")]
     [ApiController]
-
+    
     public class ExerciseController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -36,6 +36,7 @@ namespace GymTracker.Controllers
         }
 
         [HttpPost("AddExercise")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> AddExercise([FromBody] Exercise exercise)
         {
             await _unitOfWork.Exercises.AddExercise(exercise);
@@ -45,6 +46,7 @@ namespace GymTracker.Controllers
 
 
         [HttpDelete("DeleteExercise{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteExercise(int id)
         {
             await _unitOfWork.Exercises.DeleteExercise(id);
@@ -53,6 +55,7 @@ namespace GymTracker.Controllers
         }
 
         [HttpPut("UpdateExercise{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateExercise(int id, [FromBody] Exercise exercise)
         {
             var existingExercise = await _unitOfWork.Exercises.GetExerciseById(id);

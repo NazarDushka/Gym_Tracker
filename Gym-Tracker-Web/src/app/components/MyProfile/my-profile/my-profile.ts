@@ -17,7 +17,7 @@ export class MyProfile {
  UserInfo = this.authService.getUserINFOFromToken()|| { id: 0, name: "Unknown User", joinDate: "0000-00-00" };
 
  measurementService = inject(MeasurementService);
- measurements$ = this.measurementService.getLatestMeasurementLogs(this.UserInfo.id || 0); 
+ measurements$ = this.measurementService.getLatestMeasurementLogs(); 
 
  
   // 3. Решение ошибки TS2339: Массив для @for
