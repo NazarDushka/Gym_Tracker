@@ -84,7 +84,7 @@ namespace GymTracker.Repository.Auth
             var result = new PasswordHasher<User>().VerifyHashedPassword(account, account.PasswordHash, passwd);
             if (result == PasswordVerificationResult.Success)
             {
-                return _jwtService.GenerateToken(account);
+                return _jwtService.GenerateToken(account.Id, account.Email, account.FullName);
             }
             else
             {

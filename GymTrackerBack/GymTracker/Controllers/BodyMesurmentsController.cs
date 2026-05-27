@@ -17,6 +17,16 @@ namespace GymTracker.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        private int GetUserId()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                throw new UnauthorizedAccessException("UserId claim is missing or invalid.");
+            }
+            return userId;
+        }
+
         // GET: api/measurements/types
         [AllowAnonymous]
         [HttpGet("types")]
@@ -26,6 +36,7 @@ namespace GymTracker.Controllers
             return Ok(types);
         }
 
+        // GET: api/measurements
         [HttpGet("last")]
         public async Task<ActionResult<IEnumerable<MeasurementLog>>> GetLastLogsForUser()
         {
@@ -41,12 +52,7 @@ namespace GymTracker.Controllers
         public async Task<ActionResult<IEnumerable<MeasurementLog>>> GetUserLogs() 
         {
             // Получение идентификатора пользователя из контекста аутентификации
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "Id");
-            if (userIdClaim == null)
-                return Unauthorized(new { message = "Пользователь не аутентифицирован" });
-
-            if (!int.TryParse(userIdClaim.Value, out int userId))
-                return BadRequest(new { message = "Некорректный идентификатор пользователя" });
+            int userId = GetUserId();
 
             // Проверка существования пользователя
             var user = await _unitOfWork.User.GetUser(userId);
@@ -75,7 +81,8 @@ namespace GymTracker.Controllers
                 return BadRequest(new { message = "Value не может быть отрицательным" });
 
             // Проверка существования пользователя
-            var user = await _unitOfWork.User.GetUser(log.UserId);
+            int userId = GetUserId();
+            var user = await _unitOfWork.User.GetUser(userId);
             if (user == null)
                 return BadRequest(new { message = "Пользователь не найден" });
 
@@ -110,10 +117,12 @@ namespace GymTracker.Controllers
         {
             try
             {
+                int userId = GetUserId();
                 var log = await _unitOfWork.Measurements.GetLogByIdAsync(id);
                 if (log == null)
                     return NotFound(new { message = "Логирование не найдено" });
-
+                if (log.UserId != userId)
+                    return BadRequest(new { message = "У вас нет прав на удаление этого логирования" });
                 await _unitOfWork.Measurements.DeleteLogAsync(id);
                 await _unitOfWork.CompleteAsync(); 
 
@@ -125,14 +134,11 @@ namespace GymTracker.Controllers
             }
         }
 
-        // GET: api/users/{userId}/targets
-        [HttpGet("~/api/users/{userId}/targets")]
-        public async Task<ActionResult<IEnumerable<MeasurementTarget>>> GetUserTargets(int userId) 
+        // GET: api/targets
+        [HttpGet("~/targets")]
+        public async Task<ActionResult<IEnumerable<MeasurementTarget>>> GetUserTargets() 
         {
-            // Проверка существования пользователя
-            var user = await _unitOfWork.User.GetUser(userId);
-            if (user == null)
-                return NotFound(new { message = "Пользователь не найден" });
+            int userId = GetUserId();
 
             var targets = await _unitOfWork.Measurements.GetActiveTargetsByUserIdAsync(userId);
             return Ok(targets);
@@ -156,7 +162,8 @@ namespace GymTracker.Controllers
                 return BadRequest(new { message = "TargetValue не может быть отрицательным" });
 
             // Проверка существования пользователя
-            var user = await _unitOfWork.User.GetUser(target.UserId);
+            int userId = GetUserId();
+            var user = await _unitOfWork.User.GetUser(userId);
             if (user == null)
                 return NotFound(new { message = "Пользователь не найден" });
 

@@ -1,6 +1,7 @@
 ﻿using GymTracker.Interfaces;
 using GymTracker.Models;
 using GymTracker.Repository.UnitOfWork;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace GymTracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PRController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;

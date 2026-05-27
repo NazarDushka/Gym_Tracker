@@ -41,7 +41,7 @@ export class LoginComponent {
     ).subscribe(response => {
       if (response) {
         // Логин успешен, перенаправляем пользователя
-        this.router.navigate(['/last-workout']); // Или на любую другую страницу
+        this.router.navigate(['/']); // Или на любую другую страницу
       }
     });
   }

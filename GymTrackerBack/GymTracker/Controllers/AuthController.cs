@@ -27,6 +27,7 @@ namespace GymTracker.Controllers
             try
             {
                 await _unitOfWork.User.AddUser(user);
+                await Login(user.Email, user.Password);
                 return Ok(new { message = "Registration complete" });
             }
             catch (Exception ex)

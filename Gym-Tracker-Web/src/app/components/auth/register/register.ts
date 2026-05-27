@@ -46,14 +46,13 @@ export class RegisterComponent {
       finalize(() => this.isLoading = false),
       catchError(error => {
         this.errorMessage = error.message || 'Registration failed.';
-        return of(null); // Возвращаем Observable, чтобы поток завершился
+        return of(null); 
       })
     ).subscribe(response => {
       if (response) {
         this.successMessage = 'Registration successful! You are now logged in.';
-        // После успешной регистрации и/или входа, перенаправляем пользователя
         setTimeout(() => {
-          this.router.navigate(['/last-workout']); // Или на любую другую страницу
+          this.router.navigate(['/']);
         }, 1500);
       }
     });

@@ -14,10 +14,10 @@ baseUrl='https://localhost:7079/GymTracker/Workout/'
     return this.http.get<Workout[]>(this.baseUrl+'GetAllWorkouts')
   }
   getUsersWorkouts(myId: number) {
-    return this.http.get<Workout[]>(`${this.baseUrl}GetMyWorkouts?userId=${myId}`);
+    return this.http.get<Workout[]>(`${this.baseUrl}GetMyWorkouts`);
   }
   getLastWorkout(myId: number) {
-    return this.http.get<Workout>(`${this.baseUrl}LastWorkout?userId=${myId}`);
+    return this.http.get<Workout>(`${this.baseUrl}LastWorkout`);
   }
 
   getWorkoutDetails(id: number) {
