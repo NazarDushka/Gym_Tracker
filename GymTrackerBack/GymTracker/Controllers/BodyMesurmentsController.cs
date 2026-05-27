@@ -37,6 +37,17 @@ namespace GymTracker.Controllers
         }
 
         // GET: api/measurements
+        [HttpGet("last")]
+        public async Task<ActionResult<IEnumerable<MeasurementLog>>> GetLastLogsForUser()
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value ?? "0");
+            var logs = await _unitOfWork.Measurements.GetLastLogsForUserAsync(userId);
+            if (logs == null || !logs.Any())
+                return NotFound(new { message = "Logs not found for the specified user" });
+            return Ok(logs);
+        }
+
+        // GET: api/users/{userId}/measurements
         [HttpGet("~/measurements")]
         public async Task<ActionResult<IEnumerable<MeasurementLog>>> GetUserLogs() 
         {
