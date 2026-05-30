@@ -83,7 +83,7 @@ namespace GymTracker.IntegrationTests
         public async Task GettingAndAddingMeasurements_ShouldSaveAndReturnLogs()
         {
             int testUserId;
-            int testTypeId;
+            Guid testTypeId;
 
             // === 0. SEEDING ===
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
@@ -94,7 +94,7 @@ namespace GymTracker.IntegrationTests
 
                 // Создаем тестовые данные
                 var user = new User { FullName = "MeasurementTester", PasswordHash = "123", Email = "test@measurements.com" };
-                var measurementType = new MeasurementType { Id = 1, Name = "Body Fat Percentage", Unit = "%" };
+                var measurementType = new MeasurementType { Id = Guid.NewGuid(), Name = "Body Fat Percentage", Unit = "%" };
 
                 dbContext.Users.Add(user);
                 dbContext.MeasurementTypes.Add(measurementType);

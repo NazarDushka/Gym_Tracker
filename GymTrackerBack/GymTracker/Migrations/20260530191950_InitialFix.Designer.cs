@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymTracker.Migrations
 {
     [DbContext(typeof(WorkoutDbContext))]
-    [Migration("20260302144932_AddBodyMeasurementFields")]
-    partial class AddBodyMeasurementFields
+    [Migration("20260530191950_InitialFix")]
+    partial class InitialFix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,57 +24,6 @@ namespace GymTracker.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("GymTracker.Models.BodyMeasurements", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<float?>("Biceps")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("BodyFatPercentage")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("Calves")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("Chest")
-                        .HasColumnType("real");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<float?>("Forearms")
-                        .HasColumnType("real");
-
-                    b.Property<float>("Height")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("Hips")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("Legs")
-                        .HasColumnType("real");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<float?>("Waist")
-                        .HasColumnType("real");
-
-                    b.Property<float>("Weight")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("BodyMeasurements");
-                });
 
             modelBuilder.Entity("GymTracker.Models.Exercise", b =>
                 {
@@ -97,6 +46,122 @@ namespace GymTracker.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Exercises");
+                });
+
+            modelBuilder.Entity("GymTracker.Models.MeasurementLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("MeasurementTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Value")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeasurementTypeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MeasurementLogs");
+                });
+
+            modelBuilder.Entity("GymTracker.Models.MeasurementTarget", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("MeasurementTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("TargetValue")
+                        .HasColumnType("real");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeasurementTypeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MeasurementTargets");
+                });
+
+            modelBuilder.Entity("GymTracker.Models.MeasurementType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MeasurementTypes");
+                });
+
+            modelBuilder.Entity("GymTracker.Models.PersonalRecord", b =>
+                {
+                    b.Property<int>("WorkoutSetId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WorkoutSetId"));
+
+                    b.Property<DateTime>("AchievedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("CalculatedMaxLift")
+                        .HasColumnType("real");
+
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ExerciseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Reps")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Weight")
+                        .HasColumnType("real");
+
+                    b.HasKey("WorkoutSetId");
+
+                    b.ToTable("PersonalRecords");
                 });
 
             modelBuilder.Entity("GymTracker.Models.User", b =>
@@ -180,15 +245,38 @@ namespace GymTracker.Migrations
                     b.ToTable("WorkoutSets");
                 });
 
-            modelBuilder.Entity("GymTracker.Models.BodyMeasurements", b =>
+            modelBuilder.Entity("GymTracker.Models.MeasurementLog", b =>
                 {
-                    b.HasOne("GymTracker.Models.User", "User")
-                        .WithMany("BodyMeasurements")
+                    b.HasOne("GymTracker.Models.MeasurementType", "MeasurementType")
+                        .WithMany("Logs")
+                        .HasForeignKey("MeasurementTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GymTracker.Models.User", null)
+                        .WithMany("MeasurementLogs")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("MeasurementType");
+                });
+
+            modelBuilder.Entity("GymTracker.Models.MeasurementTarget", b =>
+                {
+                    b.HasOne("GymTracker.Models.MeasurementType", "MeasurementType")
+                        .WithMany("Targets")
+                        .HasForeignKey("MeasurementTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GymTracker.Models.User", null)
+                        .WithMany("MeasurementTargets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MeasurementType");
                 });
 
             modelBuilder.Entity("GymTracker.Models.Workout", b =>
@@ -221,9 +309,18 @@ namespace GymTracker.Migrations
                     b.Navigation("Workout");
                 });
 
+            modelBuilder.Entity("GymTracker.Models.MeasurementType", b =>
+                {
+                    b.Navigation("Logs");
+
+                    b.Navigation("Targets");
+                });
+
             modelBuilder.Entity("GymTracker.Models.User", b =>
                 {
-                    b.Navigation("BodyMeasurements");
+                    b.Navigation("MeasurementLogs");
+
+                    b.Navigation("MeasurementTargets");
 
                     b.Navigation("Workouts");
                 });

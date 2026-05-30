@@ -57,8 +57,8 @@ namespace GymTracker.Migrations
                     b.Property<Guid>("MeasurementTypeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.Property<float>("Value")
                         .HasColumnType("real");
@@ -67,14 +67,18 @@ namespace GymTracker.Migrations
 
                     b.HasIndex("MeasurementTypeId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("MeasurementLogs");
                 });
 
             modelBuilder.Entity("GymTracker.Models.MeasurementTarget", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -91,12 +95,14 @@ namespace GymTracker.Migrations
                     b.Property<float>("TargetValue")
                         .HasColumnType("real");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MeasurementTypeId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("MeasurementTargets");
                 });
@@ -244,6 +250,12 @@ namespace GymTracker.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GymTracker.Models.User", null)
+                        .WithMany("MeasurementLogs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("MeasurementType");
                 });
 
@@ -252,6 +264,12 @@ namespace GymTracker.Migrations
                     b.HasOne("GymTracker.Models.MeasurementType", "MeasurementType")
                         .WithMany("Targets")
                         .HasForeignKey("MeasurementTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GymTracker.Models.User", null)
+                        .WithMany("MeasurementTargets")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -297,6 +315,10 @@ namespace GymTracker.Migrations
 
             modelBuilder.Entity("GymTracker.Models.User", b =>
                 {
+                    b.Navigation("MeasurementLogs");
+
+                    b.Navigation("MeasurementTargets");
+
                     b.Navigation("Workouts");
                 });
 

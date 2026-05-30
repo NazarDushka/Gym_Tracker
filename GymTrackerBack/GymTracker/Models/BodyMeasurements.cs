@@ -2,7 +2,7 @@
 {
     public class MeasurementType
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } 
         public string Unit { get; set; } 
 
@@ -15,7 +15,7 @@
         public int Id { get; set; }
         public int UserId { get; set; }
 
-        public int MeasurementTypeId { get; set; }
+        public Guid MeasurementTypeId { get; set; }
         public MeasurementType? MeasurementType { get; set; }
 
         public float TargetValue { get; set; } 
@@ -26,10 +26,10 @@
 
     public class MeasurementLog
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public int UserId { get; set; }
 
-        public int MeasurementTypeId { get; set; }
+        public Guid MeasurementTypeId { get; set; }
         public MeasurementType? MeasurementType { get; set; } 
 
         public float Value { get; set; } 

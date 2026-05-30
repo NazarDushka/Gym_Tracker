@@ -42,8 +42,7 @@ namespace GymTracker.Controllers
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value ?? "0");
             var logs = await _unitOfWork.Measurements.GetLastLogsForUserAsync(userId);
-            if (logs == null || !logs.Any())
-                return NotFound(new { message = "Logs not found for the specified user" });
+      
             return Ok(logs);
         }
 
@@ -74,8 +73,8 @@ namespace GymTracker.Controllers
             if (log.UserId <= 0)
                 return BadRequest(new { message = "UserId должен быть больше 0" });
             
-            if (log.MeasurementTypeId <= 0)
-                return BadRequest(new { message = "MeasurementTypeId должен быть больше 0" });
+            if (log.MeasurementTypeId == Guid.Empty)
+                return BadRequest(new { message = "MeasurementTypeId должен быть указан" });
             
             if (log.Value < 0)
                 return BadRequest(new { message = "Value не может быть отрицательным" });
@@ -88,7 +87,7 @@ namespace GymTracker.Controllers
 
             // Проверка существования типа измерения
             var types = await _unitOfWork.Measurements.GetAllTypesAsync();
-            if (!types.Any(t => t.Id == log.MeasurementTypeId))
+            if (!types.Any(t => t.Id == new Guid(log.MeasurementTypeId.ToString())))
                 return BadRequest(new { message = "Тип измерения не найден" });
 
             try
@@ -155,8 +154,8 @@ namespace GymTracker.Controllers
             if (target.UserId <= 0)
                 return BadRequest(new { message = "UserId должен быть больше 0" });
             
-            if (target.MeasurementTypeId <= 0)
-                return BadRequest(new { message = "MeasurementTypeId должен быть больше 0" });
+            if (target.MeasurementTypeId == Guid.Empty)
+                return BadRequest(new { message = "MeasurementTypeId должен быть" });
             
             if (target.TargetValue < 0)
                 return BadRequest(new { message = "TargetValue не может быть отрицательным" });

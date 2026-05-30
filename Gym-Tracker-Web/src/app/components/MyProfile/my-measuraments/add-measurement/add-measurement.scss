@@ -1,0 +1,102 @@
+.add-measurement-form-container {
+  max-width: 450px;
+  margin: 0 auto;
+  padding: 32px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  font-family: sans-serif;
+
+  h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 24px;
+  }
+}
+
+.form-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: #212529;
+    background-color: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+      border-color: #86b7fe;
+      /* Свечение при фокусе, как в Bootstrap */
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+    }
+
+    &::placeholder {
+      color: #adb5bd;
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+
+  button {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+
+  .btn-cancel {
+    background-color: transparent;
+    color: #6c757d;
+    border: 1px solid #ced4da;
+
+    &:hover {
+      background-color: #f8f9fa;
+      color: #495057;
+    }
+  }
+
+  .btn-submit {
+    background-color: #0d6efd;
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 2px 4px rgba(13, 110, 253, 0.2);
+
+    &:hover:not(:disabled) {
+      background-color: #0b5ed7;
+      box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+    }
+
+    &:disabled {
+      background-color: #6ea8fe;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+  }
+}

@@ -4,6 +4,7 @@ import { Component, inject } from '@angular/core';
 import { MeasurementService } from '../../../Data/Services/measurement-service';
 import { UpperCasePipe, DatePipe, AsyncPipe, SlicePipe } from '@angular/common'; 
 import { AuthService } from '../../../Data/Services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-profile',
@@ -19,17 +20,14 @@ export class MyProfile {
  measurementService = inject(MeasurementService);
  measurements$ = this.measurementService.getLatestMeasurementLogs(); 
 
+ router = inject(Router);
+
  
-  // 3. Решение ошибки TS2339: Массив для @for
-  recentRecords = [
-    { id: 1, exerciseName: 'Жим лежа', weight: 100, reps: 5, date: '2026-03-08' },
-    { id: 2, exerciseName: 'Присед', weight: 140, reps: 5, date: '2026-03-09' }
-  ];
+  recentRecords = []; // Здесь будет массив с последними рекордами пользователя (можно расширить модель данных для этого)
 
   // 4. Решение ошибки TS2339: Обработчики кликов
   viewAllMeasurements(): void {
-    console.log('Клик по кнопке: Показать все замеры');
-    // Здесь позже будет логика навигации, например: this.router.navigate(['/measurements']);
+    this.router.navigate(['/measurements']);
   }
 
   viewAllRecords(): void {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GymTracker.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,6 +27,38 @@ namespace GymTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MeasurementTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MeasurementTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PersonalRecords",
+                columns: table => new
+                {
+                    WorkoutSetId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CalculatedMaxLift = table.Column<float>(type: "real", nullable: false),
+                    Reps = table.Column<int>(type: "int", nullable: false),
+                    Weight = table.Column<float>(type: "real", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ExerciseName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExerciseId = table.Column<int>(type: "int", nullable: false),
+                    AchievedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonalRecords", x => x.WorkoutSetId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -43,23 +75,56 @@ namespace GymTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BodyMeasurements",
+                name: "MeasurementLogs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    MeasurementTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Value = table.Column<float>(type: "real", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MeasurementLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MeasurementLogs_MeasurementTypes_MeasurementTypeId",
+                        column: x => x.MeasurementTypeId,
+                        principalTable: "MeasurementTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MeasurementLogs_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MeasurementTargets",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Weight = table.Column<float>(type: "real", nullable: false),
-                    Chest = table.Column<float>(type: "real", nullable: true),
-                    Waist = table.Column<float>(type: "real", nullable: true),
-                    Biceps = table.Column<float>(type: "real", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    MeasurementTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TargetValue = table.Column<float>(type: "real", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BodyMeasurements", x => x.Id);
+                    table.PrimaryKey("PK_MeasurementTargets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BodyMeasurements_Users_UserId",
+                        name: "FK_MeasurementTargets_MeasurementTypes_MeasurementTypeId",
+                        column: x => x.MeasurementTypeId,
+                        principalTable: "MeasurementTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MeasurementTargets_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -116,8 +181,23 @@ namespace GymTracker.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BodyMeasurements_UserId",
-                table: "BodyMeasurements",
+                name: "IX_MeasurementLogs_MeasurementTypeId",
+                table: "MeasurementLogs",
+                column: "MeasurementTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MeasurementLogs_UserId",
+                table: "MeasurementLogs",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MeasurementTargets_MeasurementTypeId",
+                table: "MeasurementTargets",
+                column: "MeasurementTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MeasurementTargets_UserId",
+                table: "MeasurementTargets",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -140,10 +220,19 @@ namespace GymTracker.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BodyMeasurements");
+                name: "MeasurementLogs");
+
+            migrationBuilder.DropTable(
+                name: "MeasurementTargets");
+
+            migrationBuilder.DropTable(
+                name: "PersonalRecords");
 
             migrationBuilder.DropTable(
                 name: "WorkoutSets");
+
+            migrationBuilder.DropTable(
+                name: "MeasurementTypes");
 
             migrationBuilder.DropTable(
                 name: "Exercises");
