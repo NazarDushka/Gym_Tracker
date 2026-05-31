@@ -1,9 +1,9 @@
 //Временная заглушка
 
 import { Component, inject } from '@angular/core';
-import { MeasurementService } from '../../../Data/Services/measurement-service';
+import { MeasurementService } from '../../../data/services/measurement-service';
 import { UpperCasePipe, DatePipe, AsyncPipe, SlicePipe } from '@angular/common'; 
-import { AuthService } from '../../../Data/Services/auth.service';
+import { AuthService } from '../../../data/services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({

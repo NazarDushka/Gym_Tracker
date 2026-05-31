@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Workout } from './Interfaces/workout.interface';
-import { Exercise } from './Interfaces/exercise.interface';
+import { Workout } from './interfaces/workout.interface';
+import { Exercise } from './interfaces/exercise.interface';
 
 @Injectable({
   providedIn: 'root'

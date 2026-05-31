@@ -1,8 +1,8 @@
 import { Component, inject ,ChangeDetectorRef } from '@angular/core';
-import { WorkoutService } from '../../Data/Services/workout.service';
-import { Workout } from '../../Data/Services/Interfaces/workout.interface';
+import { WorkoutService } from '../../data/services/workout.service';
+import { Workout } from '../../data/services/interfaces/workout.interface';
 import { CommonModule,DatePipe} from '@angular/common';
-import { AuthService } from '../../Data/Services/auth.service';
+import { AuthService } from '../../data/services/auth.service';
 
 
 

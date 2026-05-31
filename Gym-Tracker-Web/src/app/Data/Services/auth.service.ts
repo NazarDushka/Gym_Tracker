@@ -2,9 +2,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
-import { RegisterRequest } from './Interfaces/register-request';
-import { AuthResponse } from './Interfaces/auth-response';
-import { LoginRequest } from './Interfaces/login-request';
+import { RegisterRequest } from './interfaces/register-request';
+import { AuthResponse } from './interfaces/auth-response';
+import { LoginRequest } from './interfaces/login-request';
 import { jwtDecode } from 'jwt-decode'; 
 
 @Injectable({
