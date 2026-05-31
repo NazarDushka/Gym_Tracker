@@ -2,14 +2,14 @@
 
 import { Component, inject } from '@angular/core';
 import { MeasurementService } from '../../../data/services/measurement-service';
-import { UpperCasePipe, DatePipe, AsyncPipe, SlicePipe } from '@angular/common'; 
+import { UpperCasePipe, AsyncPipe, SlicePipe } from '@angular/common'; 
 import { AuthService } from '../../../data/services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-profile',
   standalone: true,
-  imports: [UpperCasePipe, DatePipe, AsyncPipe, SlicePipe],
+  imports: [UpperCasePipe, AsyncPipe, SlicePipe],
   templateUrl: './my-profile.html',
   styleUrls: ['./my-profile.scss'] 
 })
