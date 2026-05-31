@@ -9,6 +9,7 @@ namespace GymTracker.Models
     public class PersonalRecord
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int WorkoutSetId { get; set; }
 
         public float CalculatedMaxLift { get; set; }

@@ -52,7 +52,7 @@ export class AddMeasurement implements OnInit {
 
   onSubmit() {
       const log: MeasurementLog = {
-      userId: this.authService.getUserINFOFromToken().id!,
+      userId: this.authService.getUserINFOFromToken().userId!,
       measurementTypeId: this.measurementForm.value.measurementTypeId!,
       value: this.measurementForm.value.value!,
       date: this.measurementForm.value.date!

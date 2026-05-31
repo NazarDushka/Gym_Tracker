@@ -24,7 +24,7 @@ namespace GymTracker.Controllers
 
         private int GetUserId()
         {
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
             {
                 throw new UnauthorizedAccessException("UserId claim is missing or invalid.");

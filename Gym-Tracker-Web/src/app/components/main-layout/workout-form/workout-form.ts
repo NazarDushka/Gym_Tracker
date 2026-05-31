@@ -30,7 +30,7 @@ export class WorkoutFormComponent implements OnInit {
 
   private authService = inject(AuthService);
 
-  MyId: number = this.authService.getUserINFOFromToken().id || 0; 
+  MyId: number = this.authService.getUserINFOFromToken().userId ?? 0;
 
   workout: Workout = this.initializeNewWorkout(); 
 
@@ -98,7 +98,7 @@ export class WorkoutFormComponent implements OnInit {
       date: new Date().toISOString().split('T')[0], // Формат YYYY-MM-DD для input type="date"
       notes: '',
       sets: [],
-       userId: this.MyId,
+      userId: this.MyId,
     };
   }
 

@@ -66,7 +66,7 @@ private _isAuthenticated = new BehaviorSubject<boolean>(this.hasToken());
   }
 
 // Новый метод для извлечения информации о пользователе
-  getUserINFOFromToken(): { id: number | null, name: string | null , joinDate: Date | null} {
+  getUserINFOFromToken(): { userId: number | null, name: string | null , joinDate: Date | null} {
     const token = this.getToken();
     if (token) {
       try {
@@ -74,16 +74,16 @@ private _isAuthenticated = new BehaviorSubject<boolean>(this.hasToken());
         // Предполагаем, что ID пользователя хранится в поле 'nameid' или 'sub'
         // Проверьте структуру вашего токена
 
-        const userId = decodedToken.Id || decodedToken.sub;
+        const userId = decodedToken.UserId || decodedToken.sub;
         const userName = decodedToken.FullName || null;
         const joinDate = decodedToken.JoinDate ? new Date(decodedToken.JoinDate) : null;
-        return { id: userId ? +userId : null, name: userName, joinDate };
+        return { userId: userId ? +userId : null, name: userName, joinDate };
       } catch (error) {
         console.error('Error decoding token:', error);
-        return { id: null, name: null, joinDate: null };
+        return { userId: null, name: null, joinDate: null };
       }
     }
-    return { id: null, name: null, joinDate: null };
+    return { userId: null, name: null, joinDate: null };
   }
 
   // Обработка ошибок

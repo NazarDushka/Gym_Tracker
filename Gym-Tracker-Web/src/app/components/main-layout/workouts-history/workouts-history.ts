@@ -17,7 +17,7 @@ export class WorkoutsHistory  {
   router = inject(Router);
     WorkoutService = inject(WorkoutService);
     AuthService = inject(AuthService);
-    myId= this.AuthService.getUserINFOFromToken().id || 0;
+    myId= this.AuthService.getUserINFOFromToken().userId ?? 0;
   workouts?: Workout[]; 
 errorMessage: any;
 set: any;
