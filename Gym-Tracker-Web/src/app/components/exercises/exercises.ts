@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
-import { ExerciseService } from '../../Data/Services/exercise.service';
-import { Exercise } from '../../Data/Services/Interfaces/exercise.interface';
+import { ExerciseService } from '../../data/services/exercise.service';
+import { Exercise } from '../../data/services/interfaces/exercise.interface';
 import { Router } from '@angular/router';
 
 @Component({

@@ -8,9 +8,9 @@ import { WorkoutDetails } from './components/main-layout/workout-details/workout
 import { WorkoutFormComponent } from './components/main-layout/workout-form/workout-form';
 import { ExercisesList } from './components/exercises/exercises';
 import { ExerciseDetails } from './components/exercise-details/exercise-details';
-import { MyProfile } from './components/MyProfile/my-profile/my-profile';
-import { MyMeasuraments } from './components/MyProfile/my-measuraments/my-measuraments';
-import { AddMeasurement } from './components/MyProfile/my-measuraments/add-measurement/add-measurement';
+import { MyProfile } from './components/myprofile/my-profile/my-profile';
+import { MyMeasuraments } from './components/myprofile/my-measuraments/my-measuraments';
+import { AddMeasurement } from './components/myprofile/my-measuraments/add-measurement/add-measurement';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
