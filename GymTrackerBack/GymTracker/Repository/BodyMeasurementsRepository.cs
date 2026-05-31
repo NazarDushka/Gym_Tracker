@@ -44,7 +44,7 @@ namespace GymTracker.Repository
         public async Task<IEnumerable<MeasurementLog>> GetLogsByTypeAsync(int userId, int typeId)
         {
             return await _workoutDbContext.MeasurementLogs
-                .Where(l => l.UserId == userId && l.MeasurementTypeId == typeId)
+                .Where(l => l.UserId == userId && l.MeasurementTypeId == new Guid(typeId.ToString()))
                 .OrderBy(l => l.Date)
                 .AsNoTracking()
                 .ToListAsync();
@@ -54,7 +54,7 @@ namespace GymTracker.Repository
         {
             return await _workoutDbContext.MeasurementLogs
                 .Include(l => l.MeasurementType)
-                .FirstOrDefaultAsync(l => l.Id == logId);
+                .FirstOrDefaultAsync(l => l.Id == new Guid(logId.ToString()));
         }
 
         public async Task AddLogAsync(MeasurementLog log)

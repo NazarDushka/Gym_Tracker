@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { MeasurementLog } from './Interfaces/body-measurements';
+import { MeasurementLog, MeasurementType } from './Interfaces/body-measurements';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { Target } from '@angular/compiler';
@@ -10,6 +10,10 @@ import { Target } from '@angular/compiler';
 export class MeasurementService {
   http = inject(HttpClient)
   baseUrl = 'https://localhost:7079/GymTracker/measurements';
+
+  getMeasurementTypes(): Observable<MeasurementType[]> {
+    return this.http.get<MeasurementType[]>(`${this.baseUrl}/types`);
+  }
  getLatestMeasurementLogs(): Observable<MeasurementLog[]> {
     return this.http.get<MeasurementLog[]>(`${this.baseUrl}/last`);
   }

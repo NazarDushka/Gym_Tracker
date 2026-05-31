@@ -7,7 +7,7 @@ import { Exercise } from './Interfaces/exercise.interface';
 })
 export class ExerciseService {
 http = inject(HttpClient)
-baseUrl = 'https://localhost:7079/';
+baseUrl = 'https://localhost:7079/GymTracker/Exercise/';
 
 getExercises() {
   return this.http.get<Exercise[]>(this.baseUrl+'GetExercises')

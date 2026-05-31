@@ -1,0 +1,195 @@
+.measurement-list-container {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: sans-serif;
+
+  h1 {
+    font-size: 1.75rem;
+    color: #333;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+}
+
+.measurements-table {
+  width: 100%;
+  /* Главный секрет: отделяем строки друг от друга */
+  border-collapse: separate; 
+  border-spacing: 0 12px; /* 0 по горизонтали, 12px по вертикали между строками */
+  
+  /* Убираем общий фон и тень у самой таблицы */
+  background-color: transparent; 
+  box-shadow: none; 
+  border-radius: 0;
+
+  thead {
+    th {
+      padding: 0 20px 8px 20px; /* Оставляем отступ только снизу */
+      text-align: left;
+      font-weight: 600;
+      color: #6c757d; // Делаем заголовок чуть приглушенным
+      border-bottom: none;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  tbody {
+    tr {
+      background-color: #ffffff; /* Фон теперь у каждой строки индивидуальный */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04); /* Легкая тень вокруг каждой строки */
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+      /* Эффект "всплытия" карточки при наведении */
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      td {
+        padding: 16px 20px;
+        color: #212529;
+        vertical-align: middle;
+        font-size: 0.95rem;
+        
+        /* Добавляем едва заметную рамку сверху и снизу для четкости */
+        border-top: 1px solid #f8f9fa;
+        border-bottom: 1px solid #f8f9fa;
+
+        /* Поскольку border-collapse: separate, скруглять углы нужно у крайних ячеек (td), а не у строки (tr) */
+        &:first-child {
+          border-left: 1px solid #f8f9fa;
+          border-top-left-radius: 10px;
+          border-bottom-left-radius: 10px;
+        }
+
+        &:last-child {
+          border-right: 1px solid #f8f9fa;
+          border-top-right-radius: 10px;
+          border-bottom-right-radius: 10px;
+        }
+
+        .unit-text {
+          font-size: 0.85em;
+          color: #868e96;
+          margin-left: 4px;
+          font-weight: 500;
+        }
+
+        .empty-text {
+          color: #adb5bd;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+.action-buttons-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; 
+  align-items: flex-start; 
+}
+
+/* --- Кнопки --- */
+
+.details-button {
+  padding: 8px 16px;
+  background-color: #0d6efd; // Синий
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+
+  &:hover {
+    background-color: #0b5ed7;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.add-btn-small {
+  padding: 8px 16px;
+  background-color: transparent;
+  color: #198754; // Зеленый для акцента на добавлении
+  border: 1px solid #198754;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #198754;
+    color: #ffffff;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.add-measurement-button-container {
+  display: flex;
+  justify-content: flex-end; 
+  margin-bottom: 20px;       
+
+  button {
+    padding: 10px 20px;
+    background-color: #0d6efd; 
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(13, 110, 253, 0.2); 
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      background-color: #0b5ed7;
+      box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+    }
+
+    &:active {
+      transform: scale(0.97); 
+    }
+  }
+}
+
+/* --- Сообщения состояний --- */
+
+.no-data-message {
+  text-align: center;
+  color: #6c757d;
+  font-size: 1rem;
+  padding: 40px 20px;
+  background-color: #f8f9fa;
+  border: 1px dashed #ced4da;
+  border-radius: 8px;
+  font-style: italic;
+}
+
+.loading-message {
+  text-align: center;
+  color: #6c757d;
+  font-size: 1.1rem;
+  padding: 40px;
+  font-weight: 500;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+// Анимация пульсации для текста загрузки
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}

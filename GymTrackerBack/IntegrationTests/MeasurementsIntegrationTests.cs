@@ -1,10 +1,11 @@
 using GymTracker.Models;
 using GymTracker.Repository;
+using IntegrationTests;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Xunit;
-using IntegrationTests;
 
 namespace GymTracker.IntegrationTests
 {
@@ -60,7 +61,7 @@ namespace GymTracker.IntegrationTests
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             int testUserId;
-            int testTypeId;
+            Guid testTypeId;
 
             using (var scope = _factory.Services.CreateScope())
             {
@@ -112,7 +113,7 @@ namespace GymTracker.IntegrationTests
             // === 0. SEEDING ===
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
-            int testTypeId;
+            Guid testTypeId;
 
             using (var scope = _factory.Services.CreateScope())
             {
@@ -159,7 +160,7 @@ namespace GymTracker.IntegrationTests
             var newLog = new MeasurementLog
             {
                 UserId = testUserId,
-                MeasurementTypeId = 999, // Несуществующий тип
+                MeasurementTypeId = Guid.NewGuid(), // Несуществующий тип
                 Value = 75.5f
             };
 
@@ -229,7 +230,7 @@ namespace GymTracker.IntegrationTests
             // === 0. SEEDING ===
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
-            int testLogId;
+            Guid testLogId;
 
             using (var scope = _factory.Services.CreateScope())
             {
@@ -286,7 +287,7 @@ namespace GymTracker.IntegrationTests
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             int testUserId;
-            int testTypeId;
+            Guid testTypeId;
 
             using (var scope = _factory.Services.CreateScope())
             {
@@ -339,7 +340,7 @@ namespace GymTracker.IntegrationTests
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             int testUserId;
-            int testTypeId;
+            Guid testTypeId;
             int oldTargetId;
 
             using (var scope = _factory.Services.CreateScope())
@@ -516,6 +517,8 @@ namespace GymTracker.IntegrationTests
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             int testUserId;
+            Guid type1Id;
+            Guid type2Id;
 
             using (var scope = _factory.Services.CreateScope())
             {
@@ -530,6 +533,8 @@ namespace GymTracker.IntegrationTests
                 await dbContext.SaveChangesAsync();
 
                 testUserId = user.Id;
+                type1Id = type1.Id;
+                type2Id = type2.Id;
 
                 // Добавляем несколько логов для одного типа - должны получить только последний
                 var log1 = new MeasurementLog 
@@ -592,8 +597,8 @@ namespace GymTracker.IntegrationTests
             Assert.Equal(2, logs.Count);
 
             // Проверяем что это последние логи
-            var lastLog1 = logs.FirstOrDefault(l => l.MeasurementTypeId == 1);
-            var lastLog2 = logs.FirstOrDefault(l => l.MeasurementTypeId == 2);
+            var lastLog1 = logs.FirstOrDefault(l => l.MeasurementTypeId == type1Id);
+            var lastLog2 = logs.FirstOrDefault(l => l.MeasurementTypeId == type2Id);
 
             Assert.NotNull(lastLog1);
             Assert.Equal(74.0f, lastLog1.Value); // Последний вес

@@ -1,15 +1,15 @@
 import { User } from "./user";
 
 export interface MeasurementType {
-  Id: number;
-  Name: string;
-  Unit: string;
+  id: string;
+  name: string;
+  unit: string;
 }
 
 export interface MeasurementLog {
-  UserId: number;
-  MeasurementTypeId: number;
-  Value: number;
-  Date: Date | string;
-  Type?: MeasurementType; 
+  userId: number;
+  measurementTypeId: string;
+  value: number;
+  date: Date | string;
+  measurementType?: MeasurementType; 
 }

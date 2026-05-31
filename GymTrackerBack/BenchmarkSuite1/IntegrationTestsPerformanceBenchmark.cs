@@ -64,7 +64,7 @@ namespace BenchmarkSuite1
             await DatabaseResetHelper.ResetDatabaseAsync(_factory!.Services);
 
             int testUserId;
-            int testTypeId;
+            Guid testTypeId;
 
             // Подготовка данных
             using (var scope = _factory!.Services.CreateScope())

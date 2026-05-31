@@ -24,7 +24,7 @@ baseUrl='https://localhost:7079/GymTracker/Workout/'
     return this.http.get<Workout>(this.baseUrl+'GetWorkout/'+id)
   }
   deleteWorkout(id: number) {
-    return this.http.delete<Workout>(this.baseUrl+'DeleteWorkout'+id)
+    return this.http.delete<Workout>(this.baseUrl+'DeleteWorkout/'+id)
   }
   
   updateWorkout(workout: Workout) {

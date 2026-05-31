@@ -33,9 +33,9 @@ namespace GymTracker.Repository.Auth
 
             var claims = new[]
             {
-            new Claim("FullName",user.FullName),
-            new Claim("Id",user.Id.ToString()),
-            new Claim("JoinDate",user.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ"))
+            new Claim("FullName",fullName),
+            new Claim("UserId",userId.ToString()),
+            new Claim("Email",email)
             };
 
             var token = new JwtSecurityToken(

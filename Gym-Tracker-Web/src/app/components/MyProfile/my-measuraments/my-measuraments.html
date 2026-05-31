@@ -1,1 +1,62 @@
-<p>my-measuraments works!</p>
+<div class="measurement-list-container">
+  <h1>My Measurements</h1>
+
+  @if (dashboardItems$ | async; as items) {
+    
+    @if (items.length > 0) {
+      <table class="measurements-table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Latest Value</th>
+            <th>Date</th>
+            <th>Action</th> 
+          </tr>
+        </thead>
+        <tbody>
+        
+        @for (item of items; track item.typeId) {
+          <tr>
+            <td><strong>{{ item.typeName }}</strong></td>
+            
+            <td>
+              @if (item.hasData) {
+                {{ item.latestValue }} <span class="unit-text">{{ item.unit }}</span>
+              } @else {
+                <span class="empty-text">—</span>
+              }
+            </td>
+            
+            <td>
+              @if (item.hasData) {
+                {{ item.date | date:'shortDate' }}
+              } @else {
+                <span class="empty-text">—</span>
+              }
+            </td>
+            
+            <td>
+              <div class="action-buttons-stack">
+                <button class="add-btn-small" (click)="AddMeasurementForType(item.typeId)">
+                  + Add new
+                </button>
+                
+                @if (item.hasData) {
+                  <button class="details-button" (click)="navigateToMeasurementDetails(item.typeId)">
+                    Details
+                  </button>
+                }
+              </div>
+            </td>
+          </tr>
+        }
+        </tbody>
+      </table>
+    } @else {
+      <p class="no-data-message">No measurement types configured in the system.</p>
+    }
+
+  } @else {
+    <p class="loading-message">Loading dashboard...</p>
+  }
+</div>

@@ -15,7 +15,7 @@ import { AuthService } from '../../Data/Services/auth.service';
 export class LastWorkout {
   WorkoutService = inject(WorkoutService);
    authService = inject(AuthService);
-  MyId = this.authService.getUserINFOFromToken().id || 0;
+  MyId = this.authService.getUserINFOFromToken().userId ?? 0;
   workout?: Workout; 
 errorMessage: any;
 set: any;
