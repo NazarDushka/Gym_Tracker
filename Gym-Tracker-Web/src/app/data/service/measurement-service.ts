@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { MeasurementLog, MeasurementType } from './interfaces/body-measurements';
+import { MeasurementLog, MeasurementType } from './interface/body-measurements';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { Target } from '@angular/compiler';

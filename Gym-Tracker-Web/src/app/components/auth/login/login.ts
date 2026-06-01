@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { LoginRequest } from '../../../data/services/interfaces/login-request';
-import { AuthService } from '../../../data/services/auth.service';
+import { LoginRequest } from '../../../data/service/interface/login-request';
+import { AuthService } from '../../../data/service/auth.service';
 import { RouterLink } from '@angular/router';
 
 

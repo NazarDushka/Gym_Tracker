@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { MeasurementService } from '../../../../data/services/measurement-service';
+import { MeasurementService } from '../../../../data/service/measurement-service';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from '../../../../data/services/auth.service';
-import { MeasurementLog } from '../../../../data/services/interfaces/body-measurements';
+import { AuthService } from '../../../../data/service/auth.service';
+import { MeasurementLog } from '../../../../data/service/interface/body-measurements';
 
 @Component({
   selector: 'app-add-measurement',

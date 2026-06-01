@@ -2,14 +2,14 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, DatePipe, NgIf, NgFor } from '@angular/common'; // Для директив
 import { FormsModule, NgForm } from '@angular/forms'; // Для форм на основе шаблонов
-import { WorkoutService } from '../../../data/services/workout.service';
-import { Workout} from '../../../data/services/interfaces/workout.interface';
+import { WorkoutService } from '../../../data/service/workout.service';
+import { Workout} from '../../../data/service/interface/workout.interface';
 import { finalize, switchMap, of, catchError, Observable } from 'rxjs'; // Добавляем необходимые операторы
-import { Exercise } from '../../../data/services/interfaces/exercise.interface';
-import { Sets } from '../../../data/services/interfaces/sets.interface';
+import { Exercise } from '../../../data/service/interface/exercise.interface';
+import { Sets } from '../../../data/service/interface/sets.interface';
 import { Token } from '@angular/compiler';
-import { AuthService } from '../../../data/services/auth.service';
-import { ExerciseService } from '../../../data/services/exercise.service';
+import { AuthService } from '../../../data/service/auth.service';
+import { ExerciseService } from '../../../data/service/exercise.service';
 
 
 @Component({

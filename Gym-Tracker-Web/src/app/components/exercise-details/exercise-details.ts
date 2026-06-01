@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
-import { ExerciseService } from '../../data/services/exercise.service';
+import { ExerciseService } from '../../data/service/exercise.service';
 import { ActivatedRoute } from '@angular/router';
-import { Exercise } from '../../data/services/interfaces/exercise.interface';
+import { Exercise } from '../../data/service/interface/exercise.interface';
 
 @Component({
   selector: 'app-exercise-details',

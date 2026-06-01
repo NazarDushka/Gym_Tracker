@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { finalize, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { AuthService } from '../../../data/services/auth.service';
-import { RegisterRequest } from '../../../data/services/interfaces/register-request';
+import { AuthService } from '../../../data/service/auth.service';
+import { RegisterRequest } from '../../../data/service/interface/register-request';
 
 @Component({
   selector: 'app-register',

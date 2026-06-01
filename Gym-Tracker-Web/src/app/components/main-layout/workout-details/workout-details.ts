@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
-import { Workout } from '../../../data/services/interfaces/workout.interface';
+import { Workout } from '../../../data/service/interface/workout.interface';
 import { ActivatedRoute } from '@angular/router';
-import { WorkoutService } from '../../../data/services/workout.service';
+import { WorkoutService } from '../../../data/service/workout.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { DatePipe } from '@angular/common';
 

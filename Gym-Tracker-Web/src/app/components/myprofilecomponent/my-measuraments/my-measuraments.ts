@@ -2,8 +2,8 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable, combineLatest, map } from 'rxjs';
-import { MeasurementService } from '../../../data/services/measurement-service';
-import { MeasurementLog, MeasurementType } from '../../../data/services/interfaces/body-measurements';
+import { MeasurementService } from '../../../data/service/measurement-service';
+import { MeasurementLog, MeasurementType } from '../../../data/service/interface/body-measurements';
 
 // Интерфейс для удобной отрисовки строки в таблице
 interface DashboardItem {
