@@ -3,13 +3,14 @@ import { MeasurementLog, MeasurementType } from './interface/body-measurements';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { Target } from '@angular/compiler';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MeasurementService {
   http = inject(HttpClient)
-  baseUrl = 'https://localhost:7079/GymTracker/measurements';
+  baseUrl = environment.apiUrl + '/GymTracker/measurements';
 
   getMeasurementTypes(): Observable<MeasurementType[]> {
     return this.http.get<MeasurementType[]>(`${this.baseUrl}/types`);

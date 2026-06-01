@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Workout } from './interface/workout.interface';
 import { Exercise } from './interface/exercise.interface';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WorkoutService {
   http = inject(HttpClient)
-baseUrl='https://localhost:7079/GymTracker/Workout/'
+baseUrl = environment.apiUrl + '/GymTracker/Workout/'
 
   getWorkouts() {
     return this.http.get<Workout[]>(this.baseUrl+'GetAllWorkouts')

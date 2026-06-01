@@ -6,13 +6,14 @@ import { RegisterRequest } from './interface/register-request';
 import { AuthResponse } from './interface/auth-response';
 import { LoginRequest } from './interface/login-request';
 import { jwtDecode } from 'jwt-decode'; 
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   http = inject(HttpClient)
-  baseUrl = 'https://localhost:7079/Auth/'
+  baseUrl = environment.apiUrl + '/Auth/'
   router = inject(Router)
 
 private _isAuthenticated = new BehaviorSubject<boolean>(this.hasToken());
