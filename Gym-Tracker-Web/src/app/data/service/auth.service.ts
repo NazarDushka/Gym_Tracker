@@ -22,7 +22,7 @@ private _isAuthenticated = new BehaviorSubject<boolean>(this.hasToken());
   constructor() { }
 
   private hasToken(): boolean {
-    return !!localStorage.getItem('authToken');
+    return !!localStorage.getItem('token');
   }
 
   // Метод для регистрации пользователя
@@ -50,7 +50,7 @@ private _isAuthenticated = new BehaviorSubject<boolean>(this.hasToken());
 
   // Метод для выхода пользователя
   logout(): void {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
     // Очистите другие данные пользователя из localStorage/сессии, если храните
     this._isAuthenticated.next(false);
     this.router.navigate(['/login']); // Перенаправляем на страницу входа
