@@ -1,5 +1,5 @@
+/* Базовые десктопные стили */
 .sidebar-container {
-  width: 250px; 
   background-color: #2c3e50; 
   color: #ecf0f1; 
   height: 100vh; 
@@ -7,7 +7,6 @@
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); 
   display: flex; 
   flex-direction: column; 
-  
 }
 
 .sidebar-header {
@@ -37,14 +36,14 @@
   text-decoration: none;
   color: #ecf0f1;
   font-size: 1.1em;
-  transition: background-color 0.3s ease, color 0.3s ease; 
+  transition: all 0.3s ease; 
+  border-left: 5px solid transparent; /* Подготовка под активный стейт */
 }
 
 .sidebar-nav a:hover {
   background-color: #34495e; 
   color: #ffffff;
 }
-
 
 .sidebar-nav a.active {
   background-color: #3498db; 
@@ -55,9 +54,67 @@
 
 .sidebar-footer {
   text-align: center;
+  margin-top: auto; /* Прижимает футер к самому низу */
   padding-top: 20px;
   border-top: 1px solid #34495e; 
   font-size: 0.9em;
   color: #bdc3c7;
-  ;
+}
+
+/* Мобильная версия (превращение в Bottom Nav) */
+@media (max-width: 1200px) {
+  .sidebar-container {
+    height: 60px; /* Фиксируем высоту панели */
+    padding: 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); /* Тень теперь сверху */
+
+    position: fixed; 
+    bottom: 0; 
+    left: 0;
+    width: 100%; 
+    z-index: 9999;
+  }
+
+  /* Скрываем ненужные элементы */
+  .sidebar-header, 
+  .sidebar-footer {
+    display: none;
+  }
+
+  .sidebar-nav {
+    height: 100%;
+  }
+
+  .sidebar-nav ul {
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-around; 
+    align-items: center; /* Центрируем по вертикали */
+    height: 100%;
+  }
+
+  .sidebar-nav li {
+    margin-bottom: 0;
+    flex-grow: 1; /* Кнопки равномерно занимают всю ширину */
+    text-align: center;
+  }
+
+  .sidebar-nav a {
+    padding: 0;
+    height: 60px; /* Высота равна высоте панели */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: none; /* Убираем левую рамку */
+    border-top: 4px solid transparent; /* Добавляем прозрачную рамку сверху */
+  }
+
+  .sidebar-nav a.active {
+    border-left: none; /* Отменяем десктопное правило */
+    border-top: 4px solid #3498db; /* Активная рамка теперь сверху, как в мобильных приложениях */
+  }
+
+  .options {
+    font-size: 1.1em;
+  }
 }

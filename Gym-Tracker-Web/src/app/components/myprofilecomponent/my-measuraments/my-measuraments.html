@@ -17,24 +17,26 @@
         
         @for (item of items; track item.typeId) {
           <tr>
-            <td><strong>{{ item.typeName }}</strong></td>
-            
-            <td>
+            <td data-label="Type">
+              <strong>{{ item.typeName }}</strong>
+            </td>
+
+            <td data-label="Latest Value">
               @if (item.hasData) {
                 {{ item.latestValue }} <span class="unit-text">{{ item.unit }}</span>
               } @else {
                 <span class="empty-text">—</span>
               }
             </td>
-            
-            <td>
+
+            <td data-label="Date">
               @if (item.hasData) {
                 {{ item.date | date:'shortDate' }}
               } @else {
                 <span class="empty-text">—</span>
               }
             </td>
-            
+
             <td>
               <div class="action-buttons-stack">
                 <button class="add-btn-small" (click)="AddMeasurementForType(item.typeId)">
