@@ -1,8 +1,85 @@
+// Мобильная адаптация таблицы
+  @media (max-width: 768px) {
+  .measurements-table {
+    display: block; // Отключаем табличную сетку
+
+    thead {
+      display: none; // Полностью прячем шапку
+    }
+
+    tbody {
+      display: block;
+    }
+
+    tr {
+      display: flex;
+      flex-direction: column; 
+      margin-bottom: 24px; 
+      background-color: #ffffff; 
+      border-radius: 10px;
+      border: 1px solid #e0e0e0; 
+      border-left: 5px solid #0d6efd; 
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+      overflow: hidden; 
+    }
+
+    td {
+      display: flex;
+      justify-content: space-between; // Разносим Label и Значение по краям
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid #f8f9fa; // Полоска между строками внутри карточки
+      text-align: right; // Текст значения прижимаем вправо
+
+      /* Отменяем десктопные радиусы и границы для ячеек */
+      &:first-child, &:last-child {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+      }
+
+      /* Убираем нижнюю полоску у последней ячейки (с кнопками) */
+      &:last-child {
+        border-bottom: none;
+        padding-top: 16px; // Даем чуть больше места кнопкам
+      }
+
+      /* Генерируем заголовки колонок из атрибута data-label */
+      &::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #6c757d;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        text-align: left;
+        margin-right: 15px; // Отступ от значения
+      }
+    }
+
+    /* Адаптируем кнопки под пальцы */
+    .action-buttons-stack {
+      width: 100%;
+      flex-direction: row; // Ставим кнопки горизонтально
+      justify-content: space-between;
+      gap: 12px;
+
+      button {
+        flex: 1; // Заставляем кнопки растягиваться поровну
+        padding: 12px; // Делаем их выше для удобного нажатия
+        text-align: center;
+      }
+    }
+  }
+}
+
 .measurement-list-container {
   padding: 24px;
   max-width: 900px;
   margin: 0 auto;
   font-family: sans-serif;
+
+  background-color: #f4f7f6; 
+  border-radius: 12px;
 
   h1 {
     font-size: 1.75rem;
@@ -69,6 +146,9 @@
           border-right: 1px solid #f8f9fa;
           border-top-right-radius: 10px;
           border-bottom-right-radius: 10px;
+          margin-top: 8px; /* Отступ от данных */
+          border-top: 1px dashed #e9ecef; 
+          background-color: #fafbfc; 
         }
 
         .unit-text {

@@ -117,10 +117,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseRouting();
-app.UseCors(MyAllowSpecificOrigins);
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("AllowAll");
+}
+else
+{
+    app.UseCors(MyAllowSpecificOrigins);
+}
 app.UseAuthentication();  
 app.UseAuthorization();
 
