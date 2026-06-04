@@ -13,9 +13,9 @@
       <tbody>
       @for (exercise of exercises; track exercise.id) {
         <tr>
-          <td>{{ exercise.name }}</td>
-          <td>{{ exercise.muscleGroup || 'N/A' }}</td>
-          <td>
+          <td data-label="Exercise">{{ exercise.name }}</td>
+          <td data-label="Muscle Group">{{ exercise.muscleGroup || 'N/A' }}</td>
+          <td data-label="">
             <button class="details-button" (click)="navigateToExerciseDetails(exercise.id)">Details</button>
           </td>
         </tr>

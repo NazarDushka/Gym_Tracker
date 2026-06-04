@@ -49,6 +49,16 @@ $error-color: #e74c3c; // Red for errors
       margin-bottom: 15px;
     }
 
+    @media (max-width: 768px) {
+       padding: 7px;
+        h1 {
+          font-size: 1.5em; 
+        }
+        .exercise-name, .set-details {
+          font-size: 0.7em; 
+        }
+      }
+
     .exercise-list {
       list-style: none;
       padding: 0;
@@ -64,6 +74,8 @@ $error-color: #e74c3c; // Red for errors
       display: flex;
       justify-content: space-between;
       align-items: center;
+
+      
 
       .exercise-name {
         font-weight: bold;
