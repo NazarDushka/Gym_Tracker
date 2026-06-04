@@ -1,59 +1,37 @@
-# GymTracker
+# GymTracker 🏋️‍♂️📈
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.1.
+[![Live App](https://img.shields.io/badge/Live_App-Available-success?style=for-the-badge)](https://mypersonalgymtrackerproject.netlify.app/)
 
-## Development server
+> A comprehensive web-based fitness tracking application designed to monitor workouts, track progress, and help achieve peak physical condition.
 
-To start a local development server, run:
+## 🌐 Live Application
 
-```bash
-ng serve
-```
+No installation or local setup is required. You can access and use the fully functional web application directly in your browser: 
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+👉 **[Launch GymTracker](https://mypersonalgymtrackerproject.netlify.app/)**
 
-## Code scaffolding
+## 📖 About The Project
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+GymTracker is built for individuals who take their training seriously. Whether the focus is on building strength, optimizing hypertrophy, or hitting specific body composition targets, this tool provides a seamless, accessible way to log and analyze data from anywhere. 
 
-```bash
-ng generate component component-name
-```
+## ✨ Key Features
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+* **Cloud-Based Access:** Log your workouts on the go. Everything is available instantly on any device via the web browser.
+* **Intuitive Workout Logging:** Easily record sets, reps, and weights for various exercises without interrupting your gym session.
+* **Progress Analytics:** Track strength gains and volume over time to ensure consistent progressive overload(in progress).
+* **Responsive UI:** A clean, user-friendly interface designed specifically for quick data entry.
 
-```bash
-ng generate --help
-```
+## 🛠️ Built With
 
-## Building
+* **Backend:** C# / ASP.NET
+* **Frontend:** Angular
+* **DataBase:** SQL Server
+* **Hosting:** Netlify (Frontend), Azure (Backend & DB)
 
-To build the project run:
+## 🤝 Feedback & Support
 
-```bash
-ng build
-```
+Since this is an actively maintained live web application, any feedback on usability, bug reports, or feature requests is highly appreciated. 
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 📜 License
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Distributed under the MIT License. See `LICENSE` for more information.
