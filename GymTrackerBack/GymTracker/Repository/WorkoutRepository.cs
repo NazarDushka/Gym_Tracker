@@ -43,10 +43,6 @@ namespace GymTracker.Repository
             {
                 throw new ArgumentException("Invalid user ID.");
             }
-            else if (userId == null)
-            {
-                throw new UnauthorizedAccessException("User not authenticated.");
-            }
             var lastWorkout = await _db.Workouts
                 .Where(w => w.UserId == userId)
                 .OrderByDescending(w => w.Date)

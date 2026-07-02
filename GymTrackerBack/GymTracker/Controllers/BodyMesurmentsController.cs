@@ -3,6 +3,7 @@ using GymTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using GymTracker.Extensions;
 
 namespace GymTracker.Controllers
 {
@@ -15,16 +16,6 @@ namespace GymTracker.Controllers
         public MeasurementsController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-        }
-
-        private int GetUserId()
-        {
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
-            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
-            {
-                throw new UnauthorizedAccessException("UserId claim is missing or invalid.");
-            }
-            return userId;
         }
 
         // GET: api/measurements/types
@@ -50,13 +41,13 @@ namespace GymTracker.Controllers
         [HttpGet("~/measurements")]
         public async Task<ActionResult<IEnumerable<MeasurementLog>>> GetUserLogs() 
         {
-            // Получение идентификатора пользователя из контекста аутентификации
-            int userId = GetUserId();
+            // Get the user ID from the authentication context
+            int userId = User.GetUserId();
 
-            // Проверка существования пользователя
+            // Check if the user exists
             var user = await _unitOfWork.User.GetUser(userId);
             if (user == null)
-                return NotFound(new { message = "Пользователь не найден" });
+                return NotFound(new { message = "User not found" });
 
             var logs = await _unitOfWork.Measurements.GetLogsByUserIdAsync(userId);
             return Ok(logs);
@@ -66,29 +57,28 @@ namespace GymTracker.Controllers
         [HttpPost]
         public async Task<ActionResult> AddMeasurementLog([FromBody] MeasurementLog log)
         {
-            // Валидация входных данных
+            // Validation of input data
             if (log == null)
-                return BadRequest(new { message = "Данные логирования не могут быть пустыми" });
+                return BadRequest(new { message = "Measurement log data cannot be null" });
             
             if (log.UserId <= 0)
-                return BadRequest(new { message = "UserId должен быть больше 0" });
+                return BadRequest(new { message = "UserId must be greater than 0" });
             
             if (log.MeasurementTypeId == Guid.Empty)
-                return BadRequest(new { message = "MeasurementTypeId должен быть указан" });
+                return BadRequest(new { message = "MeasurementTypeId must be specified" });
             
             if (log.Value < 0)
-                return BadRequest(new { message = "Value не может быть отрицательным" });
+                return BadRequest(new { message = "Value cannot be negative" });
 
-            // Проверка существования пользователя
-            int userId = GetUserId();
+            // Check if the user exists
+            int userId = User.GetUserId();
             var user = await _unitOfWork.User.GetUser(userId);
             if (user == null)
-                return BadRequest(new { message = "Пользователь не найден" });
-
-            // Проверка существования типа измерения
+                return BadRequest(new { message = "User not found" });
+            // Check if the measurement type exists
             var types = await _unitOfWork.Measurements.GetAllTypesAsync();
-            if (!types.Any(t => t.Id == new Guid(log.MeasurementTypeId.ToString())))
-                return BadRequest(new { message = "Тип измерения не найден" });
+            if (!types.Any(t => t.Id == log.MeasurementTypeId))
+                return BadRequest(new { message = "Measurement type not found" });
 
             try
             {
@@ -106,7 +96,7 @@ namespace GymTracker.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Ошибка при создании логирования", details = ex.Message });
+                return StatusCode(500, new { message = "Error creating measurement log"});
             }
         }
 
@@ -116,12 +106,12 @@ namespace GymTracker.Controllers
         {
             try
             {
-                int userId = GetUserId();
+                int userId = User.GetUserId();
                 var log = await _unitOfWork.Measurements.GetLogByIdAsync(id);
                 if (log == null)
-                    return NotFound(new { message = "Логирование не найдено" });
+                    return NotFound(new { message = "Measurement log not found" });
                 if (log.UserId != userId)
-                    return BadRequest(new { message = "У вас нет прав на удаление этого логирования" });
+                    return BadRequest(new { message = "You do not have permission to delete this measurement log" });
                 await _unitOfWork.Measurements.DeleteLogAsync(id);
                 await _unitOfWork.CompleteAsync(); 
 
@@ -129,7 +119,7 @@ namespace GymTracker.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Ошибка при удалении логирования", details = ex.Message });
+                return StatusCode(500, new { message = "Error deleting measurement log"});
             }
         }
 
@@ -137,7 +127,7 @@ namespace GymTracker.Controllers
         [HttpGet("~/targets")]
         public async Task<ActionResult<IEnumerable<MeasurementTarget>>> GetUserTargets() 
         {
-            int userId = GetUserId();
+            int userId = User.GetUserId();
 
             var targets = await _unitOfWork.Measurements.GetActiveTargetsByUserIdAsync(userId);
             return Ok(targets);
@@ -147,24 +137,24 @@ namespace GymTracker.Controllers
         [HttpPost("targets")]
         public async Task<ActionResult> AddTarget([FromBody] MeasurementTarget target)
         {
-            // Валидация входных данных
+            // Validate input data
             if (target == null)
-                return BadRequest(new { message = "Целевое значение не может быть пустым" });
+                return BadRequest(new { message = "Target cannot be null" });
             
             if (target.UserId <= 0)
-                return BadRequest(new { message = "UserId должен быть больше 0" });
+                return BadRequest(new { message = "UserId must be greater than 0" });
             
             if (target.MeasurementTypeId == Guid.Empty)
-                return BadRequest(new { message = "MeasurementTypeId должен быть" });
+                return BadRequest(new { message = "MeasurementTypeId must be provided" });
             
             if (target.TargetValue < 0)
-                return BadRequest(new { message = "TargetValue не может быть отрицательным" });
+                return BadRequest(new { message = "TargetValue cannot be negative" });
 
-            // Проверка существования пользователя
-            int userId = GetUserId();
+            // Check if the user exists
+            int userId = User.GetUserId();
             var user = await _unitOfWork.User.GetUser(userId);
             if (user == null)
-                return NotFound(new { message = "Пользователь не найден" });
+                return NotFound(new { message = "User not found " });
 
             try
             {
@@ -186,7 +176,7 @@ namespace GymTracker.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Ошибка при создании целевого значения", details = ex.Message });
+                return StatusCode(500, new { message = "Error creating target"});
             }
         }
 
@@ -203,7 +193,7 @@ namespace GymTracker.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Ошибка при деактивации целевого значения", details = ex.Message });
+                return StatusCode(500, new { message = "Error deactivating target"});
             }
         }
     }

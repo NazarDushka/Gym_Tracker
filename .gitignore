@@ -59,5 +59,4 @@ Thumbs.db
 *.sln.docstates
 
 # Local configuration and secrets
-appsettings.Development.json
-appsettings.Local.json
+appsettings.*.json

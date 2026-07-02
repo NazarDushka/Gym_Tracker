@@ -46,7 +46,7 @@ namespace GymTracker.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new { message = "Invalid login attempt" });
             }
         }
 
