@@ -3,11 +3,12 @@ using GymTracker.Models;
 using GymTracker.Repository;
 using GymTracker.Repository.Auth;
 using GymTracker.Repository.UnitOfWork;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
+using GymTracker.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens; 
 using System.Text; 
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,6 +106,7 @@ builder.Services.AddScoped<IUser, UserRepository>();
 builder.Services.AddScoped<IWorkout, WorkoutRepository>();
 builder.Services.AddScoped<IExercise, ExerciseRepository>();
 builder.Services.AddScoped<IPersonalRecord, PRsRepository>();
+builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

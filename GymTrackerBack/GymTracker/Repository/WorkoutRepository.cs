@@ -37,7 +37,7 @@ namespace GymTracker.Repository
             _db.Workouts.Update(workout);
         }
 
-        public async Task<Workout> GetMyLastWorkout(int userId)
+        public async Task<Workout> GetUsersLastWorkout(int userId)
         {
             if (userId <= 0)
             {
@@ -51,14 +51,14 @@ namespace GymTracker.Repository
                 .FirstOrDefaultAsync();
             return lastWorkout ?? throw new KeyNotFoundException("No workouts found for this user.");
         }
-        public async Task<Workout> GetMyWorkoutById(int userId, int id)
+        public async Task<Workout> GetUsersWorkoutById(int userId, int id)
         {
             return await _db.Workouts
                 .Include(w => w.Sets)
                 .ThenInclude(e => e.Exercise)
                 .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
         }
-        public async Task<IEnumerable<Workout>> GetMyWorkouts(int userId)
+        public async Task<IEnumerable<Workout>> GetUsersWorkouts(int userId)
         {
             return await _db.Workouts
                 .Where(w => w.UserId == userId)
