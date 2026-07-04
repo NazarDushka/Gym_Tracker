@@ -7,10 +7,12 @@ namespace GymTracker.Services
     public class WorkoutService:IWorkoutService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IPRService _personalRecordService;
 
-        public WorkoutService(IUnitOfWork unitOfWork)
+        public WorkoutService(IUnitOfWork unitOfWork, IPRService personalRecordService)
         {
             _unitOfWork = unitOfWork;
+            _personalRecordService = personalRecordService;
         }
 
         public async Task<IEnumerable<WorkoutDto>> GetUsersWorkoutsAsync(int userId)
@@ -46,8 +48,12 @@ namespace GymTracker.Services
             await _unitOfWork.Workout.Add(workout);
             foreach (var set in workout.Sets)
             {
-                await _unitOfWork.PersonalRecords.AddOrUpdatePersonalRecord(
-                    userId, set.ExerciseId, set);
+                await _personalRecordService.AddPersonalRecord(userId, new GymTracker.DTOs.PersonalRecords.AddPersonalRecordRequest
+                {
+                    ExerciseId = set.ExerciseId,
+                    Reps = set.Reps,
+                    Weight = set.Weight
+                });
             }
             await _unitOfWork.CompleteAsync();
 
@@ -92,15 +98,12 @@ namespace GymTracker.Services
             await _unitOfWork.CompleteAsync();
             foreach (var set in existingWorkout.Sets)
             {
-                await _unitOfWork.PersonalRecords.AddOrUpdatePersonalRecord(
-                    userId, set.ExerciseId, set);
-            }
-            await _unitOfWork.CompleteAsync();
-
-            foreach (var set in existingWorkout.Sets)
-            {
-                await _unitOfWork.PersonalRecords.AddOrUpdatePersonalRecord(
-                    userId, set.ExerciseId, set);
+                await _personalRecordService.UpdatePersonalRecord(userId, new GymTracker.DTOs.PersonalRecords.UpdatePersonalRecordRequest
+                {
+                    ExerciseId = set.ExerciseId,
+                    Reps = set.Reps,
+                    Weight = set.Weight
+                });
             }
             await _unitOfWork.CompleteAsync();
         }

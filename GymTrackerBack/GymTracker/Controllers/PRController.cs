@@ -1,8 +1,7 @@
-﻿using GymTracker.Interfaces;
-using GymTracker.Models;
-using GymTracker.Repository.UnitOfWork;
+﻿using GymTracker.DTOs.PersonalRecords;
+using GymTracker.Extensions;
+using GymTracker.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymTracker.Controllers
@@ -12,40 +11,27 @@ namespace GymTracker.Controllers
     [Authorize]
     public class PRController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public PRController(IUnitOfWork unitOfWork)
+        private readonly IPRService _prService;
+        public PRController(IPRService prService)
         {
-            _unitOfWork = unitOfWork;
+            _prService = prService;
         }
 
         [HttpGet("GetPersonalRecordInExercise")]
-        public async Task<ActionResult<PersonalRecord>> GetPersonalRecordInExercise(int userId, int exerciseId)
+        public async Task<ActionResult<PersonalRecordDto>> GetPersonalRecordInExercise(int exerciseId)
         {
-            var pr = await _unitOfWork.PersonalRecords.GetPersonalRecordInExerc(userId, exerciseId);
-            if (pr == null) return NotFound($"No personal record found for user {userId} in exercise {exerciseId}.");
+            var pr = await _prService.GetPersonalRecordInExerc(User.GetUserId(), exerciseId);
+            if (pr == null) return NotFound($"No personal record found in exercise.");
             return Ok(pr);
         }
 
         [HttpGet("GetPersonalRecordsForUser")]
-        public async Task<ActionResult<List<PersonalRecord>>> GetPersonalRecordsForUser(int userId)
+        public async Task<ActionResult<List<PersonalRecordDto>>> GetPersonalRecordsForUser()
         {
-            var prs = await _unitOfWork.PersonalRecords.GetPersonalRecordsForUser(userId);
-            if (prs == null || !prs.Any()) return NotFound($"No personal records found for user {userId}.");
+            var prs = await _prService.GetPersonalRecordsForUser(User.GetUserId());
+            if (prs == null || !prs.Any()) return NotFound($"No personal records found for user {User.GetUserId()}.");
             return Ok(prs);
         }
 
-        [HttpGet("OneRepMax")]
-        public async Task<ActionResult<float>> GetOneRepMax(Workout workout)
-        {
-            float orm = 0;
-
-            foreach (var set in workout.Sets)
-            {
-                float currentOrm = await _unitOfWork.PersonalRecords.GetORM(set);
-                if (currentOrm > orm) orm = currentOrm;
-            }
-
-            return Ok(orm);
-        }
     }
 }

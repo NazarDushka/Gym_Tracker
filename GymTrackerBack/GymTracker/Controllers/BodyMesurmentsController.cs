@@ -1,9 +1,8 @@
-﻿using GymTracker.Interfaces;
+﻿using GymTracker.Extensions;
+using GymTracker.Interfaces;
 using GymTracker.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using GymTracker.Extensions;
 
 namespace GymTracker.Controllers
 {

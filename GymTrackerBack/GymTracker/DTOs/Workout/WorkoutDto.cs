@@ -8,3 +8,4 @@
         public List<WorkoutSetDto> WorkoutSets { get; set; } = new List<WorkoutSetDto>();
     }
 }
+    

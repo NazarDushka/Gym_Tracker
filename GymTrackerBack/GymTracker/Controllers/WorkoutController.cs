@@ -1,15 +1,8 @@
-﻿using GymTracker.Interfaces;
-using GymTracker.Models;
-using GymTracker.Repository;
-using GymTracker.Repository.UnitOfWork;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
+﻿using GymTracker.DTOs.Workout;
 using GymTracker.Extensions;
 using GymTracker.Services;
-using GymTracker.DTOs.Workout;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GymTracker.Controllers
 {
@@ -26,26 +19,15 @@ namespace GymTracker.Controllers
         }
 
         [HttpGet("GetMyWorkouts")]
-        public async Task<ActionResult<IEnumerable<Workout>>> GetMyWorkouts()
+        public async Task<ActionResult<IEnumerable<WorkoutDto>>> GetMyWorkouts()
         {
             var workouts = await _workoutService.GetUsersWorkoutsAsync(User.GetUserId());
             return Ok(workouts);
         }
 
-        [HttpGet("GetAllWorkouts")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<Workout>>> GetAllWorkouts()
-        {
-            var workouts = await _workoutService.GetUsersWorkoutsAsync(User.GetUserId());
-            if (workouts == null || !workouts.Any())
-            {
-                return NotFound("No workouts found.");
-            }
-            return Ok(workouts);
-        }
 
         [HttpGet("GetWorkout/{id}")]
-        public async Task<ActionResult<Workout>> GetWorkout(int id)
+        public async Task<ActionResult<WorkoutDto>> GetWorkout(int id)
         {
            var workout = await _workoutService.GetWorkoutByIdAsync(User.GetUserId(), id);
            if (workout == null)
@@ -56,7 +38,7 @@ namespace GymTracker.Controllers
         }
 
         [HttpPost("AddWorkout")]
-        public async Task<ActionResult<Workout>> AddWorkout([FromBody]CreateWorkoutRequest request)
+        public async Task<ActionResult<WorkoutDto>> AddWorkout([FromBody]CreateWorkoutRequest request)
         {
             var createdWorkout = await _workoutService.CreateWorkoutAsync(User.GetUserId(), request);
             return CreatedAtAction(nameof(GetWorkout), new { id = createdWorkout.Id }, createdWorkout);
@@ -99,7 +81,7 @@ namespace GymTracker.Controllers
         }
 
         [HttpGet("LastWorkout")]
-        public async Task<ActionResult<Workout>> GetLastWorkout()
+        public async Task<ActionResult<WorkoutDto>> GetLastWorkout()
         {
             var workout = await _workoutService.GetLastUsersWorkoutAsync(User.GetUserId());
             if (workout == null)
