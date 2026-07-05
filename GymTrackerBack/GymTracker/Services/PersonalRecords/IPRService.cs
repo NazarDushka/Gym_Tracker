@@ -1,6 +1,6 @@
 ﻿using GymTracker.DTOs.PersonalRecords;
 
-namespace GymTracker.Services
+namespace GymTracker.Services.PersonalRecords
 {
     public interface IPRService
     {

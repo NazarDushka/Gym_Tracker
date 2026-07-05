@@ -1,6 +1,6 @@
 ﻿using GymTracker.DTOs.Workout;
 
-namespace GymTracker.Services
+namespace GymTracker.Services.Workouts
 {
     public interface IWorkoutService
     {

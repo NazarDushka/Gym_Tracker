@@ -2,7 +2,7 @@
 using GymTracker.Interfaces;
 using GymTracker.Models;
 
-namespace GymTracker.Services
+namespace GymTracker.Services.PersonalRecords
 {
     public class PRService : IPRService
     {
@@ -17,7 +17,7 @@ namespace GymTracker.Services
         {
             if (reps <= 0)
                 throw new ArgumentException("Reps must be greater than zero.");
-            return (weight * (1 + reps / 30.0f));
+            return weight * (1 + reps / 30.0f);
         }
 
         public async Task<PersonalRecordDto> GetPersonalRecordInExerc(int userId, int exerciseId)

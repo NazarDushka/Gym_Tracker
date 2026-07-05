@@ -1,6 +1,6 @@
 ﻿using GymTracker.DTOs.Workout;
 using GymTracker.Extensions;
-using GymTracker.Services;
+using GymTracker.Services.Workouts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

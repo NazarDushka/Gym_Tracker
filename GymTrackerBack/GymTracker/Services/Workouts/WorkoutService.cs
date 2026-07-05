@@ -1,8 +1,9 @@
 ﻿using GymTracker.DTOs.Workout;
 using GymTracker.Interfaces;
 using GymTracker.Models;
+using GymTracker.Services.PersonalRecords;
 
-namespace GymTracker.Services
+namespace GymTracker.Services.Workouts
 {
     public class WorkoutService:IWorkoutService
     {
@@ -48,7 +49,7 @@ namespace GymTracker.Services
             await _unitOfWork.Workout.Add(workout);
             foreach (var set in workout.Sets)
             {
-                await _personalRecordService.AddPersonalRecord(userId, new GymTracker.DTOs.PersonalRecords.AddPersonalRecordRequest
+                await _personalRecordService.AddPersonalRecord(userId, new DTOs.PersonalRecords.AddPersonalRecordRequest
                 {
                     ExerciseId = set.ExerciseId,
                     Reps = set.Reps,
@@ -98,7 +99,7 @@ namespace GymTracker.Services
             await _unitOfWork.CompleteAsync();
             foreach (var set in existingWorkout.Sets)
             {
-                await _personalRecordService.UpdatePersonalRecord(userId, new GymTracker.DTOs.PersonalRecords.UpdatePersonalRecordRequest
+                await _personalRecordService.UpdatePersonalRecord(userId, new DTOs.PersonalRecords.UpdatePersonalRecordRequest
                 {
                     ExerciseId = set.ExerciseId,
                     Reps = set.Reps,
