@@ -21,12 +21,28 @@ namespace GymTracker.IntegrationTests
         {
             builder.ConfigureTestServices(services =>
             {
-                services.AddAuthentication(options =>
+            var dbContextDescriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(DbContextOptions<WorkoutDbContext>));
+
+            if (dbContextDescriptor != null)
+            {
+                services.Remove(dbContextDescriptor);
+            }
+
+                string inMemoryDbName = $"TestDb_{Guid.NewGuid()}";
+            
+                services.AddDbContext<WorkoutDbContext>(options =>
                 {
-                    options.DefaultAuthenticateScheme = "TestScheme";
-                    options.DefaultChallengeScheme = "TestScheme";
-                })
-                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", options => { });
+                    options.UseInMemoryDatabase(inMemoryDbName);
+                });
+                {
+                    services.AddAuthentication(options =>
+                    {
+                        options.DefaultAuthenticateScheme = "TestScheme";
+                        options.DefaultChallengeScheme = "TestScheme";
+                    })
+                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", options => { });
+                }
             });
         }
     }

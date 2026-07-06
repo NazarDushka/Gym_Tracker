@@ -1,6 +1,7 @@
 ﻿using GymTracker.DTOs.BodyMeasurements;
 using GymTracker.Interfaces;
 using GymTracker.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymTracker.Services.BodyMeasurements
 {
@@ -24,6 +25,16 @@ namespace GymTracker.Services.BodyMeasurements
                 Name = t.Name,
                 Unit = t.Unit
             });
+        }
+
+        public async Task<IEnumerable<MeasurementLogDto>> GetLastUsersMeasurementLogsAsync(int userId)
+        {
+            var logs = await _unitOfWork.Measurements.GetLastLogsForUserAsync(userId);
+            if (logs == null || !logs.Any())
+            {
+                throw new KeyNotFoundException("No measurement logs found");
+            }
+            return logs.Select(MapLogToDto);
         }
 
         public async Task<IEnumerable<MeasurementLogDto>> GetMeasurementLogsAsync(int userId)
@@ -56,20 +67,35 @@ namespace GymTracker.Services.BodyMeasurements
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow
                 };
+                DeactivateTargetAsync(userId, request.MeasurementTypeId).Wait();
                 await _unitOfWork.Measurements.AddTargetAsync(target);
+                
                 await _unitOfWork.CompleteAsync();
                 return MapTargetToDto(target);
         }
 
         public async Task<MeasurementLogDto> CreateMeasurementLogAsync(int userId, CreateMeasurementLogRequest request)
         {
-                var log = new MeasurementLog
+            // Valitation:
+            var userExists = await _unitOfWork.User.GetUser(userId);
+            if (userExists == null)
+            {
+                throw new ArgumentException($"User does not exist.");
+            }
+            var measurementType = await _unitOfWork.Measurements.GetAllTypesAsync();
+            if (measurementType == null || !measurementType.Any(t => t.Id == request.MeasurementTypeId))
+            {
+                throw new KeyNotFoundException("Measurement type not found");
+            }
+
+            var log = new MeasurementLog
                 {
                     UserId = userId,
                     MeasurementTypeId = request.MeasurementTypeId,
                     Value = request.Value,
                     Date = request.Date
                 };
+    
                 await _unitOfWork.Measurements.AddLogAsync(log);
                 await _unitOfWork.CompleteAsync();
                 return MapLogToDto(log);
@@ -100,18 +126,35 @@ namespace GymTracker.Services.BodyMeasurements
             return MapLogToDto(log);
         }
 
+        public async Task DeactivateTargetAsync(int userId, Guid measurementId)
+        {
+            var target = await _unitOfWork.Measurements.GetActiveTargetByMeasurementTypeAsync(userId, measurementId);
+            if (target != null)
+            {
+                if (target.UserId != userId)
+                {
+                    throw new KeyNotFoundException("Measurement target not found or does not belong to the user");
+                }
+                await _unitOfWork.Measurements.DeactivateTargetAsync(target.Id, target);
+                await _unitOfWork.CompleteAsync();
+            }
+        }
+
         public async Task DeactivateTargetAsync(int userId, int targetId)
         {
             var target = await _unitOfWork.Measurements.GetTargetByIdAsync(targetId);
-            if (target == null || target.UserId != userId)
+            if (target != null)
             {
-                throw new KeyNotFoundException("Measurement target not found or does not belong to the user");
+                if (target.UserId != userId)
+                {
+                    throw new KeyNotFoundException("Measurement target not found or does not belong to the user");
+                }
+                await _unitOfWork.Measurements.DeactivateTargetAsync(target.Id, target);
+                await _unitOfWork.CompleteAsync();
             }
-            await _unitOfWork.Measurements.DeactivateTargetAsync(target.Id, target);
-            await _unitOfWork.CompleteAsync();
         }
 
-         
+
 
         //Will implement this method later, for now it throws a NotImplementedException
         public async Task<MeasurementTargetDto> UpdateMeasurementTargetAsync(int userId, CreateTargetRequest request)

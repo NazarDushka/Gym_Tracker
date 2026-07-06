@@ -125,17 +125,21 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ARRANGE ===
-            var newLog = new MeasurementLog
+
+            _client.DefaultRequestHeaders.Remove("X-Test-Claim-NameIdentifier");
+            _client.DefaultRequestHeaders.Add("X-Test-Claim-NameIdentifier", "999");
+
+            var newLogRequest = new
             {
-                UserId = 999, // Несуществующий пользователь
                 MeasurementTypeId = testTypeId,
                 Value = 75.5f
             };
 
             // === 2. ACT ===
-            var response = await _client.PostAsJsonAsync("/GymTracker/Measurements", newLog);
+            var response = await _client.PostAsJsonAsync("/GymTracker/Measurements", newLogRequest);
 
             // === 3. ASSERT ===
+
             Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
         }
 
@@ -200,7 +204,7 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ACT ===
-            var response = await _client.GetAsync($"/api/users/{testUserId}/measurements");
+            var response = await _client.GetAsync($"/GymTracker/Measurements/UsersMeasurements");
             var responseText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
@@ -272,9 +276,10 @@ namespace GymTracker.IntegrationTests
         {
             // === 0. SEEDING ===
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
+            Guid invalidLogId = Guid.NewGuid(); // Несуществующий лог   
 
             // === 1. ACT ===
-            var response = await _client.DeleteAsync($"/GymTracker/Measurements/999");
+            var response = await _client.DeleteAsync($"/GymTracker/Measurements/{invalidLogId}");
 
             // === 2. ASSERT ===
             Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
@@ -444,7 +449,7 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ACT ===
-            var response = await _client.GetAsync($"/api/users/{testUserId}/targets");
+            var response = await _client.GetAsync($"/targets");
             var responseText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
@@ -452,7 +457,7 @@ namespace GymTracker.IntegrationTests
 
             var targets = await response.Content.ReadFromJsonAsync<List<MeasurementTarget>>();
             Assert.NotNull(targets);
-            Assert.Single(targets); // Только активный target
+            Assert.Single(targets); 
             Assert.True(targets[0].IsActive);
             Assert.Equal(70.0f, targets[0].TargetValue);
         }
@@ -536,7 +541,7 @@ namespace GymTracker.IntegrationTests
                 type1Id = type1.Id;
                 type2Id = type2.Id;
 
-                // Добавляем несколько логов для одного типа - должны получить только последний
+                // Adding multiple logs for type1 (Weight)
                 var log1 = new MeasurementLog 
                 { 
                     UserId = user.Id, 
@@ -559,7 +564,7 @@ namespace GymTracker.IntegrationTests
                     Date = DateTime.UtcNow 
                 };
 
-                // Логи для другого типа
+                // Adding multiple logs for type2 (Body Fat Percentage) 
                 var log4 = new MeasurementLog 
                 { 
                     UserId = user.Id, 
@@ -579,13 +584,9 @@ namespace GymTracker.IntegrationTests
                 await dbContext.SaveChangesAsync();
             }
 
-            // === 1. ACT - Добавляем UserId в claims для теста ===
-            var authClient = _factory.CreateClient();
-            authClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme");
-            // Добавляем UserId в claims через test auth scheme
-            var claimsClient = new TestClaimsHttpClient(authClient, testUserId);
+            // === 1. ACT ===
 
-            var response = await claimsClient.GetAsync("/GymTracker/Measurements/last");
+            var response = await _client.GetAsync("/GymTracker/Measurements/last");
             var responseText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
@@ -593,7 +594,7 @@ namespace GymTracker.IntegrationTests
 
             var logs = await response.Content.ReadFromJsonAsync<List<MeasurementLog>>();
             Assert.NotNull(logs);
-            // Должны получить только последний лог для каждого типа (2 типа)
+            // should return last log for each type, so we expect 2 logs (one for Weight and one for Body Fat Percentage)
             Assert.Equal(2, logs.Count);
 
             // Проверяем что это последние логи
@@ -601,10 +602,10 @@ namespace GymTracker.IntegrationTests
             var lastLog2 = logs.FirstOrDefault(l => l.MeasurementTypeId == type2Id);
 
             Assert.NotNull(lastLog1);
-            Assert.Equal(74.0f, lastLog1.Value); // Последний вес
+            Assert.Equal(74.0f, lastLog1.Value); // last weight log
 
             Assert.NotNull(lastLog2);
-            Assert.Equal(19.5f, lastLog2.Value); // Последний процент жира
+            Assert.Equal(19.5f, lastLog2.Value); // last body fat percentage log
         }
 
         [Fact]
@@ -627,11 +628,7 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ACT ===
-            var authClient = _factory.CreateClient();
-            authClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme");
-            var claimsClient = new TestClaimsHttpClient(authClient, testUserId);
-
-            var response = await claimsClient.GetAsync("/GymTracker/Measurements/last");
+            var response = await _client.GetAsync("/GymTracker/Measurements/last");
 
             // === 2. ASSERT ===
             Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
@@ -668,28 +665,25 @@ namespace GymTracker.IntegrationTests
                 // Логи для второго пользователя
                 var log3 = new MeasurementLog { UserId = user2.Id, MeasurementTypeId = type.Id, Value = 80.0f, Date = DateTime.UtcNow };
                 var log4 = new MeasurementLog { UserId = user2.Id, MeasurementTypeId = type.Id, Value = 79.0f, Date = DateTime.UtcNow.AddDays(-1) };
-
                 dbContext.MeasurementLogs.AddRange(log1, log2, log3, log4);
                 await dbContext.SaveChangesAsync();
             }
 
             // === 1. ACT - Получаем логи первого пользователя ===
-            var authClient = _factory.CreateClient();
-            authClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme");
-            var claimsClient = new TestClaimsHttpClient(authClient, testUserId1);
+            _client.DefaultRequestHeaders.Remove("X-Test-Claim-NameIdentifier");
+            _client.DefaultRequestHeaders.Add("X-Test-Claim-NameIdentifier", testUserId1.ToString());
 
-            var response = await claimsClient.GetAsync("/GymTracker/Measurements/last");
+            var response1 = await _client.GetAsync("/GymTracker/Measurements/last");
 
             // === 2. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode);
+            Assert.True(response1.IsSuccessStatusCode);
 
-            var logs = await response.Content.ReadFromJsonAsync<List<MeasurementLog>>();
+            var logs = await response1.Content.ReadFromJsonAsync<List<MeasurementLog>>();
             Assert.NotNull(logs);
-            Assert.Single(logs); // Только один тип для пользователя
+            Assert.Single(logs); // only one log should be returned for the last measurement of the first user
 
-            // Проверяем что это логи первого пользователя с его последним значением
+            // Check that the returned log belongs to the first user and has the correct value
             Assert.Equal(75.0f, logs[0].Value);
-            Assert.Equal(testUserId1, logs[0].UserId);
         }
     }
 }

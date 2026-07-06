@@ -110,6 +110,7 @@ namespace GymTracker.IntegrationTests
         {
             // === 0. SEEDING ===
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
+            _client.DefaultRequestHeaders.Add("X-Test-Role", "Admin");
 
             // === 1. ARRANGE ===
             var newExercise = new Exercise
@@ -143,6 +144,7 @@ namespace GymTracker.IntegrationTests
         public async Task UpdateExercise_ShouldModifyExistingExercise()
         {
             // === 0. SEEDING ===
+            _client.DefaultRequestHeaders.Add("X-Test-Role", "Admin");
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             int testExerciseId;
@@ -196,6 +198,7 @@ namespace GymTracker.IntegrationTests
         public async Task UpdateExercise_WithInvalidId_ShouldReturnNotFound()
         {
             // === 0. SEEDING ===
+            _client.DefaultRequestHeaders.Add("X-Test-Role", "Admin");
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             // === 1. ARRANGE ===
@@ -217,6 +220,7 @@ namespace GymTracker.IntegrationTests
         public async Task DeleteExercise_ShouldRemoveExerciseFromDatabase()
         {
             // === 0. SEEDING ===
+            _client.DefaultRequestHeaders.Add("X-Test-Role", "Admin");
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             int testExerciseId;
@@ -259,6 +263,7 @@ namespace GymTracker.IntegrationTests
         public async Task DeleteExercise_WithInvalidId_ShouldReturnOk()
         {
             // === 0. SEEDING ===
+            _client.DefaultRequestHeaders.Add("X-Test-Role", "Admin");
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             // === 1. ACT ===

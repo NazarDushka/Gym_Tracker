@@ -30,12 +30,19 @@ namespace GymTracker.Controllers
         [HttpGet("last")]
         public async Task<ActionResult<IEnumerable<MeasurementLogDto>>> GetLastLogsForUser()
         {
-            var logs = await _bodyMeasurementsService.GetMeasurementLogsAsync(User.GetUserId());
-            return Ok(logs);
+            try
+            {
+                var logs = await _bodyMeasurementsService.GetLastUsersMeasurementLogsAsync(User.GetUserId());
+                return Ok(logs);
+            } catch (KeyNotFoundException ex) {
+                return NotFound(new { message = ex.Message });
+            } catch (Exception ex) {
+                return StatusCode(500, new { message = "Error retrieving last measurement logs" });
+            }
         }
 
         // GET: api/users/{userId}/measurements
-        [HttpGet("~/measurements")]
+        [HttpGet("UsersMeasurements")]
         public async Task<ActionResult<IEnumerable<MeasurementLogDto>>> GetUserLogs() 
         {  
             var logs = await _bodyMeasurementsService.GetMeasurementLogsAsync(User.GetUserId());
@@ -50,6 +57,14 @@ namespace GymTracker.Controllers
             {
                 await _bodyMeasurementsService.CreateMeasurementLogAsync(User.GetUserId(), request);
                 return StatusCode(StatusCodes.Status201Created);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
             }
             catch (Exception ex)
             {
@@ -66,6 +81,10 @@ namespace GymTracker.Controllers
                await _bodyMeasurementsService.DeleteMeasurementLogAsync(User.GetUserId(), id);
 
                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+               return NotFound(new { message = ex.Message });
             }
             catch (Exception ex)
             {

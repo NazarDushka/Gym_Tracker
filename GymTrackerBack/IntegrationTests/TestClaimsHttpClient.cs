@@ -42,7 +42,22 @@ namespace IntegrationTests
         /// </summary>
         private void ApplyClaims()
         {
-            TestAuthHandler.CustomClaims = new Dictionary<string, string>(_claims);
+            // Очищаем старые тестовые заголовки, если клиент переиспользуется
+            var headersToRemove = _httpClient.DefaultRequestHeaders
+                .Where(h => h.Key.StartsWith("X-Test-Claim-"))
+                .Select(h => h.Key)
+                .ToList();
+
+            foreach (var header in headersToRemove)
+            {
+                _httpClient.DefaultRequestHeaders.Remove(header);
+            }
+
+            // Добавляем новые claims как HTTP-заголовки
+            foreach (var claim in _claims)
+            {
+                _httpClient.DefaultRequestHeaders.Add($"X-Test-Claim-{claim.Key}", claim.Value);
+            }
         }
 
         /// <summary>

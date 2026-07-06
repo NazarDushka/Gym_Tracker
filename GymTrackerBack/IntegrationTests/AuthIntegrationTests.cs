@@ -153,7 +153,7 @@ namespace GymTracker.IntegrationTests
 
             // === 2. ACT ===
             var response = await _client.PostAsync(
-                $"/Auth/login?email={Uri.EscapeDataString(testEmail)}&passwd={Uri.EscapeDataString(testPassword)}",
+                $"/Auth/login?email={Uri.EscapeDataString(testEmail)}&password={Uri.EscapeDataString(testPassword)}",
                 null);
             var responseText = await response.Content.ReadAsStringAsync();
 
@@ -176,7 +176,7 @@ namespace GymTracker.IntegrationTests
 
             // Проверяем наличие нужных claims
             var fullNameClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "FullName");
-            var idClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "Id");
+            var idClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "UserId");
 
             Assert.NotNull(fullNameClaim);
             Assert.Equal("TestUser", fullNameClaim.Value);
@@ -281,7 +281,7 @@ namespace GymTracker.IntegrationTests
 
             // === 1. ARRANGE - Логинимся и получаем токен ===
             var loginResponse = await _client.PostAsync(
-                $"/Auth/login?email={Uri.EscapeDataString(testEmail)}&passwd={Uri.EscapeDataString(testPassword)}",
+                $"/Auth/login?email={Uri.EscapeDataString(testEmail)}&password={Uri.EscapeDataString(testPassword)}",
                 null);
 
             var loginResponseText = await loginResponse.Content.ReadAsStringAsync();
@@ -348,7 +348,7 @@ namespace GymTracker.IntegrationTests
 
             // === 1. ACT & ASSERT для User1 ===
             var login1Response = await _client.PostAsync(
-                $"/Auth/login?email={Uri.EscapeDataString("user1@example.com")}&passwd={Uri.EscapeDataString("Password1!")}",
+                $"/Auth/login?email={Uri.EscapeDataString("user1@example.com")}&password={Uri.EscapeDataString("Password1!")}",
                 null);
 
             Assert.True(login1Response.IsSuccessStatusCode);
@@ -363,7 +363,7 @@ namespace GymTracker.IntegrationTests
 
             // === 2. ACT & ASSERT для User2 ===
             var login2Response = await _client.PostAsync(
-                $"/Auth/login?email={Uri.EscapeDataString("user2@example.com")}&passwd={Uri.EscapeDataString("Password2!")}",
+                $"/Auth/login?email={Uri.EscapeDataString("user2@example.com")}&password={Uri.EscapeDataString("Password2!")}",
                 null);
 
             Assert.True(login2Response.IsSuccessStatusCode);
