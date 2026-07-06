@@ -1,12 +1,14 @@
-﻿using GymTracker.Models;
+﻿using GymTracker.DTOs.PersonalRecords;
+using GymTracker.DTOs.Workout;
+using GymTracker.Models;
 
 namespace GymTracker.Interfaces
 {
     public interface IPersonalRecord
     {
-        Task<float> GetORM(WorkoutSet set);
         Task<PersonalRecord> GetPersonalRecordInExerc(int userId, int exerciseId);
-        Task<List<PersonalRecord>> GetPersonalRecordsForUser(int userId);
-        Task AddOrUpdatePersonalRecord(int userId, int exerciseId, WorkoutSet set);
+        Task<IEnumerable<PersonalRecord>> GetPersonalRecordsForUser(int userId);
+        Task Add(PersonalRecord pr);
+        Task Update (int userId, int exerciseId, WorkoutSet set);
     }
 }

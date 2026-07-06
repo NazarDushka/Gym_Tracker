@@ -41,20 +41,20 @@ namespace GymTracker.Repository
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<MeasurementLog>> GetLogsByTypeAsync(int userId, int typeId)
+        public async Task<IEnumerable<MeasurementLog>> GetLogsByTypeAsync(int userId, Guid typeId)
         {
             return await _workoutDbContext.MeasurementLogs
-                .Where(l => l.UserId == userId && l.MeasurementTypeId == new Guid(typeId.ToString()))
+                .Where(l => l.UserId == userId && l.MeasurementTypeId == typeId)
                 .OrderBy(l => l.Date)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task<MeasurementLog?> GetLogByIdAsync(int logId)
+        public async Task<MeasurementLog?> GetLogByIdAsync(Guid logId)
         {
             return await _workoutDbContext.MeasurementLogs
                 .Include(l => l.MeasurementType)
-                .FirstOrDefaultAsync(l => l.Id == new Guid(logId.ToString()));
+                .FirstOrDefaultAsync(l => l.Id == logId);
         }
 
         public async Task AddLogAsync(MeasurementLog log)
@@ -62,7 +62,7 @@ namespace GymTracker.Repository
             await _workoutDbContext.MeasurementLogs.AddAsync(log);
         }
 
-        public async Task DeleteLogAsync(int logId)
+        public async Task DeleteLogAsync(Guid logId)
         {
             var log = await _workoutDbContext.MeasurementLogs.FindAsync(logId);
             if (log != null)
@@ -79,20 +79,21 @@ namespace GymTracker.Repository
                 .AsNoTracking()
                 .ToListAsync();
         }
-
+        public async Task<MeasurementTarget?> GetTargetByIdAsync(int targetId)
+        {
+            return await _workoutDbContext.MeasurementTargets
+                .Include(t => t.MeasurementType)
+                .FirstOrDefaultAsync(t => t.Id == targetId);
+        }
         public async Task AddTargetAsync(MeasurementTarget target)
         {
             await _workoutDbContext.MeasurementTargets.AddAsync(target);
         }
 
-        public async Task DeactivateTargetAsync(int targetId)
+        public async Task DeactivateTargetAsync(int targetId, MeasurementTarget target)
         {
-            var target = await _workoutDbContext.MeasurementTargets.FindAsync(targetId);
-            if (target != null)
-            {
                 target.IsActive = false;
                 _workoutDbContext.MeasurementTargets.Update(target);
-            }
         }
     }
 }

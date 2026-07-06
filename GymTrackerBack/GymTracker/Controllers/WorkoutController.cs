@@ -1,179 +1,92 @@
-﻿using GymTracker.Interfaces;
-using GymTracker.Models;
-using GymTracker.Repository;
-using GymTracker.Repository.UnitOfWork;
+﻿using GymTracker.DTOs.Workout;
+using GymTracker.Extensions;
+using GymTracker.Services.Workouts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
-using GymTracker.Extensions;
 
 namespace GymTracker.Controllers
 {
     [ApiController]
     [Route("GymTracker/[controller]")]
     [Authorize]
-    public class WorkoutController : Controller
+    public class WorkoutController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        public readonly IWorkoutService _workoutService;
 
-        public WorkoutController(IUnitOfWork unitOfWork)
+        public WorkoutController(IWorkoutService workoutService)
         {
-            _unitOfWork = unitOfWork;
+            _workoutService = workoutService;
         }
-
 
         [HttpGet("GetMyWorkouts")]
-        public async Task<ActionResult<IEnumerable<Workout>>> GetMyWorkouts()
+        public async Task<ActionResult<IEnumerable<WorkoutDto>>> GetMyWorkouts()
         {
-            int userId = User.GetUserId();
-            var workouts = await _unitOfWork.Workout.GetMyWorkouts(userId);
-            if (workouts == null || !workouts.Any()) return NotFound("No workouts found for this user.");
-            workouts = workouts.OrderByDescending(w => w.Date).ToList();
+            var workouts = await _workoutService.GetUsersWorkoutsAsync(User.GetUserId());
             return Ok(workouts);
         }
 
-        [HttpGet("GetAllWorkouts")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<Workout>>> GetAllWorkouts()
-        {
-            var workouts = await _unitOfWork.Workout.GetAll();
-            workouts = workouts.OrderByDescending(w => w.Date).ToList();
-            return Ok(workouts);
-        }
 
         [HttpGet("GetWorkout/{id}")]
-        public async Task<ActionResult<Workout>> GetWorkout(int id)
+        public async Task<ActionResult<WorkoutDto>> GetWorkout(int id)
         {
-            int userId = User.GetUserId();
-            var workout = await _unitOfWork.Workout.Get(id);
-            if (workout == null) 
-            { 
-                return NotFound($"Workout with ID {id} not found."); 
-            }
-            if (userId != workout.UserId)
-            {
-                return Forbid("You are not authorized to view this workout.");
+           var workout = await _workoutService.GetWorkoutByIdAsync(User.GetUserId(), id);
+           if (workout == null)
+           {
+               return NotFound($"Workout with ID {id} not found.");
             }
             return Ok(workout);
         }
 
         [HttpPost("AddWorkout")]
-        public async Task<ActionResult<Workout>> AddWorkout([FromBody] Workout workout)
+        public async Task<ActionResult<WorkoutDto>> AddWorkout([FromBody]CreateWorkoutRequest request)
         {
-            int userId = User.GetUserId();
-            if (userId != workout.UserId)
-            {
-                return Forbid("You are not authorized to add this workout.");
-            }
-
-            await _unitOfWork.Workout.Add(workout);
-
-            if (workout.Sets != null && workout.Sets.Any())
-            {
-                foreach (var set in workout.Sets)
-                {
-                    await _unitOfWork.PersonalRecords.AddOrUpdatePersonalRecord(workout.UserId, set.ExerciseId, set);
-                }
-            }
-            await _unitOfWork.CompleteAsync();
-            return Ok(workout);
+            var createdWorkout = await _workoutService.CreateWorkoutAsync(User.GetUserId(), request);
+            return CreatedAtAction(nameof(GetWorkout), new { id = createdWorkout.Id }, createdWorkout);
         }
 
         [HttpPut("UpdateWorkout/{id}")]
-        public async Task<ActionResult> UpdateWorkout(int id, [FromBody] Workout updatedWorkout)
+        public async Task<ActionResult> UpdateWorkout(int id, [FromBody] UpdateWorkoutRequest request)
         {
-            int userId = User.GetUserId();
-            if (userId != updatedWorkout.UserId)
-            {
-                return Forbid("You are not authorized to update this workout.");
+            try
+            { 
+                await _workoutService.UpdateWorkoutAsync(User.GetUserId(), id, request);
+                return Ok("Workout was updated");
             }
-            if (id != updatedWorkout.Id)
-            {
-                return BadRequest("Workout ID in URL does not match ID in body.");
-            }
-
-            var existingWorkout = await _unitOfWork.Workout.Get(id);
-            if (existingWorkout == null)
+            catch (KeyNotFoundException)
             {
                 return NotFound($"Workout with ID {id} not found.");
             }
-
-            existingWorkout.Date = updatedWorkout.Date;
-            existingWorkout.Notes = updatedWorkout.Notes;
-
-            var incomingSetIds = updatedWorkout.Sets.Select(s => s.Id).ToList();
-            var setsToRemove = existingWorkout.Sets
-                .Where(existingSet => !incomingSetIds.Contains(existingSet.Id))
-                .ToList();
-
-            foreach (var setToRemove in setsToRemove)
+            catch (UnauthorizedAccessException)
             {
-                existingWorkout.Sets.Remove(setToRemove);
+                return Forbid("You are not authorized to update this workout.");
             }
-
-            foreach (var incomingSet in updatedWorkout.Sets)
-            {
-                var existingSet = existingWorkout.Sets.FirstOrDefault(s => s.Id == incomingSet.Id);
-
-                if (existingSet != null && existingSet.Id != 0)
-                {
-                    existingSet.Reps = incomingSet.Reps;
-                    existingSet.Weight = incomingSet.Weight;
-                    existingSet.ExerciseId = incomingSet.ExerciseId;
-                }
-                else
-                {
-                    existingWorkout.Sets.Add(new WorkoutSet
-                    {
-                        Reps = incomingSet.Reps,
-                        Weight = incomingSet.Weight,
-                        ExerciseId = incomingSet.ExerciseId
-                    });
-                }
-            }
-
-            await _unitOfWork.CompleteAsync();
-
-            foreach (var set in existingWorkout.Sets)
-            {
-                await _unitOfWork.PersonalRecords.AddOrUpdatePersonalRecord(existingWorkout.UserId, set.ExerciseId, set);
-            }
-
-            await _unitOfWork.CompleteAsync();
-
-            return Ok("Workout was updated");
         }
 
         [HttpDelete("DeleteWorkout/{id}")]
         public async Task<ActionResult> DeleteWorkout(int id)
         {
-            int userId = User.GetUserId();
-            var workoutToDelete = await _unitOfWork.Workout.Get(id);
-            if (workoutToDelete == null)
+            try
+            { 
+                await _workoutService.DeleteWorkoutAsync(User.GetUserId(), id);
+                return Ok("Workout was deleted");
+            }
+            catch (KeyNotFoundException)
             {
                 return NotFound($"Workout with ID {id} not found.");
             }
-            if (userId != workoutToDelete.UserId)
+            catch (UnauthorizedAccessException)
             {
                 return Forbid("You are not authorized to delete this workout.");
             }
-            
-            _unitOfWork.Workout.Delete(workoutToDelete);
-            await _unitOfWork.CompleteAsync();
-
-            return Ok();
         }
 
         [HttpGet("LastWorkout")]
-        public async Task<ActionResult<Workout>> GetLastWorkout()
+        public async Task<ActionResult<WorkoutDto>> GetLastWorkout()
         {
-            int userId = User.GetUserId();
-            var lastWorkout = await _unitOfWork.Workout.GetMyLastWorkout(userId);
-            if (lastWorkout == null) 
+            var workout = await _workoutService.GetLastUsersWorkoutAsync(User.GetUserId());
+            if (workout == null)
                 return NotFound();
-            return Ok(lastWorkout);
+            return Ok(workout);
         }
     }
 }

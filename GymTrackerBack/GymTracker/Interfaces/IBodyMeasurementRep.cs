@@ -9,16 +9,17 @@ namespace GymTracker.Interfaces
 
         Task<IEnumerable<MeasurementLog>> GetLogsByUserIdAsync(int userId);
 
-        Task<IEnumerable<MeasurementLog>> GetLogsByTypeAsync(int userId, int typeId);
+        Task<IEnumerable<MeasurementLog>> GetLogsByTypeAsync(int userId, Guid typeId);
 
         Task<IEnumerable<MeasurementLog>> GetLastLogsForUserAsync(int userId);
 
-        Task<MeasurementLog?> GetLogByIdAsync(int logId);
+        Task<MeasurementLog?> GetLogByIdAsync(Guid logId);
         Task AddLogAsync(MeasurementLog log);
-        Task DeleteLogAsync(int logId);
+        Task DeleteLogAsync(Guid logId);
 
         Task<IEnumerable<MeasurementTarget>> GetActiveTargetsByUserIdAsync(int userId);
+        Task<MeasurementTarget?> GetTargetByIdAsync(int targetId);
         Task AddTargetAsync(MeasurementTarget target);
-        Task DeactivateTargetAsync(int targetId);
+        Task DeactivateTargetAsync(int targetId, MeasurementTarget target);
     }
 }
