@@ -38,11 +38,17 @@ namespace GymTracker.Services.PersonalRecords
 
         public async Task AddPersonalRecord(int userId, AddPersonalRecordRequest request)
         {
+            var exercise = await _unitOfWork.Exercises.GetExerciseById(request.ExerciseId);
+            if (exercise == null)
+                throw new KeyNotFoundException("Exercise not found.");
+            var exerciseName = exercise.Name;
+
             await _unitOfWork.PersonalRecords.Add(new PersonalRecord
             {
                 WorkoutSetId = request.WorkoutSetId,
                 UserId = userId,
                 ExerciseId = request.ExerciseId,
+                ExerciseName = exerciseName,
                 Weight = request.Weight,
                 Reps = request.Reps,
                 CalculatedMaxLift = ORM(request.Weight, request.Reps),

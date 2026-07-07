@@ -1,11 +1,11 @@
-using System.Security.Claims;
+п»їusing System.Security.Claims;
 using System.Net.Http.Headers;
 
 namespace IntegrationTests
 {
     /// <summary>
-    /// Вспомогательный класс для добавления custom claims в тестовые HTTP запросы
-    /// Позволяет эмулировать аутентифицированного пользователя с определенными claims
+    /// Helper class to add custom claims to test HTTP requests
+    /// Allows emulating an authenticated user with specific claims
     /// </summary>
     public class TestClaimsHttpClient
     {
@@ -23,12 +23,12 @@ namespace IntegrationTests
                 { "Id", userId.ToString() }
             };
 
-            // Устанавливаем claims в TestAuthHandler
+            // Set claims in TestAuthHandler
             ApplyClaims();
         }
 
         /// <summary>
-        /// Добавляет дополнительный claim
+        /// Adds an additional claim
         /// </summary>
         public TestClaimsHttpClient WithClaim(string claimType, string claimValue)
         {
@@ -38,15 +38,30 @@ namespace IntegrationTests
         }
 
         /// <summary>
-        /// Применяет claims к TestAuthHandler
+        /// Applies claims to TestAuthHandler
         /// </summary>
         private void ApplyClaims()
         {
-            TestAuthHandler.CustomClaims = new Dictionary<string, string>(_claims);
+            // Clear old test headers if the client is reused
+            var headersToRemove = _httpClient.DefaultRequestHeaders
+                .Where(h => h.Key.StartsWith("X-Test-Claim-"))
+                .Select(h => h.Key)
+                .ToList();
+
+            foreach (var header in headersToRemove)
+            {
+                _httpClient.DefaultRequestHeaders.Remove(header);
+            }
+
+            // Add new claims as HTTP headers
+            foreach (var claim in _claims)
+            {
+                _httpClient.DefaultRequestHeaders.Add($"X-Test-Claim-{claim.Key}", claim.Value);
+            }
         }
 
         /// <summary>
-        /// Выполняет GET запрос с установленными claims
+        /// Performs a GET request with the set claims
         /// </summary>
         public async Task<HttpResponseMessage> GetAsync(string uri)
         {
@@ -54,7 +69,7 @@ namespace IntegrationTests
         }
 
         /// <summary>
-        /// Выполняет POST запрос с установленными claims
+        /// Performs a POST request with the set claims
         /// </summary>
         public async Task<HttpResponseMessage> PostAsync(string uri, HttpContent content)
         {
@@ -62,7 +77,7 @@ namespace IntegrationTests
         }
 
         /// <summary>
-        /// Выполняет DELETE запрос с установленными claims
+        /// Performs a DELETE request with the set claims
         /// </summary>
         public async Task<HttpResponseMessage> DeleteAsync(string uri)
         {
@@ -70,7 +85,7 @@ namespace IntegrationTests
         }
 
         /// <summary>
-        /// Выполняет PUT запрос с установленными claims
+        /// Performs a PUT request with the set claims
         /// </summary>
         public async Task<HttpResponseMessage> PutAsync(string uri, HttpContent content)
         {
@@ -78,7 +93,7 @@ namespace IntegrationTests
         }
 
         /// <summary>
-        /// Получает текущие claims
+        /// Gets current claims
         /// </summary>
         public IReadOnlyDictionary<string, string> GetClaims()
         {

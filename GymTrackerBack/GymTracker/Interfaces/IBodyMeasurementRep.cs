@@ -18,6 +18,7 @@ namespace GymTracker.Interfaces
         Task DeleteLogAsync(Guid logId);
 
         Task<IEnumerable<MeasurementTarget>> GetActiveTargetsByUserIdAsync(int userId);
+        Task<MeasurementTarget?> GetActiveTargetByMeasurementTypeAsync(int userId, Guid measurementTypeId);
         Task<MeasurementTarget?> GetTargetByIdAsync(int targetId);
         Task AddTargetAsync(MeasurementTarget target);
         Task DeactivateTargetAsync(int targetId, MeasurementTarget target);

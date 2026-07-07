@@ -79,6 +79,16 @@ namespace GymTracker.Repository
                 .AsNoTracking()
                 .ToListAsync();
         }
+
+        public async Task<MeasurementTarget> GetActiveTargetByMeasurementTypeAsync(int userId, Guid measurementTypeId)
+        {
+            return await _workoutDbContext.MeasurementTargets
+                .Include(t => t.MeasurementType)
+                .Where(t => t.UserId == userId && t.MeasurementTypeId == measurementTypeId && t.IsActive)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<MeasurementTarget?> GetTargetByIdAsync(int targetId)
         {
             return await _workoutDbContext.MeasurementTargets

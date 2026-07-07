@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
@@ -13,9 +10,6 @@ namespace IntegrationTests
 {
     public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        // Static storage для claims из тестов
-        public static Dictionary<string, string> CustomClaims { get; set; } = new();
-
         public TestAuthHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
             : base(options, logger, encoder, clock)
@@ -25,27 +19,49 @@ namespace IntegrationTests
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, "Test User"),
-                new Claim(ClaimTypes.NameIdentifier, "1")
-            };
+    {
+        new Claim(ClaimTypes.Name, "Test User"),
+        new Claim(ClaimTypes.Role, "User") // Default role
+    };
 
-            // Добавляем дополнительные claims если они установлены
-            if (CustomClaims.Any())
+            bool isIdFound = false;
+
+            // Look for the standard HTTP Authorization header
+            if (Context.Request.Headers.TryGetValue("Authorization", out var authHeader))
             {
-                foreach (var claim in CustomClaims)
+                var token = authHeader.ToString(); // Example: "TestScheme 2"
+
+                // Check if this is our scheme and extract what comes after the space
+                if (token.StartsWith("TestScheme ", StringComparison.OrdinalIgnoreCase))
                 {
-                    claims.Add(new Claim(claim.Key, claim.Value));
+                    var userId = token.Substring("TestScheme ".Length).Trim();
+
+                    claims.Add(new Claim(ClaimTypes.NameIdentifier, userId));
+                    claims.Add(new Claim("UserId", userId));
+                    claims.Add(new Claim("Id", userId));
+                    isIdFound = true;
+                }
+                if (token.StartsWith("TestSchemeAdmin", StringComparison.OrdinalIgnoreCase))
+                {
+                    var userId = token.Substring("TestSchemeAdmin".Length).Trim();
+
+                    claims.Add(new Claim(ClaimTypes.NameIdentifier, userId));
+                    claims.Add(new Claim("UserId", userId));
+                    claims.Add(new Claim("Id", userId));
+                    claims.Add(new Claim(ClaimTypes.Role, "Admin")); // Administrator role
+                    isIdFound = true;
                 }
             }
-            else
+
+            // Fallback: if the header was without an ID (just "TestScheme"), set to 1
+            if (!isIdFound)
             {
-                // Default claim для UserId
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, "1"));
                 claims.Add(new Claim("UserId", "1"));
                 claims.Add(new Claim("Id", "1"));
             }
 
-            var identity = new ClaimsIdentity(claims, "Test");
+            var identity = new ClaimsIdentity(claims, "TestScheme");
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, "TestScheme");
 
