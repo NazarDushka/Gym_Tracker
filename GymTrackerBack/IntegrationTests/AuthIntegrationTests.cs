@@ -1,4 +1,4 @@
-using GymTracker.Models;
+п»їusing GymTracker.Models;
 using GymTracker.Repository;
 using GymTracker.Repository.Auth;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +10,7 @@ using Xunit;
 
 namespace GymTracker.IntegrationTests
 {
+
     public class AuthIntegrationTests : IClassFixture<GymTrackerWebApplicationFactory>
     {
         private readonly GymTrackerWebApplicationFactory _factory;
@@ -40,9 +41,9 @@ namespace GymTracker.IntegrationTests
             var responseText = await response.Content.ReadAsStringAsync();
 
             // === 3. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер вернул ошибку: {responseText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server returned an error: {responseText}");
 
-            // Проверяем, что пользователь был создан в БД
+            // Verify that the user was created in the DB
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
@@ -63,7 +64,7 @@ namespace GymTracker.IntegrationTests
             // === 0. SEEDING ===
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
-            // Создаем первого пользователя в БД
+            // Create the first user in the DB
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
@@ -82,7 +83,7 @@ namespace GymTracker.IntegrationTests
             var signupRequest = new SignupRequest
             {
                 Name = "NewUser",
-                Email = "existing@example.com", // Используем существующий email
+                Email = "existing@example.com", // Use existing email
                 Password = "Password123!"
             };
 
@@ -99,7 +100,7 @@ namespace GymTracker.IntegrationTests
             // === 0. SEEDING ===
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
-            // Создаем первого пользователя в БД
+            // Create the first user in the DB
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
@@ -117,7 +118,7 @@ namespace GymTracker.IntegrationTests
             // === 1. ARRANGE ===
             var signupRequest = new SignupRequest
             {
-                Name = "ExistingUser", // Используем существующее имя
+                Name = "ExistingUser", // Use existing name
                 Email = "different@example.com",
                 Password = "Password123!"
             };
@@ -138,7 +139,7 @@ namespace GymTracker.IntegrationTests
             string testEmail = "testuser@example.com";
             string testPassword = "SecurePassword123!";
 
-            // Регистрируем пользователя
+            // Register user
             var signupRequest = new SignupRequest
             {
                 Name = "TestUser",
@@ -149,7 +150,7 @@ namespace GymTracker.IntegrationTests
             await _client.PostAsJsonAsync("/Auth/register", signupRequest);
 
             // === 1. ARRANGE ===
-            // Используем registered credentials
+            // Use registered credentials
 
             // === 2. ACT ===
             var response = await _client.PostAsync(
@@ -158,7 +159,7 @@ namespace GymTracker.IntegrationTests
             var responseText = await response.Content.ReadAsStringAsync();
 
             // === 3. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Ошибка при логине: {responseText}");
+            Assert.True(response.IsSuccessStatusCode, $"Error during login: {responseText}");
 
             var jsonResponse = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
             Assert.NotNull(jsonResponse);
@@ -167,14 +168,14 @@ namespace GymTracker.IntegrationTests
             var token = jsonResponse["token"];
             Assert.NotEmpty(token);
 
-            // Проверяем, что токен является валидным JWT
+            // Verify that the token is a valid JWT
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtToken = tokenHandler.ReadJwtToken(token);
 
             Assert.NotNull(jwtToken);
             Assert.NotEmpty(jwtToken.Claims);
 
-            // Проверяем наличие нужных claims
+            // Check for required claims
             var fullNameClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "FullName");
             var idClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "UserId");
 
@@ -207,7 +208,7 @@ namespace GymTracker.IntegrationTests
             string testEmail = "testuser@example.com";
             string testPassword = "SecurePassword123!";
 
-            // Регистрируем пользователя
+            // Register user
             var signupRequest = new SignupRequest
             {
                 Name = "TestUser",
@@ -269,7 +270,7 @@ namespace GymTracker.IntegrationTests
             string testEmail = "testuser@example.com";
             string testPassword = "SecurePassword123!";
 
-            // Регистрируем пользователя
+            // Register user
             var signupRequest = new SignupRequest
             {
                 Name = "TestUser",
@@ -279,7 +280,7 @@ namespace GymTracker.IntegrationTests
 
             await _client.PostAsJsonAsync("/Auth/register", signupRequest);
 
-            // === 1. ARRANGE - Логинимся и получаем токен ===
+            // === 1. ARRANGE - Log in and get token ===
             var loginResponse = await _client.PostAsync(
                 $"/Auth/login?email={Uri.EscapeDataString(testEmail)}&password={Uri.EscapeDataString(testPassword)}",
                 null);
@@ -290,15 +291,15 @@ namespace GymTracker.IntegrationTests
 
             Assert.NotNull(token);
 
-            // === 2. ACT - Используем токен в заголовке Authorization ===
+            // === 2. ACT - Use token in Authorization header ===
             var clientWithAuth = _factory.CreateClient();
             clientWithAuth.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Делаем какой-то запрос с токеном (например, GET /GetExercises)
+            // Make a request with the token (e.g., GET /GetExercises)
             var authorizedResponse = await clientWithAuth.GetAsync("/GetExercises");
 
             // === 3. ASSERT ===
-            // Просто проверяем, что запрос прошел (не 401 Unauthorized)
+            // Just check that the request passed (not 401 Unauthorized)
             Assert.NotEqual(System.Net.HttpStatusCode.Unauthorized, authorizedResponse.StatusCode);
         }
 
@@ -311,7 +312,7 @@ namespace GymTracker.IntegrationTests
             // === 1. ARRANGE ===
             var signupRequest = new SignupRequest
             {
-                Name = "", // Пустое имя
+                Name = "", // Empty name
                 Email = "emptyname@example.com",
                 Password = "Password123!"
             };
@@ -320,7 +321,7 @@ namespace GymTracker.IntegrationTests
             var response = await _client.PostAsJsonAsync("/Auth/register", signupRequest);
 
             // === 3. ASSERT ===
-            // Это зависит от валидации на сервере. Если сервер позволяет, тест пройдет
+            // This depends on server validation. If the server allows it, the test will pass
             if (response.IsSuccessStatusCode)
             {
                 using (var scope = _factory.Services.CreateScope())
@@ -339,14 +340,14 @@ namespace GymTracker.IntegrationTests
             // === 0. SEEDING ===
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
-            // Регистрируем двух пользователей
+            // Register two users
             var user1 = new SignupRequest { Name = "User1", Email = "user1@example.com", Password = "Password1!" };
             var user2 = new SignupRequest { Name = "User2", Email = "user2@example.com", Password = "Password2!" };
 
             await _client.PostAsJsonAsync("/Auth/register", user1);
             await _client.PostAsJsonAsync("/Auth/register", user2);
 
-            // === 1. ACT & ASSERT для User1 ===
+            // === 1. ACT & ASSERT for User1 ===
             var login1Response = await _client.PostAsync(
                 $"/Auth/login?email={Uri.EscapeDataString("user1@example.com")}&password={Uri.EscapeDataString("Password1!")}",
                 null);
@@ -361,7 +362,7 @@ namespace GymTracker.IntegrationTests
             var claim1 = jwt1.Claims.FirstOrDefault(c => c.Type == "FullName");
             Assert.Equal("User1", claim1?.Value);
 
-            // === 2. ACT & ASSERT для User2 ===
+            // === 2. ACT & ASSERT for User2 ===
             var login2Response = await _client.PostAsync(
                 $"/Auth/login?email={Uri.EscapeDataString("user2@example.com")}&password={Uri.EscapeDataString("Password2!")}",
                 null);
@@ -375,7 +376,7 @@ namespace GymTracker.IntegrationTests
             var claim2 = jwt2.Claims.FirstOrDefault(c => c.Type == "FullName");
             Assert.Equal("User2", claim2?.Value);
 
-            // Проверяем, что токены разные
+            // Verify that the tokens are different
             Assert.NotEqual(token1, token2);
         }
     }

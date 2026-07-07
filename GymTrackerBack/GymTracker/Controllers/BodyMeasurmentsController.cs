@@ -105,7 +105,7 @@ namespace GymTracker.Controllers
         public async Task<ActionResult> AddTarget([FromBody] CreateTargetRequest target)
         {
             try 
-            { 
+            {
                 await _bodyMeasurementsService.CreateMeasurementTargetAsync(User.GetUserId(), target);
                 return StatusCode(StatusCodes.Status201Created);
             }

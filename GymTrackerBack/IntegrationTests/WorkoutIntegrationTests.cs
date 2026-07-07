@@ -1,4 +1,4 @@
-using GymTracker.Models;
+п»їusing GymTracker.Models;
 using GymTracker.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +8,7 @@ using Xunit;
 
 namespace GymTracker.IntegrationTests
 {
+
     public class WorkoutIntegrationTests : IClassFixture<GymTrackerWebApplicationFactory>
     {
         private readonly GymTrackerWebApplicationFactory _factory;
@@ -45,8 +46,7 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ARRANGE ===
-            _client.DefaultRequestHeaders.Remove("X-Test-Claim-NameIdentifier");
-            _client.DefaultRequestHeaders.Add("X-Test-Claim-NameIdentifier", testUserId.ToString());
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme", testUserId.ToString());
 
             var newWorkoutRequest = new
             {
@@ -63,7 +63,7 @@ namespace GymTracker.IntegrationTests
             var errorText = await response.Content.ReadAsStringAsync();
 
             // === 3. ASSERT  ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {errorText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {errorText}");
 
             using (var scope = _factory.Services.CreateScope())
             {
@@ -112,8 +112,7 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ARRANGE ===
-            _client.DefaultRequestHeaders.Remove("X-Test-Claim-NameIdentifier");
-            _client.DefaultRequestHeaders.Add("X-Test-Claim-NameIdentifier", testUserId.ToString());
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme", testUserId.ToString());
 
             var newLog = new MeasurementLog
             {
@@ -129,14 +128,14 @@ namespace GymTracker.IntegrationTests
             var postErrorText = await postResponse.Content.ReadAsStringAsync();
 
             // === 3. ASSERT (POST) ===
-            Assert.True(postResponse.IsSuccessStatusCode, $"Сервер вернул ошибку при POST: {postErrorText}");
+            Assert.True(postResponse.IsSuccessStatusCode, $"Server returned error on POST: {postErrorText}");
 
             // === 4. ACT (GET) ===
             var getResponse = await _client.GetAsync($"GymTracker/Measurements/UsersMeasurements");
             var getErrorText = await getResponse.Content.ReadAsStringAsync();
 
             // === 5. ASSERT (GET) ===
-            Assert.True(getResponse.IsSuccessStatusCode, $"Сервер вернул ошибку при GET: {getErrorText}");
+            Assert.True(getResponse.IsSuccessStatusCode, $"Server returned error on GET: {getErrorText}");
 
             var retrievedLogs = await getResponse.Content.ReadFromJsonAsync<List<MeasurementLog>>();
 

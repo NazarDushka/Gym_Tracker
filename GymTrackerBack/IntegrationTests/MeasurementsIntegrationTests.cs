@@ -9,6 +9,7 @@ using Xunit;
 
 namespace GymTracker.IntegrationTests
 {
+
     public class MeasurementsIntegrationTests : IClassFixture<GymTrackerWebApplicationFactory>
     {
         private readonly GymTrackerWebApplicationFactory _factory;
@@ -44,7 +45,7 @@ namespace GymTracker.IntegrationTests
             var responseText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {responseText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {responseText}");
 
             var types = await response.Content.ReadFromJsonAsync<List<MeasurementType>>();
             Assert.NotNull(types);
@@ -79,6 +80,8 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ARRANGE ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme", testUserId.ToString());
+
             var newLog = new MeasurementLog
             {
                 UserId = testUserId,
@@ -92,10 +95,10 @@ namespace GymTracker.IntegrationTests
             var responseText = await response.Content.ReadAsStringAsync();
 
             // === 3. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {responseText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {responseText}");
             Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
 
-            // Проверяем, что лог был сохранен в БД
+            // Verify that the log was saved to the DB
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
@@ -125,9 +128,6 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ARRANGE ===
-
-            _client.DefaultRequestHeaders.Remove("X-Test-Claim-NameIdentifier");
-            _client.DefaultRequestHeaders.Add("X-Test-Claim-NameIdentifier", "999");
 
             var newLogRequest = new
             {
@@ -164,7 +164,7 @@ namespace GymTracker.IntegrationTests
             var newLog = new MeasurementLog
             {
                 UserId = testUserId,
-                MeasurementTypeId = Guid.NewGuid(), // Несуществующий тип
+                MeasurementTypeId = Guid.NewGuid(), // Non-existent type
                 Value = 75.5f
             };
 
@@ -204,11 +204,13 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ACT ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme", testUserId.ToString());
+
             var response = await _client.GetAsync($"/GymTracker/Measurements/UsersMeasurements");
             var responseText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {responseText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {responseText}");
 
             var logs = await response.Content.ReadFromJsonAsync<List<MeasurementLog>>();
             Assert.NotNull(logs);
@@ -235,7 +237,7 @@ namespace GymTracker.IntegrationTests
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             Guid testLogId;
-
+            int testUserId;
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
@@ -250,19 +252,21 @@ namespace GymTracker.IntegrationTests
                 var log = new MeasurementLog { UserId = user.Id, MeasurementTypeId = type.Id, Value = 75.5f, Date = DateTime.UtcNow };
                 dbContext.MeasurementLogs.Add(log);
                 await dbContext.SaveChangesAsync();
-
+                testUserId = user.Id;
                 testLogId = log.Id;
             }
 
             // === 1. ACT ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme", testUserId.ToString());
+
             var response = await _client.DeleteAsync($"/GymTracker/Measurements/{testLogId}");
             var responseText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {responseText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {responseText}");
             Assert.Equal(System.Net.HttpStatusCode.NoContent, response.StatusCode);
 
-            // Проверяем, что лог был удален из БД
+            // Verify that the log was deleted from the DB
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
@@ -276,7 +280,7 @@ namespace GymTracker.IntegrationTests
         {
             // === 0. SEEDING ===
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
-            Guid invalidLogId = Guid.NewGuid(); // Несуществующий лог   
+            Guid invalidLogId = Guid.NewGuid(); // Non-existent log   
 
             // === 1. ACT ===
             var response = await _client.DeleteAsync($"/GymTracker/Measurements/{invalidLogId}");
@@ -310,6 +314,7 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ARRANGE ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme", testUserId.ToString());
             var newTarget = new MeasurementTarget
             {
                 UserId = testUserId,
@@ -318,15 +323,16 @@ namespace GymTracker.IntegrationTests
                 Deadline = DateTime.UtcNow.AddMonths(3)
             };
 
+
             // === 2. ACT ===
             var response = await _client.PostAsJsonAsync("/GymTracker/Measurements/targets", newTarget);
             var responseText = await response.Content.ReadAsStringAsync();
 
             // === 3. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {responseText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {responseText}");
             Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);
 
-            // Проверяем, что target был сохранен в БД
+            // Verify that the target was saved to the DB
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
@@ -377,6 +383,8 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ARRANGE ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme", testUserId.ToString());
+
             var newTarget = new MeasurementTarget
             {
                 UserId = testUserId,
@@ -388,10 +396,10 @@ namespace GymTracker.IntegrationTests
             var response = await _client.PostAsJsonAsync("/GymTracker/Measurements/targets", newTarget);
 
             // === 3. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode,$"Ошибка:{response}");
+            Assert.True(response.IsSuccessStatusCode,$"Error:{response}");
 
 
-            // Проверяем, что старый target был деактивирован
+            // Verify that the old target was deactivated
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
@@ -449,11 +457,13 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ACT ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme", testUserId.ToString());
+
             var response = await _client.GetAsync($"/targets");
             var responseText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {responseText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {responseText}");
 
             var targets = await response.Content.ReadFromJsonAsync<List<MeasurementTarget>>();
             Assert.NotNull(targets);
@@ -469,6 +479,7 @@ namespace GymTracker.IntegrationTests
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             int testTargetId;
+            int testUserId;
 
             using (var scope = _factory.Services.CreateScope())
             {
@@ -492,19 +503,21 @@ namespace GymTracker.IntegrationTests
 
                 dbContext.MeasurementTargets.Add(target);
                 await dbContext.SaveChangesAsync();
-
+                testUserId = user.Id;
                 testTargetId = target.Id;
             }
 
             // === 1. ACT ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme", testUserId.ToString());
+
             var response = await _client.DeleteAsync($"/GymTracker/Measurements/targets/{testTargetId}");
             var responseText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {responseText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {responseText}");
             Assert.Equal(System.Net.HttpStatusCode.NoContent, response.StatusCode);
 
-            // Проверяем, что target был деактивирован
+            // Verify that the target was deactivated
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
@@ -585,19 +598,20 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ACT ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme", testUserId.ToString());
 
             var response = await _client.GetAsync("/GymTracker/Measurements/last");
             var responseText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {responseText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {responseText}");
 
             var logs = await response.Content.ReadFromJsonAsync<List<MeasurementLog>>();
             Assert.NotNull(logs);
             // should return last log for each type, so we expect 2 logs (one for Weight and one for Body Fat Percentage)
             Assert.Equal(2, logs.Count);
 
-            // Проверяем что это последние логи
+            // Verify that these are the latest logs
             var lastLog1 = logs.FirstOrDefault(l => l.MeasurementTypeId == type1Id);
             var lastLog2 = logs.FirstOrDefault(l => l.MeasurementTypeId == type2Id);
 
@@ -658,20 +672,19 @@ namespace GymTracker.IntegrationTests
                 testUserId1 = user1.Id;
                 testUserId2 = user2.Id;
 
-                // Логи для первого пользователя
+                // Logs for the first user
                 var log1 = new MeasurementLog { UserId = user1.Id, MeasurementTypeId = type.Id, Value = 75.0f, Date = DateTime.UtcNow };
                 var log2 = new MeasurementLog { UserId = user1.Id, MeasurementTypeId = type.Id, Value = 74.0f, Date = DateTime.UtcNow.AddDays(-1) };
 
-                // Логи для второго пользователя
+                // Logs for the second user
                 var log3 = new MeasurementLog { UserId = user2.Id, MeasurementTypeId = type.Id, Value = 80.0f, Date = DateTime.UtcNow };
                 var log4 = new MeasurementLog { UserId = user2.Id, MeasurementTypeId = type.Id, Value = 79.0f, Date = DateTime.UtcNow.AddDays(-1) };
                 dbContext.MeasurementLogs.AddRange(log1, log2, log3, log4);
                 await dbContext.SaveChangesAsync();
             }
 
-            // === 1. ACT - Получаем логи первого пользователя ===
-            _client.DefaultRequestHeaders.Remove("X-Test-Claim-NameIdentifier");
-            _client.DefaultRequestHeaders.Add("X-Test-Claim-NameIdentifier", testUserId1.ToString());
+            // === 1. ACT ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme", testUserId1.ToString());
 
             var response1 = await _client.GetAsync("/GymTracker/Measurements/last");
 

@@ -1,4 +1,4 @@
-using GymTracker.Models;
+п»їusing GymTracker.Models;
 using GymTracker.Models;
 using GymTracker.Repository;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +8,7 @@ using Xunit;
 
 namespace GymTracker.IntegrationTests
 {
+
     public class ExerciseIntegrationTests : IClassFixture<GymTrackerWebApplicationFactory>
     {
         private readonly GymTrackerWebApplicationFactory _factory;
@@ -43,7 +44,7 @@ namespace GymTracker.IntegrationTests
             var errorText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {errorText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {errorText}");
 
             var exercises = await response.Content.ReadFromJsonAsync<List<Exercise>>();
             Assert.NotNull(exercises);
@@ -83,7 +84,7 @@ namespace GymTracker.IntegrationTests
             var errorText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {errorText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {errorText}");
 
             var retrievedExercise = await response.Content.ReadFromJsonAsync<Exercise>();
             Assert.NotNull(retrievedExercise);
@@ -110,9 +111,9 @@ namespace GymTracker.IntegrationTests
         {
             // === 0. SEEDING ===
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
-            _client.DefaultRequestHeaders.Add("X-Test-Role", "Admin");
 
             // === 1. ARRANGE ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestSchemeAdmin","1");
             var newExercise = new Exercise
             {
                 Name = "Pull-ups",
@@ -125,9 +126,9 @@ namespace GymTracker.IntegrationTests
             var errorText = await response.Content.ReadAsStringAsync();
 
             // === 3. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {errorText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {errorText}");
 
-            // Проверяем, что упражнение было сохранено в БД
+            // Verify that the exercise was saved to the DB
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
@@ -144,7 +145,6 @@ namespace GymTracker.IntegrationTests
         public async Task UpdateExercise_ShouldModifyExistingExercise()
         {
             // === 0. SEEDING ===
-            _client.DefaultRequestHeaders.Add("X-Test-Role", "Admin");
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             int testExerciseId;
@@ -167,6 +167,7 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ARRANGE ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestSchemeAdmin", "1");
             var updatedExercise = new Exercise
             {
                 Name = "Incline Bench Press",
@@ -179,9 +180,9 @@ namespace GymTracker.IntegrationTests
             var errorText = await response.Content.ReadAsStringAsync();
 
             // === 3. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {errorText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {errorText}");
 
-            // Проверяем, что упражнение было обновлено в БД
+            // Verify that the exercise was updated in the DB
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
@@ -198,10 +199,10 @@ namespace GymTracker.IntegrationTests
         public async Task UpdateExercise_WithInvalidId_ShouldReturnNotFound()
         {
             // === 0. SEEDING ===
-            _client.DefaultRequestHeaders.Add("X-Test-Role", "Admin");
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             // === 1. ARRANGE ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestSchemeAdmin", "1");
             var updatedExercise = new Exercise
             {
                 Name = "Updated Exercise",
@@ -220,7 +221,6 @@ namespace GymTracker.IntegrationTests
         public async Task DeleteExercise_ShouldRemoveExerciseFromDatabase()
         {
             // === 0. SEEDING ===
-            _client.DefaultRequestHeaders.Add("X-Test-Role", "Admin");
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             int testExerciseId;
@@ -243,13 +243,14 @@ namespace GymTracker.IntegrationTests
             }
 
             // === 1. ACT ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestSchemeAdmin", "1");
             var response = await _client.DeleteAsync($"/GymTracker/Exercise/DeleteExercise{testExerciseId}");
             var errorText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {errorText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {errorText}");
 
-            // Проверяем, что упражнение было удалено из БД
+            // Verify that the exercise was deleted from the DB
             using (var scope = _factory.Services.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<WorkoutDbContext>();
@@ -263,14 +264,14 @@ namespace GymTracker.IntegrationTests
         public async Task DeleteExercise_WithInvalidId_ShouldReturnOk()
         {
             // === 0. SEEDING ===
-            _client.DefaultRequestHeaders.Add("X-Test-Role", "Admin");
             await DatabaseResetHelper.ResetDatabaseAsync(_factory.Services);
 
             // === 1. ACT ===
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestSchemeAdmin", "1");
             var response = await _client.DeleteAsync($"/GymTracker/Exercise/DeleteExercise999");
 
             // === 2. ASSERT ===
-            // Контроллер всегда возвращает Ok, даже если упражнение не существует
+            // The controller always returns Ok, even if the exercise doesn't exist
             Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
         }
 
@@ -285,7 +286,7 @@ namespace GymTracker.IntegrationTests
             var errorText = await response.Content.ReadAsStringAsync();
 
             // === 2. ASSERT ===
-            Assert.True(response.IsSuccessStatusCode, $"Сервер упал с ошибкой: {errorText}");
+            Assert.True(response.IsSuccessStatusCode, $"Server crashed with error: {errorText}");
 
             var exercises = await response.Content.ReadFromJsonAsync<List<Exercise>>();
             Assert.NotNull(exercises);

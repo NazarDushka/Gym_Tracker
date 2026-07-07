@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
@@ -19,20 +19,46 @@ namespace IntegrationTests
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, "Test User"),
-                new Claim(ClaimTypes.NameIdentifier, "1"),
-                new Claim("UserId", "1"),
-                new Claim("Id", "1")
-            };
+    {
+        new Claim(ClaimTypes.Name, "Test User"),
+        new Claim(ClaimTypes.Role, "User") // Default role
+    };
 
-            if (Context.Request.Headers.TryGetValue("X-Test-Role", out var roleValue))
+            bool isIdFound = false;
+
+            // Look for the standard HTTP Authorization header
+            if (Context.Request.Headers.TryGetValue("Authorization", out var authHeader))
             {
-                claims.Add(new Claim(ClaimTypes.Role, roleValue.ToString()));
+                var token = authHeader.ToString(); // Example: "TestScheme 2"
+
+                // Check if this is our scheme and extract what comes after the space
+                if (token.StartsWith("TestScheme ", StringComparison.OrdinalIgnoreCase))
+                {
+                    var userId = token.Substring("TestScheme ".Length).Trim();
+
+                    claims.Add(new Claim(ClaimTypes.NameIdentifier, userId));
+                    claims.Add(new Claim("UserId", userId));
+                    claims.Add(new Claim("Id", userId));
+                    isIdFound = true;
+                }
+                if (token.StartsWith("TestSchemeAdmin", StringComparison.OrdinalIgnoreCase))
+                {
+                    var userId = token.Substring("TestSchemeAdmin".Length).Trim();
+
+                    claims.Add(new Claim(ClaimTypes.NameIdentifier, userId));
+                    claims.Add(new Claim("UserId", userId));
+                    claims.Add(new Claim("Id", userId));
+                    claims.Add(new Claim(ClaimTypes.Role, "Admin")); // Administrator role
+                    isIdFound = true;
+                }
             }
-            else
+
+            // Fallback: if the header was without an ID (just "TestScheme"), set to 1
+            if (!isIdFound)
             {
-                claims.Add(new Claim(ClaimTypes.Role, "User"));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, "1"));
+                claims.Add(new Claim("UserId", "1"));
+                claims.Add(new Claim("Id", "1"));
             }
 
             var identity = new ClaimsIdentity(claims, "TestScheme");
