@@ -1,130 +1,107 @@
-/* Общие переменные и миксины */
-$primary-color: #4CAF50; // Зеленый
-$secondary-color: #2196F3; // Синий
-$text-color: #333;
-$light-text-color: #666;
-$border-color: #ddd;
-$background-color: #f5f5f5;
-$card-background: #fff;
-$shadow-light: rgba(0, 0, 0, 0.1);
-$shadow-medium: rgba(0, 0, 0, 0.2);
+/* Общие переменные заменены на глобальные CSS переменные из styles.scss */
 
 @mixin card-shadow {
-  box-shadow: 0 4px 8px $shadow-light;
-  transition: box-shadow 0.3s ease-in-out;
-
-  &:hover {
-    box-shadow: 0 6px 12px $shadow-medium;
-  }
+  /* Убираем тень в пользу темного дизайна или оставляем очень мягкую */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 /* --- СТИЛЬНАЯ МОБИЛЬНАЯ АДАПТАЦИЯ --- */
-    @media (max-width: 768px) {
-      .exercise-list-container {   
-        display: block;
-        border: none;
-        background: transparent;
-      }
-      thead {
-        display: none; 
-      }
+@media (max-width: 768px) {
+  .exercise-list-container {   
+    display: block;
+    border: none;
+    background: transparent;
+    padding: 16px !important;
+  }
+  thead {
+    display: none; 
+  }
 
-      tbody {
-        display: block;
-      }
+  tbody {
+    display: block;
+  }
 
-      tr {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 20px;
-        background-color: $card-background;
-        border: none; 
-        border-radius: 12px; /* Более мягкие, современные углы */
-        border-left: 5px solid $primary-color; /* Зеленая акцентная полоса слева */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Очень легкая, "парящая" тень */
-        overflow: hidden;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+  tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    background-color: var(--bg-card) !important;
+    border: none; 
+    border-radius: var(--radius-card); 
+    overflow: hidden;
+    transition: transform 0.2s ease;
 
-        /* Эффект нажатия на карточку */
-        &:active {
-          transform: scale(0.98);
-        }
-      }
+    /* Эффект нажатия на карточку */
+    &:active {
+      transform: scale(0.98);
+    }
+  }
 
-      td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 16px;
-        border: none; 
-        border-bottom: 1px dashed lighten($border-color, 5%); /* Пунктирная линия смотрится легче */
-        text-align: right;
-        font-weight: 500; /* Делаем сами значения (справа) чуть жирнее */
-        color: $text-color;
+  td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border: none !important; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; 
+    text-align: right;
+    color: var(--text-primary) !important;
 
-        /* --- ВЫДЕЛЯЕМ ПЕРВУЮ ЯЧЕЙКУ (НАЗВАНИЕ) КАК ЗАГОЛОВОК --- */
-        &:first-child {
-          background-color: rgba($primary-color, 0.05); /* Едва заметный зеленый фон */
-          font-size: 1.1em;
-          color: darken($primary-color, 10%);
-          border-bottom: 1px solid rgba($primary-color, 0.1);
-          padding-top: 16px;
-          padding-bottom: 16px;
+    /* --- ВЫДЕЛЯЕМ ПЕРВУЮ ЯЧЕЙКУ (НАЗВАНИЕ) КАК ЗАГОЛОВОК --- */
+    &:first-child {
+      background-color: rgba(255, 255, 255, 0.02);
+      font-size: 1.2em;
+      color: var(--text-primary);
+      padding-top: 20px;
+      padding-bottom: 20px;
+      font-weight: bold;
 
-          &::before {
-            color: $light-text-color;
-            font-size: 0.75em;
-          }
-        }
-
-        /* --- ЗОНА КНОПКИ --- */
-        &:last-child {
-          border-bottom: none;
-          padding: 16px;
-          background-color: #fafbfc; /* Слегка отделяем зону кнопок цветом */
-          display: block; /* Убираем flex, чтобы кнопка заняла всю ширину */
-        }
-
-        /* Дизайн подписей (data-label) */
-        &::before {
-          content: attr(data-label);
-          font-weight: 600;
-          color: #9aa0a6; /* Нейтральный серый для подписей, чтобы не отвлекали */
-          text-transform: uppercase;
-          font-size: 0.75em;
-          letter-spacing: 0.5px;
-          margin-right: 15px;
-          text-align: left;
-        }
-      }
-
-      /* Делаем кнопку массивной и удобной для телефона */
-      .details-button {
-        width: 100%;
-        padding: 12px;
-        font-size: 1em;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba($secondary-color, 0.2); /* Синяя свечащаяся тень */
+      &::before {
+        color: var(--text-secondary);
+        font-size: 0.8em;
       }
     }
+
+    /* --- ЗОНА КНОПКИ --- */
+    &:last-child {
+      border-bottom: none !important;
+      padding: 16px;
+      background-color: transparent !important; 
+      display: block; 
+    }
+
+    /* Дизайн подписей (data-label) */
+    &::before {
+      content: attr(data-label);
+      font-weight: normal;
+      color: var(--text-secondary); 
+      font-size: 0.9em;
+      margin-right: 15px;
+      text-align: left;
+    }
+  }
+
+  .details-button {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1em;
+  }
+}
 
 .exercise-list-container {
   max-width: 900px;
   margin: 20px auto;
   padding: 30px;
-  background-color: $card-background;
-  border-radius: 8px;
-  @include card-shadow;
-  font-family: Arial, sans-serif;
-  color: $text-color;
+  background-color: transparent; /* Убираем фон контейнера, карточки будут видны на фоне */
+  font-family: var(--font-family-sans);
+  color: var(--text-primary);
 
   h1 {
     text-align: center;
-    color: $primary-color;
+    color: var(--text-primary);
     margin-bottom: 30px;
     font-size: 2.5em;
     font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
   }
 
   /* Стили для сообщений (когда нет данных или ошибка) */
@@ -133,80 +110,87 @@ $shadow-medium: rgba(0, 0, 0, 0.2);
     text-align: center;
     padding: 20px;
     font-size: 1.1em;
-    color: $light-text-color;
-    border: 1px dashed $border-color;
-    border-radius: 5px;
-    background-color: $background-color;
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-card);
+    background-color: var(--bg-card);
     margin-top: 20px;
   }
 
   .error-message {
-    color: #d32f2f;
-    border-color: #d32f2f;
-    background-color: #ffebee;
+    color: #ff453a;
+    border-color: rgba(255, 69, 58, 0.3);
+    background-color: rgba(255, 69, 58, 0.1);
   }
 
   /* Стили для таблицы упражнений */
   .exercises-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0 8px; /* Отступы между строками как между карточками */
     margin-top: 10px;
-    font-size: 0.95em;
 
     th, td {
-      border: 1px solid $border-color;
-      padding: 12px 15px;
+      border: none; /* Убираем бордеры */
+      padding: 16px 20px;
       text-align: left;
     }
 
     thead {
-      background-color: $primary-color;
-      color: $card-background;
+      background-color: transparent;
+      color: var(--text-secondary);
       th {
-        font-weight: bold;
+        font-weight: normal;
+        padding-bottom: 8px;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-size: 0.85em;
+        letter-spacing: 1px;
       }
     }
 
     tbody {
       tr {
-        &:nth-child(even) {
-          background-color: lighten($background-color, 3%);
+        background-color: var(--bg-card);
+        border-radius: var(--radius-button);
+        
+        td {
+          vertical-align: middle;
+          color: var(--text-primary);
         }
-        &:hover {
-          background-color: lighten($primary-color, 45%);
-        }
-      }
 
-      td {
-        vertical-align: middle;
+        /* Закругляем углы ячеек чтобы таблица выглядела как набор пилюль */
+        td:first-child {
+          border-top-left-radius: var(--radius-button);
+          border-bottom-left-radius: var(--radius-button);
+        }
+
+        td:last-child {
+          border-top-right-radius: var(--radius-button);
+          border-bottom-right-radius: var(--radius-button);
+        }
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.08);
+        }
       }
     }
   }
 
   /* Стили для кнопки Details */
   .details-button {
-    background-color: $secondary-color; 
-    color: white;
-    padding: 8px 16px;
+    background-color: var(--bg-button); 
+    color: var(--text-primary);
+    padding: 10px 24px;
     border: none;
-    border-radius: 5px;
+    border-radius: var(--radius-button);
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 0.95em;
     font-weight: bold;
-    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
-    display: block; // Занимает всю ширину или выравнивается аккуратно
-    margin: 0 auto; // Центрируем кнопку в ячейке таблицы
+    transition: background-color 0.2s ease-in-out;
+    display: inline-block; 
 
     &:hover {
-      background-color: darken($secondary-color, 10%);
-      transform: translateY(-1px);
-    }
-
-    &:active {
-      background-color: darken($secondary-color, 15%);
-      transform: translateY(0);
+      background-color: var(--bg-button-hover);
     }
   }
 }

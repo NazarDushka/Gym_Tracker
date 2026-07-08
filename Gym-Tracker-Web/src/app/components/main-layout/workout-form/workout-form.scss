@@ -1,67 +1,43 @@
-/* Общие переменные для согласованности с другими компонентами */
-$primary-color: #4CAF50; // Зеленый
-$secondary-color: #2196F3; // Синий
-$accent-color: #FFC107; // Желтый
-$danger-color: #f44336; // Красный
-$text-color: #333;
-$light-text-color: #666;
-$border-color: #ddd;
-$background-color: #f5f5f5;
-$card-background: #fff;
-$shadow-light: rgba(0, 0, 0, 0.1);
-
-// Миксин для теней
-@mixin card-shadow {
-  box-shadow: 0 4px 8px $shadow-light;
-  transition: box-shadow 0.3s ease-in-out;
-
-  &:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  }
-}
-
-// Миксин для кнопок (для унификации стилей)
-@mixin button-styles($bg-color, $text-color: white) {
+@mixin button-styles($bg-color, $text-color: var(--text-primary)) {
   background-color: $bg-color;
   color: $text-color;
-  padding: 10px 20px;
+  padding: 14px 24px;
   border: none;
-  border-radius: 5px;
+  border-radius: var(--radius-button);
   cursor: pointer;
-  font-size: 1em;
+  font-size: 1.1em;
   font-weight: bold;
-  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  transition: transform 0.1s ease-in-out;
 
   &:hover {
-    background-color: darken($bg-color, 10%);
+    filter: brightness(1.1);
     transform: translateY(-1px);
   }
 
   &:active {
-    background-color: darken($bg-color, 15%);
     transform: translateY(0);
   }
 
   &:disabled {
-    background-color: #ccc;
+    background-color: var(--bg-button);
+    color: var(--text-secondary);
     cursor: not-allowed;
     transform: none;
   }
 }
 
 .workout-form-container {
-  max-width: 800px; // Ограничиваем ширину формы
-  margin: 30px auto; // Центрируем контейнер
+  max-width: 800px; 
+  margin: 30px auto; 
   padding: 30px;
-  background-color: $card-background;
-  border-radius: 8px;
-  @include card-shadow;
-  font-family: Arial, sans-serif;
-  color: $text-color;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-card);
+  font-family: var(--font-family-sans);
+  color: var(--text-primary);
 
   h1 {
     text-align: center;
-    color: $primary-color;
+    color: var(--text-primary);
     margin-bottom: 30px;
     font-size: 2.2em;
     font-weight: bold;
@@ -70,7 +46,7 @@ $shadow-light: rgba(0, 0, 0, 0.1);
   form {
     display: flex;
     flex-direction: column;
-    gap: 20px; // Отступ между основными секциями формы
+    gap: 20px; 
   }
 
   .form-group {
@@ -79,157 +55,287 @@ $shadow-light: rgba(0, 0, 0, 0.1);
 
     label {
       margin-bottom: 8px;
-      font-weight: bold;
-      color: $light-text-color;
+      font-weight: normal;
+      color: var(--text-secondary);
     }
 
     input[type="date"],
     textarea,
     select {
-      padding: 12px;
-      border: 1px solid $border-color;
-      border-radius: 5px;
+      padding: 14px;
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: calc(var(--radius-button) / 2);
       font-size: 1em;
-      width: 100%; // Поля занимают всю доступную ширину
-      box-sizing: border-box; // Учитываем padding и border в ширине
+      width: 100%; 
+      box-sizing: border-box; 
+      transition: border-color 0.2s;
 
       &:focus {
         outline: none;
-        border-color: $secondary-color;
-        box-shadow: 0 0 0 3px rgba($secondary-color, 0.2);
+        border-color: var(--primary-accent);
       }
 
       &.is-invalid {
-        border-color: $danger-color;
+        border-color: #ff453a;
       }
     }
 
     textarea {
-      resize: vertical; // Разрешаем изменять размер по вертикали
+      resize: vertical; 
       min-height: 80px;
+      border-radius: 12px;
     }
   }
 
   .error-message {
-    color: $danger-color;
+    color: #ff453a;
     font-size: 0.85em;
     margin-top: 5px;
   }
 
   .exercises-section {
-    border: 1px dashed $border-color;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: lighten($background-color, 2%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 24px;
+    border-radius: var(--radius-card);
+    background-color: rgba(255, 255, 255, 0.02);
 
     h3 {
-      color: $secondary-color;
+      color: var(--text-primary);
       margin-top: 0;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       font-size: 1.4em;
     }
 
     .sets-list {
       display: flex;
       flex-direction: column;
-      gap: 15px; // Отступ между отдельными подходами
-      margin-bottom: 15px;
-      max-height: 400px; // Установите желаемую максимальную высоту.
-                        // Подберите значение, которое хорошо смотрится на большинстве экранов.
-      overflow-y: auto; // Включает вертикальную прокрутку, если содержимое превышает max-height
+      gap: 15px; 
+      margin-bottom: 20px;
+      max-height: 400px; 
+      overflow-y: auto; 
       padding-right: 10px; 
     }
 
     .set-item {
       display: flex;
-      flex-wrap: wrap; // Позволяет элементам переноситься на новую строку на маленьких экранах
-      gap: 15px; // Отступ между инлайновыми группами и кнопкой удаления
-      align-items: flex-end; // Выравнивание кнопок и полей по низу
+      flex-wrap: wrap; 
+      gap: 15px; 
+      align-items: flex-end; 
+      background-color: var(--bg-button);
+      padding: 16px;
+      border-radius: 12px;
 
-      // Стили для групп полей внутри одного сета
       .set-inputs {
-        flex-grow: 1; // Занимает доступное пространство
+        flex-grow: 1; 
         display: flex;
-        flex-wrap: wrap; // Поля внутри сета могут переноситься
-        gap: 15px; // Отступ между полями exercise, reps, weight
+        flex-wrap: wrap; 
+        gap: 15px; 
       }
 
       .form-group-inline {
-        flex: 1 1 250px; // Позволяет элементам растягиваться, но с минимальной шириной 250px
+        flex: 1 1 200px; 
         display: flex;
-        flex-direction: column; // Метка над полем
-        min-width: 150px; // Минимальная ширина для полей внутри инлайн-группы
+        flex-direction: column; 
+        min-width: 150px; 
 
         label {
             margin-bottom: 5px;
             font-size: 0.9em;
-            font-weight: normal; // Метки в инлайн группах могут быть чуть менее жирными
+            color: var(--text-secondary);
         }
-        input, select {
+        input, select, .exercise-selector-btn {
             width: 100%;
+        }
+
+        .exercise-selector-btn {
+          padding: 12px 14px;
+          background-color: var(--bg-main);
+          color: var(--text-primary);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: calc(var(--radius-button) / 2);
+          font-size: 0.95rem;
+          text-align: left;
+          cursor: pointer;
+          transition: border-color 0.2s ease;
+
+          &:focus {
+            outline: none;
+            border-color: var(--primary-accent);
+          }
+
+          &.is-invalid {
+            border-color: #ff453a;
+          }
+        }
+      }
+
+      .steppers-row {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+        flex-wrap: nowrap;
+        width: 100%;
+
+        .stepper-group {
+          flex: 1;
+          min-width: 0; 
+        }
+      }
+
+      .stepper {
+        display: flex;
+        align-items: center;
+        background-color: var(--bg-main);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: calc(var(--radius-button) / 2);
+        height: 44px; // Good touch target size
+        overflow: hidden;
+        transition: border-color 0.2s ease;
+
+        &.is-invalid {
+          border-color: #ff453a;
+        }
+
+        &:focus-within {
+          border-color: var(--primary-accent);
+        }
+
+        .stepper-btn {
+          background: transparent;
+          color: var(--text-primary);
+          border: none;
+          width: 44px;
+          height: 100%;
+          font-size: 1.2rem;
+          font-weight: bold;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background-color 0.1s;
+
+          &:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.1);
+          }
+          
+          &:disabled {
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            opacity: 0.5;
+          }
+        }
+
+        input[type="number"] {
+          flex: 1;
+          min-width: 0;
+          text-align: center;
+          background: transparent;
+          border: none;
+          color: var(--text-primary);
+          font-size: 1rem;
+          font-weight: bold;
+          -moz-appearance: textfield;
+          padding: 0;
+
+          &::-webkit-outer-spin-button,
+          &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+          
+          &:focus {
+            outline: none;
+          }
         }
       }
 
       .remove-set-button {
-        @include button-styles($danger-color, white);
-        padding: 8px 15px; // Меньший padding для этих кнопок
+        @include button-styles(rgba(255, 69, 58, 0.1), #ff453a);
+        padding: 14px 20px; 
         font-size: 0.9em;
-        align-self: flex-end; // Прижимаем кнопку к низу сет-айтэма
+        align-self: flex-end; 
+
+        &:hover {
+          background-color: rgba(255, 69, 58, 0.2);
+          filter: none;
+        }
+
+        &.icon-btn {
+          padding: 10px;
+          background: transparent;
+          border: 1px solid rgba(255, 69, 58, 0.3);
+          border-radius: calc(var(--radius-button) / 2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #ff453a;
+          margin-bottom: 2px; // Align slightly better with inputs
+
+          &:hover {
+            background-color: rgba(255, 69, 58, 0.1);
+          }
+        }
       }
     }
 
     .no-sets-message {
       text-align: center;
-      color: $light-text-color;
+      color: var(--text-secondary);
       margin-bottom: 15px;
     }
 
     .add-set-button {
-      @include button-styles($secondary-color, white);
-      width: fit-content; // Кнопка занимает только необходимую ширину
-      margin: 0 auto; // Центрируем кнопку "Add Set"
-      display: block; // Делаем ее блочным элементом для margin: auto
+      @include button-styles(rgba(255, 255, 255, 0.1), var(--text-primary));
+      width: fit-content; 
+      margin: 0 auto; 
+      display: block; 
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        filter: none;
+      }
     }
   }
 
   .form-actions {
     display: flex;
-    justify-content: flex-end; // Кнопки справа
-    gap: 15px; // Отступ между кнопками
+    justify-content: flex-end; 
+    gap: 15px; 
     margin-top: 20px;
 
     .submit-button {
-      @include button-styles($primary-color, white);
+      @include button-styles(var(--primary-accent), var(--bg-main));
     }
 
     .cancel-button {
-      @include button-styles(#9e9e9e, white); // Серый цвет для отмены
+      @include button-styles(var(--bg-button), var(--text-primary)); 
     }
   }
 
-  /* Стили для сообщений о состоянии формы */
   .form-loading,
   .form-error,
   .form-success {
     text-align: center;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 14px;
+    border-radius: var(--radius-button);
     margin-top: 15px;
-    font-weight: bold;
+    font-weight: normal;
   }
 
   .form-loading {
-    background-color: #e0f2f7; // Светло-голубой
-    color: $secondary-color;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
   }
 
   .form-error {
-    background-color: #ffebee; // Светло-красный
-    color: $danger-color;
+    background-color: rgba(255, 69, 58, 0.1);
+    color: #ff453a;
   }
 
   .form-success {
-    background-color: #e8f5e9; // Светло-зеленый
-    color: $primary-color;
+    background-color: rgba(48, 209, 88, 0.1);
+    color: #30d158;
   }
 }
