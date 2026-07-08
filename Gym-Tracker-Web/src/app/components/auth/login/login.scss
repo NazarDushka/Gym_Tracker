@@ -1,36 +1,27 @@
-$primary-color: #4CAF50;
-$secondary-color: #2196F3;
-$danger-color: #f44336;
-$text-color: #333;
-$light-text-color: #666;
-$border-color: #ddd;
-$background-color: #f5f5f5;
-$card-background: #fff;
-$shadow-light: rgba(0, 0, 0, 0.1);
-
-@mixin button-styles($bg-color, $text-color: white) {
+@mixin button-styles($bg-color, $text-color: var(--text-primary)) {
   background-color: $bg-color;
   color: $text-color;
-  padding: 10px 20px;
+  padding: 14px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: var(--radius-button);
   cursor: pointer;
-  font-size: 1em;
+  font-size: 1.1em;
   font-weight: bold;
   transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
 
   &:hover {
-    background-color: darken($bg-color, 10%);
+    background-color: var(--primary-accent);
+    color: var(--bg-main);
     transform: translateY(-1px);
   }
 
   &:active {
-    background-color: darken($bg-color, 15%);
     transform: translateY(0);
   }
 
   &:disabled {
-    background-color: #ccc;
+    background-color: var(--bg-button);
+    color: var(--text-secondary);
     cursor: not-allowed;
     transform: none;
   }
@@ -39,98 +30,102 @@ $shadow-light: rgba(0, 0, 0, 0.1);
 .auth-container {
   max-width: 400px;
   margin: 50px auto;
-  padding: 30px;
-  background-color: $card-background;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px $shadow-light;
-  font-family: Arial, sans-serif;
-  color: $text-color;
-  text-align: center; // Центрируем заголовок и кнопки
+  padding: 40px 30px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-card);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  font-family: var(--font-family-sans);
+  color: var(--text-primary);
+  text-align: center; 
 
   h1 {
-    color: $primary-color;
-    margin-bottom: 25px;
+    color: var(--text-primary);
+    margin-bottom: 30px;
     font-size: 2em;
+    font-weight: bold;
   }
 
   form {
     display: flex;
     flex-direction: column;
-    gap: 15px; // Отступ между группами полей
+    gap: 20px; 
   }
 
   .form-group {
-    text-align: left; // Выравниваем метки и поля по левому краю внутри группы
+    text-align: left; 
     label {
-      display: block; // Метка на своей строке
+      display: block; 
       margin-bottom: 8px;
-      font-weight: bold;
-      color: $light-text-color;
+      font-weight: normal;
+      color: var(--text-secondary);
     }
 
     input[type="email"],
     input[type="password"],
     input[type="text"] {
-      padding: 12px;
-      border: 1px solid $border-color;
-      border-radius: 5px;
+      padding: 14px;
+      background-color: var(--bg-main);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: calc(var(--radius-button) / 2); // Pill-ish but a bit square
+      color: var(--text-primary);
       font-size: 1em;
       width: 100%;
-      box-sizing: border-box; // Учитываем padding и border в ширине
+      box-sizing: border-box; 
+      transition: border-color 0.2s;
 
       &:focus {
         outline: none;
-        border-color: $secondary-color;
-        box-shadow: 0 0 0 3px rgba($secondary-color, 0.2);
+        border-color: var(--primary-accent);
       }
 
-      &.ng-invalid.ng-touched { // Angular добавляет эти классы для валидации
-        border-color: $danger-color;
+      &.ng-invalid.ng-touched { 
+        border-color: #ff453a;
       }
     }
   }
 
   .error-message {
-    color: $danger-color;
+    color: #ff453a;
     font-size: 0.85em;
     margin-top: 5px;
   }
 
   button[type="submit"] {
-    @include button-styles($primary-color);
-    width: 100%; // Кнопка занимает всю ширину
-    margin-top: 10px;
+    @include button-styles(var(--bg-button));
+    width: 100%; 
+    margin-top: 20px;
   }
 
   .status-message {
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 15px;
-    font-weight: bold;
+    padding: 12px;
+    border-radius: var(--radius-button);
+    margin-top: 20px;
+    font-weight: normal;
+    font-size: 0.9em;
   }
 
   .loading-message {
-    background-color: #e0f2f7;
-    color: $secondary-color;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
   }
 
-  .error-message.status-message { // Переопределяем для статусного сообщения об ошибке
-    background-color: #ffebee;
-    color: $danger-color;
+  .error-message.status-message { 
+    background-color: rgba(255, 69, 58, 0.1);
+    color: #ff453a;
   }
 
   .success-message {
-    background-color: #e8f5e9;
-    color: $primary-color;
+    background-color: rgba(48, 209, 88, 0.1);
+    color: #30d158;
   }
 
   .switch-auth-link {
-    margin-top: 20px;
-    font-size: 0.9em;
-    color: $light-text-color;
+    margin-top: 30px;
+    font-size: 0.95em;
+    color: var(--text-secondary);
 
     a {
-      color: $secondary-color;
+      color: var(--primary-accent);
       text-decoration: none;
       font-weight: bold;
 

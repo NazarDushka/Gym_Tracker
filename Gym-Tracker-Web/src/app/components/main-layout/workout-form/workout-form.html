@@ -38,61 +38,48 @@
               <div class="set-inputs">
                 <div class="form-group-inline">
                   <label for="exercise-{{$index}}">Exercise:</label>
-                  <select
+                  
+                  <button 
+                    type="button"
+                    class="exercise-selector-btn"
                     id="exercise-{{$index}}"
-                    name="exercise-{{$index}}"
-                    [(ngModel)]="set.exerciseId"
-                    required
-                    #exerciseField="ngModel"
                     [class.is-invalid]="exerciseField.invalid && exerciseField.touched"
-                  >
-                    <option [ngValue]="null" disabled selected>Select Exercise</option>
-                    @for (exercise of availableExercises; track exercise.id) {
-                      <option [ngValue]="exercise.id">{{ exercise.name }}</option>
-                    }
-                  </select>
+                    (click)="openExerciseSelector($index)">
+                    {{ getExerciseName(set.exerciseId) }}
+                  </button>
+
+                  <!-- Hidden input to keep form validation working -->
+                  <input type="hidden" name="exercise-{{$index}}" [(ngModel)]="set.exerciseId" required #exerciseField="ngModel">
+
                   @if (exerciseField.invalid && exerciseField.touched) {
                     <div class="error-message">Exercise is required.</div>
                   }
                 </div>
 
-                <div class="form-group-inline">
-                  <label for="reps-{{$index}}">Reps:</label>
-                  <input
-                    type="number"
-                    id="reps-{{$index}}"
-                    name="reps-{{$index}}"
-                    [(ngModel)]="set.reps"
-                    required
-                    min="1"
-                    #repsField="ngModel"
-                    [class.is-invalid]="repsField.invalid && repsField.touched"
-                  />
-                  @if (repsField.invalid && repsField.touched) {
-                    <div class="error-message">Reps required (min 1).</div>
-                  }
-                </div>
+                <div class="steppers-row">
+                  <div class="form-group-inline stepper-group">
+                    <label>Reps:</label>
+                    <div class="stepper" [class.is-invalid]="repsField.invalid && repsField.touched">
+                      <button type="button" class="stepper-btn" (click)="decrementValue(set, 'reps', 1, 1)" [disabled]="set.reps <= 1">-</button>
+                      <input type="number" [(ngModel)]="set.reps" name="reps-{{$index}}" required min="1" #repsField="ngModel">
+                      <button type="button" class="stepper-btn" (click)="incrementValue(set, 'reps', 1)">+</button>
+                    </div>
+                  </div>
 
-                <div class="form-group-inline">
-                  <label for="weight-{{$index}}">Weight (kg):</label>
-                  <input
-                    type="number"
-                    id="weight-{{$index}}"
-                    name="weight-{{$index}}"
-                    [(ngModel)]="set.weight"
-                    required
-                    min="0"
-                    step="0.1"
-                    #weightField="ngModel"
-                    [class.is-invalid]="weightField.invalid && weightField.touched"
-                  />
-                  @if (weightField.invalid && weightField.touched) {
-                    <div class="error-message">Weight required (min 0).</div>
-                  }
+                  <div class="form-group-inline stepper-group">
+                    <label>Weight (kg):</label>
+                    <div class="stepper" [class.is-invalid]="weightField.invalid && weightField.touched">
+                      <button type="button" class="stepper-btn" (click)="decrementValue(set, 'weight', 0, 2.5)" [disabled]="set.weight <= 0">-</button>
+                      <input type="number" [(ngModel)]="set.weight" name="weight-{{$index}}" required min="0" step="0.5" #weightField="ngModel">
+                      <button type="button" class="stepper-btn" (click)="incrementValue(set, 'weight', 2.5)">+</button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <button type="button" class="remove-set-button" (click)="removeSet(set)">Remove</button>
+              <button type="button" class="remove-set-button icon-btn" (click)="removeSet(set)" title="Remove Set">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+              </button>
             </div>
           }
         </div>

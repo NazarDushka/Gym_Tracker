@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, DatePipe, NgIf, NgFor } from '@angular/common'; // Для директив
 import { FormsModule, NgForm } from '@angular/forms'; // Для форм на основе шаблонов
+import { MatBottomSheetModule, MatBottomSheet } from '@angular/material/bottom-sheet';
 import { WorkoutService } from '../../../data/service/workout.service';
 import { Workout} from '../../../data/service/interface/workout.interface';
 import { finalize, switchMap, of, catchError, Observable } from 'rxjs'; // Добавляем необходимые операторы
@@ -10,14 +11,15 @@ import { Sets } from '../../../data/service/interface/sets.interface';
 import { Token } from '@angular/compiler';
 import { AuthService } from '../../../data/service/auth.service';
 import { ExerciseService } from '../../../data/service/exercise.service';
-
+import { ExerciseSelectorComponent } from '../../exercise-selector/exercise-selector.component';
 
 @Component({
   selector: 'app-workout-form',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    MatBottomSheetModule
   ],
   templateUrl: './workout-form.html',
   styleUrl: './workout-form.scss'
@@ -27,6 +29,7 @@ export class WorkoutFormComponent implements OnInit {
   private router = inject(Router);
   private workoutService = inject(WorkoutService);
   private exerciseService = inject(ExerciseService);
+  private bottomSheet = inject(MatBottomSheet);
 
   private authService = inject(AuthService);
 
@@ -122,6 +125,49 @@ export class WorkoutFormComponent implements OnInit {
   removeSet(setToRemove: Sets): void {
     if (this.workout.sets) {
       this.workout.sets = this.workout.sets.filter(set => set !== setToRemove);
+    }
+  }
+
+  // Открытие Bottom Sheet для выбора упражнения
+  openExerciseSelector(setIndex: number): void {
+    const bottomSheetRef = this.bottomSheet.open(ExerciseSelectorComponent, {
+      data: { exercises: this.availableExercises }
+    });
+
+    bottomSheetRef.afterDismissed().subscribe((selectedExercise: Exercise | undefined) => {
+      if (selectedExercise && this.workout.sets) {
+        this.workout.sets[setIndex].exerciseId = selectedExercise.id;
+        // Optionally update local object for immediate display if needed, but we rely on getExerciseName
+      }
+    });
+  }
+
+  // Получение имени упражнения по ID
+  getExerciseName(exerciseId: number | null): string {
+    if (!exerciseId) return 'Select Exercise';
+    const exercise = this.availableExercises.find(e => e.id === exerciseId);
+    return exercise ? exercise.name : 'Unknown Exercise';
+  }
+
+  // Степперы: Уменьшить значение
+  decrementValue(set: any, field: string, min: number, step: number = 1): void {
+    if (set[field] == null || set[field] === '') {
+      set[field] = min;
+    } else {
+      const current = parseFloat(set[field]);
+      if (current > min) {
+        set[field] = parseFloat((current - step).toFixed(1));
+      }
+    }
+  }
+
+  // Степперы: Увеличить значение
+  incrementValue(set: any, field: string, step: number = 1): void {
+    if (set[field] == null || set[field] === '') {
+      set[field] = step;
+    } else {
+      const current = parseFloat(set[field]);
+      set[field] = parseFloat((current + step).toFixed(1));
     }
   }
 

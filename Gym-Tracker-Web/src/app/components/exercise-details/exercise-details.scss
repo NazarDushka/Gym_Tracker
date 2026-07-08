@@ -1,40 +1,20 @@
-
-$primary-color: #4CAF50;
-$text-color: #333;
-$light-text-color: #666;
-$border-color: #ddd;
-$background-color: #f5f5f5;
-$card-background: #fff;
-$shadow-light: rgba(0, 0, 0, 0.1);
-$shadow-medium: rgba(0, 0, 0, 0.2);
-
-@mixin card-shadow {
-  box-shadow: 0 4px 8px $shadow-light;
-  transition: box-shadow 0.3s ease-in-out;
-
-  &:hover {
-    box-shadow: 0 6px 12px $shadow-medium;
-  }
-}
-
 .exercise-card {
-  max-width: 600px; // Карточка деталей обычно уже, чем таблица
+  max-width: 600px; 
   margin: 40px auto;
   padding: 30px;
-  background-color: $card-background;
-  border-radius: 8px;
-  @include card-shadow;
-  font-family: Arial, sans-serif;
-  color: $text-color;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-card);
+  font-family: var(--font-family-sans);
+  color: var(--text-primary);
 
   h1 {
     text-align: center;
-    color: $primary-color;
+    color: var(--text-primary);
     margin-top: 0;
     margin-bottom: 25px;
     font-size: 2.2em;
     font-weight: bold;
-    border-bottom: 2px solid lighten($primary-color, 30%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding-bottom: 15px;
   }
 
@@ -44,16 +24,15 @@ $shadow-medium: rgba(0, 0, 0, 0.2);
 
     p {
       margin-bottom: 15px;
-      padding: 12px 15px;
-      background-color: lighten($background-color, 2%);
-      border-left: 4px solid $primary-color; // Акцентная полоска слева
-      border-radius: 0 4px 4px 0;
+      padding: 16px;
+      background-color: var(--bg-button);
+      border-radius: var(--radius-card);
 
       strong {
-        color: darken($text-color, 15%);
+        color: var(--text-primary);
         margin-right: 8px;
         display: inline-block;
-        min-width: 130px; // Чтобы двоеточия визуально выстраивались в колонку
+        min-width: 130px; 
       }
     }
   }
@@ -62,9 +41,9 @@ $shadow-medium: rgba(0, 0, 0, 0.2);
     text-align: center;
     padding: 20px;
     font-size: 1.1em;
-    color: $light-text-color;
-    border: 1px dashed $border-color;
-    border-radius: 5px;
-    background-color: $background-color;
+    color: var(--text-secondary);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-card);
+    background-color: var(--bg-card);
   }
 }
