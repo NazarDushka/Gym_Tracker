@@ -1,71 +1,59 @@
-// Мобильная адаптация таблицы
-  @media (max-width: 768px) {
+/* --- СТИЛЬНАЯ МОБИЛЬНАЯ АДАПТАЦИЯ --- */
+@media (max-width: 768px) {
   .measurements-table {
-    display: block; // Отключаем табличную сетку
-
-    thead {
-      display: none; // Полностью прячем шапку
-    }
-
-    tbody {
-      display: block;
-    }
+    display: block; 
+    thead { display: none; }
+    tbody { display: block; }
 
     tr {
       display: flex;
       flex-direction: column; 
       margin-bottom: 24px; 
-      background-color: #ffffff; 
-      border-radius: 10px;
-      border: 1px solid #e0e0e0; 
-      border-left: 5px solid #0d6efd; 
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+      background-color: var(--bg-card); 
+      border-radius: var(--radius-card);
+      border: none; 
       overflow: hidden; 
     }
 
     td {
       display: flex;
-      justify-content: space-between; // Разносим Label и Значение по краям
+      justify-content: space-between; 
       align-items: center;
-      padding: 12px 16px;
-      border-bottom: 1px solid #f8f9fa; // Полоска между строками внутри карточки
-      text-align: right; // Текст значения прижимаем вправо
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+      text-align: right; 
+      color: var(--text-primary);
 
-      /* Отменяем десктопные радиусы и границы для ячеек */
       &:first-child, &:last-child {
         border-radius: 0;
         border-left: none;
         border-right: none;
       }
 
-      /* Убираем нижнюю полоску у последней ячейки (с кнопками) */
       &:last-child {
         border-bottom: none;
-        padding-top: 16px; // Даем чуть больше места кнопкам
+        padding-top: 16px; 
       }
 
-      /* Генерируем заголовки колонок из атрибута data-label */
       &::before {
         content: attr(data-label);
-        font-weight: 600;
-        color: #6c757d;
-        font-size: 0.85rem;
-        text-transform: uppercase;
+        font-weight: normal;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
         text-align: left;
-        margin-right: 15px; // Отступ от значения
+        margin-right: 15px; 
       }
     }
 
-    /* Адаптируем кнопки под пальцы */
     .action-buttons-stack {
       width: 100%;
-      flex-direction: row; // Ставим кнопки горизонтально
+      flex-direction: row; 
       justify-content: space-between;
       gap: 12px;
 
       button {
-        flex: 1; // Заставляем кнопки растягиваться поровну
-        padding: 12px; // Делаем их выше для удобного нажатия
+        flex: 1; 
+        padding: 14px; 
         text-align: center;
       }
     }
@@ -76,36 +64,32 @@
   padding: 24px;
   max-width: 900px;
   margin: 0 auto;
-  font-family: sans-serif;
-
-  background-color: #f4f7f6; 
-  border-radius: 12px;
+  font-family: var(--font-family-sans);
+  background-color: transparent; 
+  border-radius: var(--radius-card);
 
   h1 {
     font-size: 1.75rem;
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 24px;
     text-align: center;
+    font-weight: bold;
   }
 }
 
 .measurements-table {
   width: 100%;
-  /* Главный секрет: отделяем строки друг от друга */
   border-collapse: separate; 
-  border-spacing: 0 12px; /* 0 по горизонтали, 12px по вертикали между строками */
-  
-  /* Убираем общий фон и тень у самой таблицы */
+  border-spacing: 0 12px; 
   background-color: transparent; 
   box-shadow: none; 
-  border-radius: 0;
 
   thead {
     th {
-      padding: 0 20px 8px 20px; /* Оставляем отступ только снизу */
+      padding: 0 20px 8px 20px; 
       text-align: left;
-      font-weight: 600;
-      color: #6c757d; // Делаем заголовок чуть приглушенным
+      font-weight: normal;
+      color: var(--text-secondary); 
       border-bottom: none;
       text-transform: uppercase;
       font-size: 0.85rem;
@@ -115,52 +99,38 @@
 
   tbody {
     tr {
-      background-color: #ffffff; /* Фон теперь у каждой строки индивидуальный */
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04); /* Легкая тень вокруг каждой строки */
-      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      background-color: var(--bg-card); 
+      border-radius: var(--radius-card);
 
-      /* Эффект "всплытия" карточки при наведении */
       &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+        background-color: rgba(255, 255, 255, 0.08);
       }
 
       td {
         padding: 16px 20px;
-        color: #212529;
+        color: var(--text-primary);
         vertical-align: middle;
         font-size: 0.95rem;
-        
-        /* Добавляем едва заметную рамку сверху и снизу для четкости */
-        border-top: 1px solid #f8f9fa;
-        border-bottom: 1px solid #f8f9fa;
+        border: none;
 
-        /* Поскольку border-collapse: separate, скруглять углы нужно у крайних ячеек (td), а не у строки (tr) */
         &:first-child {
-          border-left: 1px solid #f8f9fa;
-          border-top-left-radius: 10px;
-          border-bottom-left-radius: 10px;
+          border-top-left-radius: var(--radius-card);
+          border-bottom-left-radius: var(--radius-card);
         }
 
         &:last-child {
-          border-right: 1px solid #f8f9fa;
-          border-top-right-radius: 10px;
-          border-bottom-right-radius: 10px;
-          margin-top: 8px; /* Отступ от данных */
-          border-top: 1px dashed #e9ecef; 
-          background-color: #fafbfc; 
+          border-top-right-radius: var(--radius-card);
+          border-bottom-right-radius: var(--radius-card);
         }
 
         .unit-text {
           font-size: 0.85em;
-          color: #868e96;
+          color: var(--text-secondary);
           margin-left: 4px;
-          font-weight: 500;
         }
 
         .empty-text {
-          color: #adb5bd;
-          font-weight: 600;
+          color: var(--text-secondary);
         }
       }
     }
@@ -177,18 +147,18 @@
 /* --- Кнопки --- */
 
 .details-button {
-  padding: 8px 16px;
-  background-color: #0d6efd; // Синий
-  color: #ffffff;
+  padding: 10px 16px;
+  background-color: var(--bg-button); 
+  color: var(--text-primary);
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-button);
   cursor: pointer;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: bold;
   transition: background-color 0.2s ease-in-out, transform 0.1s ease;
 
   &:hover {
-    background-color: #0b5ed7;
+    background-color: var(--bg-button-hover);
   }
 
   &:active {
@@ -197,19 +167,19 @@
 }
 
 .add-btn-small {
-  padding: 8px 16px;
+  padding: 10px 16px;
   background-color: transparent;
-  color: #198754; // Зеленый для акцента на добавлении
-  border: 1px solid #198754;
-  border-radius: 6px;
+  color: var(--primary-accent); 
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-button);
   cursor: pointer;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: bold;
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    background-color: #198754;
-    color: #ffffff;
+    background-color: var(--bg-button);
+    border-color: transparent;
   }
 
   &:active {
@@ -223,20 +193,18 @@
   margin-bottom: 20px;       
 
   button {
-    padding: 10px 20px;
-    background-color: #0d6efd; 
-    color: #ffffff;
+    padding: 12px 24px;
+    background-color: var(--primary-accent); 
+    color: var(--bg-main);
     border: none;
-    border-radius: 6px;
+    border-radius: var(--radius-button);
     cursor: pointer;
     font-size: 0.95rem;
-    font-weight: 500;
-    box-shadow: 0 2px 4px rgba(13, 110, 253, 0.2); 
-    transition: background-color 0.2s ease-in-out, transform 0.1s ease, box-shadow 0.2s ease;
+    font-weight: bold;
+    transition: transform 0.1s ease;
 
     &:hover {
-      background-color: #0b5ed7;
-      box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+      transform: translateY(-2px);
     }
 
     &:active {
@@ -249,25 +217,22 @@
 
 .no-data-message {
   text-align: center;
-  color: #6c757d;
+  color: var(--text-secondary);
   font-size: 1rem;
   padding: 40px 20px;
-  background-color: #f8f9fa;
-  border: 1px dashed #ced4da;
-  border-radius: 8px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-card);
   font-style: italic;
 }
 
 .loading-message {
   text-align: center;
-  color: #6c757d;
+  color: var(--text-secondary);
   font-size: 1.1rem;
   padding: 40px;
-  font-weight: 500;
   animation: pulse 1.5s infinite ease-in-out;
 }
 
-// Анимация пульсации для текста загрузки
 @keyframes pulse {
   0% { opacity: 0.5; }
   50% { opacity: 1; }

@@ -1,20 +1,9 @@
-// Define some color variables for consistency
-$primary-color: #3498db; // Blue
-$secondary-color: #2c3e50; // Dark Blue/Charcoal
-$text-color-dark: #34495e; // Darker text
-$text-color-light: #7f8c8d; // Lighter text
-$background-light: #f9f9f9; // Light grey background
-$border-color: #e0e0e0; // Light grey border
-$error-color: #e74c3c; // Red for errors
-
 .user-profile-container {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: transparent;
+  border-radius: var(--radius-card);
   padding: 30px;
-  max-width: 800px; // Слегка расширен для сетки карточек
+  max-width: 800px; 
   margin: 20px auto; 
-  border-left: 5px solid $primary-color;
   
   @media (max-width: 768px) {
     padding: 15px;
@@ -25,15 +14,15 @@ $error-color: #e74c3c; // Red for errors
     display: flex;
     align-items: center;
     margin-bottom: 25px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 20px;
 
     .avatar-placeholder {
       width: 60px;
       height: 60px;
       border-radius: 50%;
-      background-color: $primary-color;
-      color: #ffffff;
+      background-color: var(--primary-accent);
+      color: var(--bg-main);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -45,15 +34,14 @@ $error-color: #e74c3c; // Red for errors
 
     .user-info {
       h1 {
-        color: $secondary-color;
+        color: var(--text-primary);
         font-size: 2em;
         margin: 0 0 5px 0;
-        border-bottom: none; // Убираем границу у h1, так как она уже есть у header
-        padding-bottom: 0;
+        font-weight: bold;
       }
 
       .join-date {
-        color: $text-color-light;
+        color: var(--text-secondary);
         font-size: 1em;
         margin: 0;
       }
@@ -62,60 +50,56 @@ $error-color: #e74c3c; // Red for errors
 
   .profile-cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); // Сетка с адаптивными колонками
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); 
     gap: 20px;
     margin-top: 30px;
   }
 
   .profile-card {
-    background-color: $background-light;
-    border-radius: 5px;
-    padding: 20px;
-    border: 1px solid $border-color;
+    background-color: var(--bg-card);
+    border-radius: var(--radius-card);
+    padding: 24px;
     display: flex;
     flex-direction: column;
 
     h2 {
-      color: $primary-color;
+      color: var(--text-primary);
       font-size: 1.5em;
       margin-top: 0;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
+      font-weight: bold;
     }
 
     .card-content {
       flex-grow: 1;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
-    // Стилизация кнопки действий внутри карточки
     .action-button {
       width: 100%;
-      padding: 10px;
-      background-color: transparent;
-      color: $primary-color;
-      border: 1px solid $primary-color;
-      border-radius: 4px;
+      padding: 14px;
+      background-color: var(--bg-button);
+      color: var(--text-primary);
+      border: none;
+      border-radius: var(--radius-button);
       font-size: 1em;
       font-weight: bold;
       cursor: pointer;
       transition: all 0.2s ease-in-out;
 
       &:hover {
-        background-color: $primary-color;
-        color: #ffffff;
+        background-color: var(--bg-button-hover);
       }
     }
   }
 
-  // Индивидуальные стили для карточки метрик
   .metrics-card {
-    
     .metric-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px dashed $border-color;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       flex-wrap: wrap; 
       gap: 5px;
       word-break: break-word;
@@ -125,24 +109,25 @@ $error-color: #e74c3c; // Red for errors
       }
 
       .metric-label {
-        color: $text-color-dark;
-        font-weight: bold;
+        color: var(--text-secondary);
+        font-weight: normal;
       }
 
       .metric-value {
-        color: $secondary-color;
+        color: var(--text-primary);
         font-size: 1.1em;
+        font-weight: bold;
 
         .goal {
           font-size: 0.85em;
-          color: $text-color-light;
+          color: var(--text-secondary);
           margin-left: 5px;
+          font-weight: normal;
         }
       }
     }
   }
 
-  // Индивидуальные стили для карточки рекордов
   .records-card {
     .records-list {
       list-style: none;
@@ -150,24 +135,23 @@ $error-color: #e74c3c; // Red for errors
       margin: 0;
 
       li {
-        background-color: #ffffff;
-        padding: 10px 15px;
+        background-color: var(--bg-button);
+        padding: 14px 16px;
         margin-bottom: 8px;
-        border-radius: 4px;
-        border: 1px solid #dcdcdc;
+        border-radius: var(--radius-button);
         display: flex;
         justify-content: space-between;
         align-items: center;
 
         .exercise-name {
           font-weight: bold;
-          color: $secondary-color;
+          color: var(--text-primary);
           flex-grow: 1;
         }
 
         .record-details {
-          font-size: 0.9em;
-          color: $text-color-light;
+          font-size: 0.95em;
+          color: var(--text-secondary);
           margin-left: 15px;
           flex-shrink: 0;
         }
@@ -175,7 +159,7 @@ $error-color: #e74c3c; // Red for errors
 
       .empty-state {
         text-align: center;
-        color: $text-color-light;
+        color: var(--text-secondary);
         padding: 10px;
         font-style: italic;
       }
@@ -186,6 +170,6 @@ $error-color: #e74c3c; // Red for errors
     text-align: center;
     padding: 20px;
     font-size: 1.2em;
-    color: $text-color-light;
+    color: var(--text-secondary);
   }
 }

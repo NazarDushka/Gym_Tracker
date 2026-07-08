@@ -1,0 +1,56 @@
+<div class="bottom-sheet-container">
+  <div class="sticky-header">
+    <div class="drag-handle"></div>
+    
+    <div class="search-container">
+      <input 
+        type="text" 
+        [formControl]="searchControl" 
+        placeholder="Search exercises..."
+        class="search-input"
+      />
+    </div>
+
+    <div class="filters-container">
+      @for (filter of filters; track filter) {
+        <button 
+          class="filter-chip" 
+          [class.active]="(selectedFilter$ | async) === filter"
+          (click)="setFilter(filter)">
+          {{ filter }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="list-container">
+    <cdk-virtual-scroll-viewport itemSize="72" class="virtual-scroll-viewport">
+      <div *cdkVirtualFor="let exercise of filteredExercises$ | async" 
+           class="exercise-item" 
+           (click)="selectExercise(exercise)">
+        
+        <div class="avatar">
+          {{ exercise.name.charAt(0) | uppercase }}
+        </div>
+        
+        <div class="info-column">
+          <span class="exercise-name">{{ exercise.name }}</span>
+          <span class="equipment-type">{{ exercise.muscleGroup || 'Other' }}</span>
+        </div>
+        
+        <div class="select-icon">
+          <!-- Custom '+' icon using CSS -->
+          <div class="plus-icon"></div>
+        </div>
+
+      </div>
+
+      <!-- Empty State -->
+      @if ((filteredExercises$ | async)?.length === 0) {
+        <div class="empty-state">
+          No exercises found.
+        </div>
+      }
+    </cdk-virtual-scroll-viewport>
+  </div>
+</div>

@@ -1,5 +1,40 @@
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+:root {
+  /* Colors */
+  --bg-main: #000000;
+  --bg-card: #1c1c1e;
+  --bg-button: #2c2c2e;
+  --bg-button-hover: #3a3a3c;
+  --primary-accent: #ffffff; /* Replaces old primary color */
+  
+  /* Typography */
+  --text-primary: #ffffff;
+  --text-secondary: #8e8e93;
+  --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Shapes & Spacing */
+  --radius-card: 20px;
+  --radius-button: 999px; /* Pill shaped */
+  --spacing-base: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+}
+
 body {
   margin: 0;
   padding: 0;
-  
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
 }
+
+/* Material Overrides */
+.mat-bottom-sheet-container {
+  background-color: var(--bg-main) !important;
+  color: var(--text-primary) !important;
+  border-top-left-radius: 24px !important;
+  border-top-right-radius: 24px !important;
+  padding: 0 !important;
+  max-height: 90vh !important;
+}
