@@ -44,6 +44,7 @@
     padding: 16px;
     border: none !important; 
     border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; 
+    border-radius: 0 !important;
     text-align: right;
     color: var(--text-primary) !important;
 
@@ -151,12 +152,22 @@
     tbody {
       tr {
         background-color: var(--bg-card);
-        border-radius: var(--radius-button);
         
         td {
           vertical-align: middle;
           color: var(--text-primary);
         }
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.08);
+        }
+      }
+    }
+
+    /* Pill-shape стили только для десктопа */
+    @media (min-width: 769px) {
+      tbody tr {
+        border-radius: var(--radius-button);
 
         /* Закругляем углы ячеек чтобы таблица выглядела как набор пилюль */
         td:first-child {
@@ -167,10 +178,6 @@
         td:last-child {
           border-top-right-radius: var(--radius-button);
           border-bottom-right-radius: var(--radius-button);
-        }
-
-        &:hover {
-          background-color: rgba(255, 255, 255, 0.08);
         }
       }
     }
