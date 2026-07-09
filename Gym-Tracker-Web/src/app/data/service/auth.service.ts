@@ -53,7 +53,7 @@ private _isAuthenticated = new BehaviorSubject<boolean>(this.hasToken());
     localStorage.removeItem('token');
     // Очистите другие данные пользователя из localStorage/сессии, если храните
     this._isAuthenticated.next(false);
-    this.router.navigate(['/login']); // Перенаправляем на страницу входа
+    this.router.navigate(['/welcome']); // Перенаправляем на лендинг
   }
 
   // Получить токен
