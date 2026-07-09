@@ -34,6 +34,7 @@
   border-radius: var(--radius-card);
   font-family: var(--font-family-sans);
   color: var(--text-primary);
+  box-sizing: border-box;
 
   h1 {
     text-align: center;
@@ -175,11 +176,11 @@
         display: flex;
         flex-direction: row;
         gap: 15px;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         width: 100%;
 
         .stepper-group {
-          flex: 1;
+          flex: 1 1 120px;
           min-width: 0; 
         }
       }
@@ -337,5 +338,91 @@
   .form-success {
     background-color: rgba(48, 209, 88, 0.1);
     color: #30d158;
+  }
+}
+
+/* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
+@media (max-width: 480px) {
+  .workout-form-container {
+    padding: 16px;
+    margin: 10px;
+    border-radius: 16px;
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 1.6em;
+      margin-bottom: 20px;
+    }
+
+    .exercises-section {
+      padding: 12px;
+      max-width: 100%;
+
+      .sets-list {
+        padding-right: 0;
+        max-width: 100%;
+      }
+
+      .set-item {
+        padding: 12px;
+        max-width: 100%;
+
+        .set-inputs {
+          width: 100%;
+          max-width: 100%;
+        }
+
+        .form-group-inline {
+          flex: 1 1 100%;
+          min-width: 0;
+          max-width: 100%;
+        }
+
+        .steppers-row {
+          flex-wrap: nowrap;
+          gap: 10px;
+          max-width: 100%;
+
+          .stepper-group {
+            flex: 1 1 0;
+            min-width: 0;
+          }
+        }
+
+        .stepper {
+          height: 48px;
+          max-width: 100%;
+
+          .stepper-btn {
+            width: 36px;
+            min-width: 36px;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+          }
+
+          input[type="number"] {
+            flex: 1;
+            min-width: 0;
+            width: 100%;
+            font-size: 1.1rem;
+          }
+        }
+      }
+    }
+
+    .form-actions {
+      flex-direction: column;
+
+      .submit-button,
+      .cancel-button {
+        width: 100%;
+        text-align: center;
+      }
+    }
   }
 }

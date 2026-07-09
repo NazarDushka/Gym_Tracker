@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Observable, combineLatest, map } from 'rxjs';
+import { Observable, combineLatest, map, of, catchError } from 'rxjs';
 import { MeasurementService } from '../../../data/service/measurement-service';
 import { MeasurementLog, MeasurementType } from '../../../data/service/interface/body-measurements';
 
@@ -26,11 +26,12 @@ export class MyMeasuraments {
   router = inject(Router);
   measurementService = inject(MeasurementService);
 
-  // Получаем оба потока (убедитесь, что метод getMeasurementTypes существует в сервисе)
-  private types$: Observable<MeasurementType[]> = this.measurementService.getMeasurementTypes();
-  private latestLogs$: Observable<MeasurementLog[]> = this.measurementService.getLatestMeasurementLogs();
 
-  // Склеиваем данные
+  private types$: Observable<MeasurementType[]> = this.measurementService.getMeasurementTypes();
+  private latestLogs$: Observable<MeasurementLog[]> = this.measurementService.getLatestMeasurementLogs().pipe(
+    catchError(() => of([] as MeasurementLog[]))
+  );
+
   dashboardItems$: Observable<DashboardItem[]> = combineLatest({
     types: this.types$,
     logs: this.latestLogs$
@@ -38,14 +39,14 @@ export class MyMeasuraments {
     map(({ types, logs }) => {
       return types.map(type => {
         const userLog = logs.find(log => log.measurementTypeId === type.id);
-        
-        
+
+
         return {
-          typeId: type.id,        
-          typeName: type.name,    
-          unit: type.unit,       
-          latestValue: userLog ? userLog.value : null, 
-          date: userLog ? userLog.date : null,         
+          typeId: type.id,
+          typeName: type.name,
+          unit: type.unit,
+          latestValue: userLog ? userLog.value : null,
+          date: userLog ? userLog.date : null,
           hasData: !!userLog
         };
       });
