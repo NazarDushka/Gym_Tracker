@@ -11,8 +11,10 @@ import { ExerciseDetails } from './components/exercise-details/exercise-details'
 import { MyProfile } from './components/myprofilecomponent/my-profile/my-profile';
 import { MyMeasuraments } from './components/myprofilecomponent/my-measuraments/my-measuraments';
 import { AddMeasurement } from './components/myprofilecomponent/my-measuraments/add-measurement/add-measurement';
+import { LandingComponent } from './components/landing/landing';
 
 export const routes: Routes = [
+    { path: 'welcome', component: LandingComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: '', component: MainLayout, children: [
