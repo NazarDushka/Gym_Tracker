@@ -62,7 +62,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
- 
+        
+      - name: Normalize names to lowercase
+        id: vars
+        run: |
+          echo "acr_name_lower=$(echo '${{ env.ACR_NAME }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+          echo "image_name_lower=$(echo '${{ env.IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+          
       - name: Azure Login (OIDC)
         uses: azure/login@v2
         with:
