@@ -12,6 +12,7 @@ env:
   IMAGE_NAME: myTracker
   RESOURCE_GROUP: Tracker
   CONTAINER_APP_NAME: gymtracker-app-20260531234016
+  BACKEND_PATH: ./GymTrackerBack
  
 permissions:
   id-token: write     
@@ -20,6 +21,9 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./GymTrackerBack
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -75,7 +79,7 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ${{ env.BACKEND_PATH }}
           push: true
           tags: ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
           cache-from: type=gha
