@@ -4,10 +4,11 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Копируем весь контекст (GymTrackerBack/*) и публикуем конкретный проект
-COPY . .
+COPY ["GymTracker/GymTracker.csproj", "GymTracker/"]
 RUN dotnet restore "GymTracker/GymTracker.csproj"
+COPY . .
 RUN dotnet publish "GymTracker/GymTracker.csproj" -c Release -o /app/publish --no-restore
+
 
 # --- Runtime stage ---
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
