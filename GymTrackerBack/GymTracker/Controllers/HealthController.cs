@@ -9,10 +9,17 @@ namespace GymTracker.Controllers
     public class HealthController : ControllerBase
     {
       [HttpGet("WakeUp")]
-      public IActionResult WakeUp(WorkoutDbContext db)
+      public async Task<IActionResult> WakeUp(WorkoutDbContext db)
       {
-            db.Database.CanConnectAsync(); // Check if the database connection is available
-            return Ok("GymTracker API is running.");
+            var canConnect = await db.Database.CanConnectAsync(); // Check if the database connection is available
+            if (canConnect)
+            {
+                return Ok("GymTracker API is running.");
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "Database connection is unavailable.");
+            }
         }
     }
 }
